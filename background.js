@@ -198,6 +198,21 @@ function updateContentScript() {
   });
 }
 
+// 廣播節拍事件到所有 YouTube 頁面
+function broadcastBeatEvent(beatIndex, beatType) {
+  chrome.tabs.query({ url: 'https://www.youtube.com/*' }, (tabs) => {
+    tabs.forEach(tab => {
+      chrome.tabs.sendMessage(tab.id, {
+        action: 'BEAT_PULSE',
+        beatIndex: beatIndex,
+        beatType: beatType
+      }).catch(() => {
+        // Content script 可能未載入，忽略錯誤
+      });
+    });
+  });
+}
+
 function broadcastState() {
   chrome.runtime.sendMessage({
     action: 'STATE_UPDATE',
@@ -295,19 +310,24 @@ function runTimer() {
 
     // 檢查是否應該觸發節拍
     if (now >= timerState.nextBeatTime) {
+      // 計算漂移（實際時間 - 理論時間）
+      const drift = now - timerState.nextBeatTime;
+      trackDrift(drift);
+
+      // 獲取節拍類型（強、中、弱）
+      const beatType = getBeatType(timerState.currentBeatInBar, timerState.timeSignature);
+
+      // 播放節拍音訊（如果啟用）
       if (timerState.soundEnabled) {
-        // 計算漂移（實際時間 - 理論時間）
-        const drift = now - timerState.nextBeatTime;
-        trackDrift(drift);
-
-        // 播放節拍
-        const beatType = getBeatType(timerState.currentBeatInBar, timerState.timeSignature);
         playBeep(beatType);
-
-        // 更新節拍計數器
-        const beatsPerBar = getBeatsPerBar(timerState.timeSignature);
-        timerState.currentBeatInBar = (timerState.currentBeatInBar + 1) % beatsPerBar;
       }
+
+      // 廣播節拍事件到 content script（視覺指示燈）
+      broadcastBeatEvent(timerState.currentBeatInBar, beatType);
+
+      // 更新節拍計數器
+      const beatsPerBar = getBeatsPerBar(timerState.timeSignature);
+      timerState.currentBeatInBar = (timerState.currentBeatInBar + 1) % beatsPerBar;
 
       // 調度下一次節拍
       scheduleNextBeat();

@@ -175,6 +175,21 @@
   line-height: 1.5;
 }
 
+/* ========== 自動啟動說明資訊 ========== */
+
+.auto-start-info {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 4px;
+}
+
+.auto-start-info small {
+  color: #667eea;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 /* ========== YouTube 覆蓋層樣式 ========== */
 
 /* YouTube 覆蓋層容器 */
@@ -269,4 +284,50 @@
 #slowjogging-timer-widget.minimized #slowjogging-toggle-btn {
   font-size: 12px;
   padding: 6px 10px;
+}
+
+/* ========== BPM 節拍指示燈 ========== */
+
+/* BPM 指示燈容器 */
+#slowjogging-bpm-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 節拍指示燈基礎樣式 */
+.slowjogging-beat-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: all 0.15s ease-out;
+  opacity: 0.3;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 左側指示燈（淺藍色） */
+#slowjogging-left-indicator {
+  background: rgb(135, 206, 250);
+}
+
+#slowjogging-left-indicator.active {
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(135, 206, 250, 0.8),
+              0 0 20px rgba(135, 206, 250, 0.4);
+  transform: scale(1.15);
+}
+
+/* 右側指示燈（淺綠色） */
+#slowjogging-right-indicator {
+  background: rgb(144, 238, 144);
+}
+
+#slowjogging-right-indicator.active {
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(144, 238, 144, 0.8),
+              0 0 20px rgba(144, 238, 144, 0.4);
+  transform: scale(1.15);
 }

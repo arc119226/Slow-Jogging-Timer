@@ -6,6 +6,7 @@ let overlayOpacity = 100;
 let timeSignature = '4/4';
 let soundType = 'beep';
 let overlayVisible = true;
+let autoStartEnabled = false;
 
 // ========== 取得 DOM 元素 ==========
 const timerDisplay = document.getElementById('timer');
@@ -22,6 +23,7 @@ const timeSignatureSelect = document.getElementById('timeSignatureSelect');
 const soundTypeSelect = document.getElementById('soundTypeSelect');
 const toggleOverlayBtn = document.getElementById('toggleOverlayBtn');
 const statusText = document.getElementById('statusText');
+const autoStartToggle = document.getElementById('autoStartToggle');
 
 // ========== 輔助函數 ==========
 function formatTime(seconds) {
@@ -86,6 +88,12 @@ function updateUIFromState(state) {
     statusText.textContent = '計時中...';
   } else {
     statusText.textContent = '準備就緒';
+  }
+
+  // 更新自動啟動開關
+  if (state.autoStartEnabled !== undefined) {
+    autoStartToggle.checked = state.autoStartEnabled;
+    autoStartEnabled = state.autoStartEnabled;
   }
 }
 
@@ -240,6 +248,16 @@ toggleOverlayBtn.addEventListener('click', () => {
   chrome.runtime.sendMessage({
     action: 'TOGGLE_OVERLAY_VISIBILITY',
     visible: overlayVisible
+  });
+});
+
+// 自動啟動開關
+autoStartToggle.addEventListener('change', (e) => {
+  autoStartEnabled = e.target.checked;
+
+  chrome.runtime.sendMessage({
+    action: 'TOGGLE_AUTO_START',
+    enabled: e.target.checked
   });
 });
 

@@ -10,8 +10,6 @@
   },
   "permissions": [
     "storage",
-    "activeTab",
-    "scripting",
     "tabs",
     "offscreen"
   ],
