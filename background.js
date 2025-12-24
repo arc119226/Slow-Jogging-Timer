@@ -23,7 +23,10 @@ let timerState = {
   // 新增：漂移補償
   driftSamples: [],         // 最近 10 次的漂移測量值（毫秒）
   avgDrift: 0,              // 平均漂移（用於補償）
-  lastTickTime: 0           // 上次 tick 的時間（用於檢測系統休眠）
+  lastTickTime: 0,          // 上次 tick 的時間（用於檢測系統休眠）
+
+  // 新增：預調度參數（階段二）
+  scheduleAheadTime: 100    // 提前 100ms 調度音效（消除通訊延遲）
 };
 
 // ========== Offscreen 生命週期管理 ==========
@@ -163,6 +166,95 @@ function handleBPMChange(now) {
   timerState.avgDrift = 0;
   timerState.lastBPM = timerState.currentBPM;
   timerState.currentBeatInBar = 0;
+
+  // ========== 重啟 timer 以應用新的檢查頻率 ==========
+  // BPM 變化可能導致節拍間隔跨越不同的頻率檔位（10/25/50ms）
+  // 需要重新計算並應用新的 checkInterval
+  if (timerState.isRunning && !timerState.isPaused && timerState.timerInterval) {
+    // 計算新的檢查頻率
+    const newCheckInterval = newBeatInterval < 200 ? 10 : (newBeatInterval < 400 ? 25 : 50);
+
+    // 停止舊的 timer
+    clearInterval(timerState.timerInterval);
+
+    // 獲取必要的變量（供新 interval 使用）
+    let lastSecondUpdate = Date.now();
+
+    // 重新創建 timer interval（使用新的 checkInterval）
+    timerState.timerInterval = setInterval(() => {
+      if (timerState.isPaused) return;
+
+      // ========== 基於實際時間的秒數更新（不依賴固定間隔）==========
+      const now = Date.now();
+      const elapsed = now - lastSecondUpdate;
+
+      // 每 1000ms（1 秒）才減少 1 秒並更新顯示
+      if (elapsed >= 1000) {
+        lastSecondUpdate = now;
+
+        if (timerState.remainingSeconds > 0) {
+          timerState.remainingSeconds--;
+          updateContentScript();
+          chrome.storage.local.set({
+            remainingSeconds: timerState.remainingSeconds,
+            currentBPM: timerState.currentBPM,
+            isRunning: timerState.isRunning,
+            isPaused: timerState.isPaused
+          });
+          broadcastState();
+        } else {
+          stopTimer();
+          broadcastState();
+        }
+      }
+
+      // ========== 新：無漂移 BPM 節拍檢測 ==========
+
+      // 檢測系統休眠（時間跳躍 > 1 秒）
+      const timeSinceLastTick = now - (timerState.lastTickTime || now);
+      if (timeSinceLastTick > 1000) {
+        console.log('[Sleep Detected] 重置節拍計時');
+        timerState.timerStartTime = now;
+        timerState.expectedBeatNumber = 0;
+        const beatInterval = 60000 / timerState.currentBPM;
+        timerState.nextBeatTime = now + beatInterval;
+        timerState.driftSamples = [];
+        timerState.avgDrift = 0;
+      }
+      timerState.lastTickTime = now;
+
+      // 檢測 BPM 變化
+      if (timerState.currentBPM !== timerState.lastBPM) {
+        handleBPMChange(now);
+      }
+
+      // ========== 階段二：提前調度節拍（預調度機制） ==========
+      while (timerState.nextBeatTime - now < timerState.scheduleAheadTime) {
+        const delay = timerState.nextBeatTime - Date.now();
+
+        const beatType = getBeatType(timerState.currentBeatInBar, timerState.timeSignature);
+
+        if (timerState.soundEnabled) {
+          chrome.runtime.sendMessage({
+            action: 'SCHEDULE_BEEP',
+            beatType: beatType,
+            delay: delay,
+            soundType: timerState.soundType
+          }).catch(err => {
+            console.error('預調度失敗:', err);
+            playBeep(beatType);
+          });
+        }
+
+        broadcastBeatEvent(timerState.currentBeatInBar, beatType);
+
+        const beatsPerBar = getBeatsPerBar(timerState.timeSignature);
+        timerState.currentBeatInBar = (timerState.currentBeatInBar + 1) % beatsPerBar;
+
+        scheduleNextBeat();
+      }
+    }, newCheckInterval);
+  }
 }
 
 /**
@@ -253,16 +345,34 @@ function runTimer() {
   timerState.avgDrift = 0;
   timerState.lastTickTime = Date.now();
 
-  let tickCounter = 0; // tick 計數器：累積 10 個 tick（1000ms）才減少 1 秒
+  // 記錄上次更新秒數的時間（用於基於實際時間的秒數更新）
+  let lastSecondUpdate = Date.now();
+
+  // ========== 動態檢查頻率（根據 BPM 調整精度）==========
+  // 根據節拍間隔動態調整檢查頻率
+  let checkInterval;
+
+  if (beatInterval < 200) {
+    // 快速 BPM (>300): 使用 10ms 高精度
+    checkInterval = 10;
+  } else if (beatInterval < 400) {
+    // 中速 BPM (150-300): 使用 25ms 中精度
+    checkInterval = 25;
+  } else {
+    // 慢速 BPM (<150): 使用 50ms 標準精度
+    checkInterval = 50;
+  }
 
   timerState.timerInterval = setInterval(() => {
     if (timerState.isPaused) return;
 
-    tickCounter++; // 每 100ms 增加 1
+    // ========== 基於實際時間的秒數更新（不依賴固定間隔）==========
+    const now = Date.now();
+    const elapsed = now - lastSecondUpdate;
 
-    // 每 10 個 tick（= 1000ms）才減少 1 秒並更新顯示
-    if (tickCounter >= 10) {
-      tickCounter = 0; // 重置計數器
+    // 每 1000ms（1 秒）才減少 1 秒並更新顯示
+    if (elapsed >= 1000) {
+      lastSecondUpdate = now; // 更新上次秒數更新時間
 
       if (timerState.remainingSeconds > 0) {
         timerState.remainingSeconds--;
@@ -288,7 +398,6 @@ function runTimer() {
     }
 
     // ========== 新：無漂移 BPM 節拍檢測 ==========
-    const now = Date.now();
 
     // 檢測系統休眠（時間跳躍 > 1 秒）
     const timeSinceLastTick = now - (timerState.lastTickTime || now);
@@ -308,21 +417,32 @@ function runTimer() {
       handleBPMChange(now);
     }
 
-    // 檢查是否應該觸發節拍
-    if (now >= timerState.nextBeatTime) {
-      // 計算漂移（實際時間 - 理論時間）
-      const drift = now - timerState.nextBeatTime;
-      trackDrift(drift);
+    // ========== 階段二：提前調度節拍（預調度機制） ==========
+    // 使用 while 循環：當下一個節拍即將到來（< scheduleAheadTime）時，提前調度
+    while (timerState.nextBeatTime - now < timerState.scheduleAheadTime) {
+      // 計算相對延遲（毫秒）
+      // 傳遞相對延遲給 offscreen.js，讓它自己計算 AudioContext 時間
+      const delay = timerState.nextBeatTime - Date.now();
 
       // 獲取節拍類型（強、中、弱）
       const beatType = getBeatType(timerState.currentBeatInBar, timerState.timeSignature);
 
-      // 播放節拍音訊（如果啟用）
+      // 發送預調度消息到 offscreen
       if (timerState.soundEnabled) {
-        playBeep(beatType);
+        chrome.runtime.sendMessage({
+          action: 'SCHEDULE_BEEP',
+          beatType: beatType,
+          delay: delay,
+          soundType: timerState.soundType
+        }).catch(err => {
+          console.error('預調度失敗:', err);
+          // 降級：立即播放
+          playBeep(beatType);
+        });
       }
 
       // 廣播節拍事件到 content script（視覺指示燈）
+      // 注意：視覺反饋仍然會有輕微延遲，但音效會精確
       broadcastBeatEvent(timerState.currentBeatInBar, beatType);
 
       // 更新節拍計數器
@@ -332,7 +452,7 @@ function runTimer() {
       // 調度下一次節拍
       scheduleNextBeat();
     }
-  }, 100); // 100ms 精度
+  }, checkInterval); // 動態精度：10-50ms（根據 BPM 自動調整）
 }
 
 function stopTimer() {

@@ -14,7 +14,8 @@ async function playBPMSound(beatType = 'weak', currentSoundType = 'beep') {
 }
 
 // 播放嗶聲（合成音效）
-function playBeepSound(beatType = 'weak') {
+// scheduledTime: AudioContext 時間軸上的絕對時間（秒），null 表示立即播放
+function playBeepSound(beatType = 'weak', scheduledTime = null) {
   if (!audioContext) {
     try {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -49,30 +50,36 @@ function playBeepSound(beatType = 'weak') {
   const config = beatConfigs[beatType] || beatConfigs.weak;
 
   try {
-    const now = audioContext.currentTime;
+    // ========== 支持預調度：使用指定時間或立即播放 ==========
+    const startTime = scheduledTime !== null
+      ? scheduledTime
+      : audioContext.currentTime;
+
     const osc = audioContext.createOscillator();
     const gain = audioContext.createGain();
 
     osc.connect(gain);
     gain.connect(audioContext.destination);
 
-    // 根據拍類型設置頻率掃描
-    osc.frequency.setValueAtTime(config.startFreq, now);
-    osc.frequency.exponentialRampToValueAtTime(config.endFreq, now + config.duration * 0.5);
+    // 根據拍類型設置頻率掃描（使用 startTime）
+    osc.frequency.setValueAtTime(config.startFreq, startTime);
+    osc.frequency.exponentialRampToValueAtTime(config.endFreq, startTime + config.duration * 0.5);
 
-    // 音量包絡 - 快速攻擊，指數衰減
-    gain.gain.setValueAtTime(config.volume, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + config.duration);
+    // 音量包絡 - 快速攻擊，指數衰減（使用 startTime）
+    gain.gain.setValueAtTime(config.volume, startTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, startTime + config.duration);
 
-    osc.start(now);
-    osc.stop(now + config.duration);
+    // 預調度播放
+    osc.start(startTime);
+    osc.stop(startTime + config.duration);
   } catch (e) {
     console.error('音效播放錯誤:', e);
   }
 }
 
 // 播放響板音效（音頻文件）
-async function playCastanetsSound(beatType = 'weak') {
+// scheduledTime: AudioContext 時間軸上的絕對時間（秒），null 表示立即播放
+async function playCastanetsSound(beatType = 'weak', scheduledTime = null) {
   // 定義不同強度拍的音頻參數
   const castanetsConfigs = {
     strong: {
@@ -99,7 +106,7 @@ async function playCastanetsSound(beatType = 'weak') {
       } catch (e) {
         console.error('AudioContext 初始化失敗:', e);
         // 降級到嗶聲
-        playBeepSound(beatType);
+        playBeepSound(beatType, scheduledTime);
         return;
       }
     }
@@ -111,11 +118,15 @@ async function playCastanetsSound(beatType = 'weak') {
 
     if (!audioBuffers['castanets']) {
       console.warn('響板音效不可用，切換至嗶聲');
-      playBeepSound(beatType);
+      playBeepSound(beatType, scheduledTime);
       return;
     }
 
-    const now = audioContext.currentTime;
+    // ========== 支持預調度：使用指定時間或立即播放 ==========
+    const startTime = scheduledTime !== null
+      ? scheduledTime
+      : audioContext.currentTime;
+
     const source = audioContext.createBufferSource();
     const gainNode = audioContext.createGain();
 
@@ -125,12 +136,13 @@ async function playCastanetsSound(beatType = 'weak') {
     source.connect(gainNode);
     gainNode.connect(audioContext.destination);
 
-    gainNode.gain.setValueAtTime(config.volume, now);
+    gainNode.gain.setValueAtTime(config.volume, startTime);
 
-    source.start(now);
+    // 預調度播放
+    source.start(startTime);
   } catch (e) {
     console.error('響板音效播放錯誤，使用嗶聲:', e);
-    playBeepSound(beatType);
+    playBeepSound(beatType, scheduledTime);
   }
 }
 
@@ -177,6 +189,47 @@ async function preloadCastanets() {
 
 // 監聽來自 background 的消息
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // ========== 新增：預調度播放（階段二） ==========
+  if (request.action === 'SCHEDULE_BEEP') {
+    const currentSoundType = request.soundType || soundType;
+    const beatType = request.beatType || 'weak';
+    const delay = request.delay;  // 相對延遲（毫秒）
+
+    // 確保 AudioContext 已初始化
+    if (!audioContext) {
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        console.error('AudioContext 初始化失敗:', e);
+        sendResponse({ success: false, error: 'AudioContext 初始化失敗' });
+        return true;
+      }
+    }
+
+    // 計算 AudioContext 時間軸上的調度時間
+    // 使用 Math.max(0, ...) 確保延遲不為負數
+    const scheduledTime = audioContext.currentTime + Math.max(0, delay / 1000);
+
+    if (currentSoundType === 'beep') {
+      playBeepSound(beatType, scheduledTime);
+      sendResponse({ success: true });
+    } else {
+      // 正確處理 async
+      playCastanetsSound(beatType, scheduledTime).then(() => {
+        sendResponse({ success: true });
+      }).catch(err => {
+        console.error('響板播放失敗:', err);
+        // 降級到嗶聲
+        playBeepSound(beatType, scheduledTime);
+        sendResponse({ success: true });
+      });
+      return true;  // 保持消息通道開啟以支援異步回應
+    }
+
+    return true;
+  }
+
+  // ========== 保留：立即播放（向後兼容） ==========
   if (request.action === 'PLAY_BEEP') {
     const currentSoundType = request.soundType || soundType;
     playBPMSound(request.beatType || 'weak', currentSoundType);
