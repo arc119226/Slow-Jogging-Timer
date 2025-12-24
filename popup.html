@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>超慢跑計時器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>超慢跑計時器</h1>
+    
+    <div class="timer-display">
+      <div id="timer">00:00:00</div>
+    </div>
+
+    <div class="controls">
+      <label>自訂時間（秒）：</label>
+      <input type="number" id="durationInput" min="1" max="3600" value="2700" placeholder="輸入秒數">
+      <button id="startBtn">開始</button>
+      <button id="pauseBtn" disabled>暫停</button>
+      <button id="stopBtn" disabled>停止</button>
+    </div>
+
+    <div class="bpm-controls">
+      <label>BPM 速度：</label>
+      <div class="bpm-container">
+        <input type="range" id="bpmSlider" min="60" max="360" value="190" step="1">
+        <input type="number" id="bpmInput" min="60" max="360" value="190" step="1">
+        <span>BPM</span>
+      </div>
+      <label>
+        <input type="checkbox" id="soundToggle" checked>
+        啟用聲音
+      </label>
+    </div>
+
+    <div class="bpm-controls">
+      <label>音效類型：</label>
+      <div class="sound-type-container">
+        <select id="soundTypeSelect">
+          <option value="beep">嗶聲（合成音）</option>
+          <option value="castanets">響板（真實音效）</option>
+        </select>
+      </div>
+      <div class="sound-type-info">
+        <small>嗶聲：電子合成音｜響板：真實響板錄音</small>
+      </div>
+    </div>
+
+    <div class="bpm-controls">
+      <label>拍號選擇：</label>
+      <div class="time-signature-container">
+        <select id="timeSignatureSelect">
+          <option value="2/4">2/4 拍（強-弱）</option>
+          <option value="3/4">3/4 拍（強-弱-弱）</option>
+          <option value="4/4" selected>4/4 拍（強-弱-次強-弱）</option>
+        </select>
+      </div>
+      <div class="time-signature-info">
+        <small>強拍：高音 | 次強拍：中音 | 弱拍：低音</small>
+      </div>
+    </div>
+
+    <div class="bpm-controls">
+      <label>面板透明度：</label>
+      <div class="bpm-container">
+        <input type="range" id="opacitySlider" min="0" max="100" value="100" step="5">
+        <input type="number" id="opacityInput" min="0" max="100" value="100" step="5">
+        <span>%</span>
+      </div>
+    </div>
+
+    <div class="overlay-controls">
+      <button id="toggleOverlayBtn">隱藏計時器面板</button>
+    </div>
+
+    <div class="status">
+      <p id="statusText">準備就緒</p>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

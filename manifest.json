@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "Slow Jogging Timer｜超慢跑計時器",
+  "version": "1.0.0",
+  "description": "BPM timer with customizable beats for YouTube slow jogging videos｜在 YouTube 上顯示超慢跑計時器和 BPM，並且有可選節奏",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "https://www.youtube.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "超慢跑計時器",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content-script.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "sounds/castanets.wav"
+      ],
+      "matches": ["https://www.youtube.com/*"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+# IDE
+.claude/
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+*.zip
+
+# Temporary
+*.swp
+*.swo
+*~
+
+# Node (如果將來使用)
+node_modules/
+package-lock.json
+
+# Development files
+CLAUDE.md
