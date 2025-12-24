@@ -10,8 +10,20 @@ let timerState = {
   timeSignature: '4/4',
   currentBeatInBar: 0,
   isRunning: false,
-  lastBeatTime: 0,
-  offscreenDocumentExists: false
+  offscreenDocumentExists: false,
+  autoStartEnabled: false,
+  defaultDuration: 2700,
+
+  // 新增：增量節拍調度字段
+  timerStartTime: 0,        // 計時器啟動的絕對時間戳
+  expectedBeatNumber: 0,     // 當前應該播放的節拍數（0, 1, 2, ...）
+  nextBeatTime: 0,          // 下一次節拍應該發生的絕對時間戳
+  lastBPM: 190,             // 追踪 BPM 變化（用於檢測調整）
+
+  // 新增：漂移補償
+  driftSamples: [],         // 最近 10 次的漂移測量值（毫秒）
+  avgDrift: 0,              // 平均漂移（用於補償）
+  lastTickTime: 0           // 上次 tick 的時間（用於檢測系統休眠）
 };
 
 // ========== Offscreen 生命週期管理 ==========
@@ -115,6 +127,63 @@ async function playBeep(beatType = 'weak') {
   }
 }
 
+/**
+ * 調度下一次節拍（增量算法，無累積漂移）
+ */
+function scheduleNextBeat() {
+  timerState.expectedBeatNumber++;
+
+  const beatInterval = 60000 / timerState.currentBPM;
+  const theoreticalNextBeat = timerState.timerStartTime +
+                              (timerState.expectedBeatNumber * beatInterval);
+
+  // 應用漂移補償（提前觸發以抵消延遲）
+  timerState.nextBeatTime = theoreticalNextBeat - timerState.avgDrift;
+}
+
+/**
+ * 處理 BPM 調整，保持節奏連續性
+ */
+function handleBPMChange(now) {
+  console.log(`[BPM Change] ${timerState.lastBPM} -> ${timerState.currentBPM} BPM`);
+
+  const elapsedTime = now - timerState.timerStartTime;
+  const oldBeatInterval = 60000 / timerState.lastBPM;
+  const beatsSoFar = Math.floor(elapsedTime / oldBeatInterval);
+
+  // 重新計算起始時間，讓轉換無縫
+  const newBeatInterval = 60000 / timerState.currentBPM;
+  timerState.timerStartTime = now - (beatsSoFar * newBeatInterval);
+  timerState.expectedBeatNumber = beatsSoFar;
+  timerState.nextBeatTime = timerState.timerStartTime +
+                            ((beatsSoFar + 1) * newBeatInterval);
+
+  // 重置漂移追踪和節拍計數器
+  timerState.driftSamples = [];
+  timerState.avgDrift = 0;
+  timerState.lastBPM = timerState.currentBPM;
+  timerState.currentBeatInBar = 0;
+}
+
+/**
+ * 追踪節拍延遲並計算平均漂移
+ */
+function trackDrift(drift) {
+  // 只追踪 0-50ms 的正常延遲（過大可能是系統異常）
+  if (drift < 0 || drift > 50) return;
+
+  timerState.driftSamples.push(drift);
+
+  // 保留最近 10 個樣本
+  if (timerState.driftSamples.length > 10) {
+    timerState.driftSamples.shift();
+  }
+
+  // 計算平均漂移
+  const sum = timerState.driftSamples.reduce((a, b) => a + b, 0);
+  timerState.avgDrift = sum / timerState.driftSamples.length;
+}
+
 function updateContentScript() {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (tabs[0]) {
@@ -140,7 +209,8 @@ function broadcastState() {
       soundEnabled: timerState.soundEnabled,
       soundType: timerState.soundType,
       overlayOpacity: timerState.overlayOpacity,
-      timeSignature: timerState.timeSignature
+      timeSignature: timerState.timeSignature,
+      autoStartEnabled: timerState.autoStartEnabled
     }
   }).catch(() => {
     // Popup 可能已關閉，忽略錯誤
@@ -154,8 +224,19 @@ function runTimer() {
   }
 
   timerState.isRunning = true;
+
+  // 初始化節拍調度狀態
+  timerState.timerStartTime = Date.now();
+  timerState.expectedBeatNumber = 0;
+  timerState.lastBPM = timerState.currentBPM;
+
   const beatInterval = 60000 / timerState.currentBPM;
-  timerState.lastBeatTime = Date.now();
+  timerState.nextBeatTime = timerState.timerStartTime + beatInterval;
+
+  // 重置漂移追踪
+  timerState.driftSamples = [];
+  timerState.avgDrift = 0;
+  timerState.lastTickTime = Date.now();
 
   let tickCounter = 0; // tick 計數器：累積 10 個 tick（1000ms）才減少 1 秒
 
@@ -191,20 +272,45 @@ function runTimer() {
       }
     }
 
-    // BPM 節拍檢測 - 每個 tick 都執行（保持精確）
+    // ========== 新：無漂移 BPM 節拍檢測 ==========
     const now = Date.now();
-    const currentBeatInterval = 60000 / timerState.currentBPM;
-    if (now - timerState.lastBeatTime >= currentBeatInterval) {
+
+    // 檢測系統休眠（時間跳躍 > 1 秒）
+    const timeSinceLastTick = now - (timerState.lastTickTime || now);
+    if (timeSinceLastTick > 1000) {
+      console.log('[Sleep Detected] 重置節拍計時');
+      timerState.timerStartTime = now;
+      timerState.expectedBeatNumber = 0;
+      const beatInterval = 60000 / timerState.currentBPM;
+      timerState.nextBeatTime = now + beatInterval;
+      timerState.driftSamples = [];
+      timerState.avgDrift = 0;
+    }
+    timerState.lastTickTime = now;
+
+    // 檢測 BPM 變化
+    if (timerState.currentBPM !== timerState.lastBPM) {
+      handleBPMChange(now);
+    }
+
+    // 檢查是否應該觸發節拍
+    if (now >= timerState.nextBeatTime) {
       if (timerState.soundEnabled) {
-        // 計算當前拍在小節中的位置
+        // 計算漂移（實際時間 - 理論時間）
+        const drift = now - timerState.nextBeatTime;
+        trackDrift(drift);
+
+        // 播放節拍
         const beatType = getBeatType(timerState.currentBeatInBar, timerState.timeSignature);
         playBeep(beatType);
 
-        // 更新拍計數器
+        // 更新節拍計數器
         const beatsPerBar = getBeatsPerBar(timerState.timeSignature);
         timerState.currentBeatInBar = (timerState.currentBeatInBar + 1) % beatsPerBar;
       }
-      timerState.lastBeatTime = now;
+
+      // 調度下一次節拍
+      scheduleNextBeat();
     }
   }, 100); // 100ms 精度
 }
@@ -232,9 +338,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.action) {
     case 'START_TIMER':
       timerState.remainingSeconds = request.duration;
+      timerState.defaultDuration = request.duration;
       timerState.isPaused = false;
-      timerState.lastBeatTime = Date.now();
-      timerState.currentBeatInBar = 0; // 重置節拍計數器，從強拍開始
+
+      // 新增：初始化節拍調度狀態
+      timerState.timerStartTime = 0;  // 將在 runTimer() 中設置
+      timerState.expectedBeatNumber = 0;
+      timerState.nextBeatTime = 0;
+      timerState.lastBPM = timerState.currentBPM;
+      timerState.currentBeatInBar = 0;
+      timerState.driftSamples = [];
+      timerState.avgDrift = 0;
+
+      chrome.storage.local.set({ defaultDuration: request.duration });
       createOffscreenDocument().then(() => {
         runTimer();
         broadcastState();
@@ -255,8 +371,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     case 'RESUME_TIMER':
       timerState.isPaused = false;
-      timerState.lastBeatTime = Date.now(); // 重置節拍時間
-      timerState.currentBeatInBar = 0; // 重置節拍計數器，從強拍開始
+
+      // 新增：恢復時重置節拍（避免時間跳躍）
+      timerState.timerStartTime = Date.now();
+      timerState.expectedBeatNumber = 0;
+      const beatInterval = 60000 / timerState.currentBPM;
+      timerState.nextBeatTime = timerState.timerStartTime + beatInterval;
+      timerState.lastBPM = timerState.currentBPM;
+      timerState.currentBeatInBar = 0;
+      timerState.driftSamples = [];
+      timerState.avgDrift = 0;
+      timerState.lastTickTime = Date.now();
+
       runTimer();
       chrome.storage.local.set({ isPaused: false });
       broadcastState();
@@ -354,9 +480,55 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           soundEnabled: timerState.soundEnabled,
           soundType: timerState.soundType,
           overlayOpacity: timerState.overlayOpacity,
-          timeSignature: timerState.timeSignature
+          timeSignature: timerState.timeSignature,
+          autoStartEnabled: timerState.autoStartEnabled
         }
       });
+      break;
+
+    case 'VIDEO_PLAY':
+      // 只在啟用自動啟動 && 計時器未運行時啟動
+      if (timerState.autoStartEnabled && !timerState.isRunning) {
+        timerState.remainingSeconds = timerState.defaultDuration;
+        timerState.isPaused = false;
+        timerState.lastBeatTime = Date.now();
+        timerState.currentBeatInBar = 0;
+        createOffscreenDocument().then(() => {
+          runTimer();
+          broadcastState();
+        });
+      }
+      // 如果計時器正在運行但被暫停，且啟用自動啟動，則恢復
+      else if (timerState.autoStartEnabled && timerState.isRunning && timerState.isPaused) {
+        timerState.isPaused = false;
+        timerState.lastBeatTime = Date.now();
+        timerState.currentBeatInBar = 0;
+        runTimer();
+        chrome.storage.local.set({ isPaused: false });
+        broadcastState();
+      }
+      sendResponse({ success: true });
+      break;
+
+    case 'VIDEO_PAUSE':
+      // 只在啟用自動啟動 && 計時器正在運行且未暫停時暫停
+      if (timerState.autoStartEnabled && timerState.isRunning && !timerState.isPaused) {
+        timerState.isPaused = true;
+        if (timerState.timerInterval) {
+          clearInterval(timerState.timerInterval);
+          timerState.timerInterval = null;
+        }
+        chrome.storage.local.set({ isPaused: true });
+        broadcastState();
+      }
+      sendResponse({ success: true });
+      break;
+
+    case 'TOGGLE_AUTO_START':
+      timerState.autoStartEnabled = request.enabled;
+      chrome.storage.local.set({ autoStartEnabled: request.enabled });
+      broadcastState();
+      sendResponse({ success: true });
       break;
 
     case 'OFFSCREEN_READY':
@@ -379,7 +551,9 @@ chrome.runtime.onStartup.addListener(() => {
     'overlayOpacity',
     'timeSignature',
     'isRunning',
-    'isPaused'
+    'isPaused',
+    'autoStartEnabled',
+    'defaultDuration'
   ], (result) => {
     if (result.remainingSeconds) timerState.remainingSeconds = result.remainingSeconds;
     if (result.currentBPM) timerState.currentBPM = result.currentBPM;
@@ -387,6 +561,8 @@ chrome.runtime.onStartup.addListener(() => {
     if (result.soundType !== undefined) timerState.soundType = result.soundType;
     if (result.overlayOpacity !== undefined) timerState.overlayOpacity = result.overlayOpacity;
     if (result.timeSignature) timerState.timeSignature = result.timeSignature;
+    if (result.autoStartEnabled !== undefined) timerState.autoStartEnabled = result.autoStartEnabled;
+    if (result.defaultDuration) timerState.defaultDuration = result.defaultDuration;
 
     // 如果計時器正在運行且未暫停，恢復執行
     if (result.isRunning && !result.isPaused && result.remainingSeconds > 0) {
@@ -405,12 +581,16 @@ chrome.runtime.onInstalled.addListener(() => {
     'soundEnabled',
     'soundType',
     'overlayOpacity',
-    'timeSignature'
+    'timeSignature',
+    'autoStartEnabled',
+    'defaultDuration'
   ], (result) => {
     if (result.currentBPM) timerState.currentBPM = result.currentBPM;
     if (result.soundEnabled !== undefined) timerState.soundEnabled = result.soundEnabled;
     if (result.soundType !== undefined) timerState.soundType = result.soundType;
     if (result.overlayOpacity !== undefined) timerState.overlayOpacity = result.overlayOpacity;
     if (result.timeSignature) timerState.timeSignature = result.timeSignature;
+    if (result.autoStartEnabled !== undefined) timerState.autoStartEnabled = result.autoStartEnabled;
+    if (result.defaultDuration) timerState.defaultDuration = result.defaultDuration;
   });
 });
