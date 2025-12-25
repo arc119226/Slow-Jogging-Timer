@@ -264,6 +264,16 @@
   cursor: pointer;
   transition: all 0.2s ease;
   z-index: 1;
+
+  /* 確保文字能夠正確顯示 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;  /* 確保等寬數字 */
 }
 
 #slowjogging-toggle-btn:hover {
@@ -282,8 +292,9 @@
 }
 
 #slowjogging-timer-widget.minimized #slowjogging-toggle-btn {
-  font-size: 12px;
-  padding: 6px 10px;
+  font-size: 11px;
+  padding: 6px 8px;
+  min-height: auto;
 }
 
 /* ========== BPM 節拍指示燈 ========== */

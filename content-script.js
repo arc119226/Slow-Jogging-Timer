@@ -5,6 +5,28 @@ let isVideoAttached = false;
 // 節拍指示燈狀態
 let currentActiveSide = 'left'; // 追蹤當前應該亮的指示燈
 
+// 追蹤當前顯示的時間（用於隱藏狀態下的按鈕文字）
+let currentDisplayTime = '00:00:00';
+
+// 安全发送消息的辅助函数，处理 extension context 失效的情况
+function safeSendMessage(message) {
+  // 检查 extension context 是否仍然有效
+  if (!chrome.runtime?.id) {
+    console.warn('[Slow Jogging] Extension context 已失效，跳过消息发送');
+    return;
+  }
+
+  try {
+    chrome.runtime.sendMessage(message).catch(err => {
+      // Promise rejection（异步错误）
+      console.error('[Slow Jogging] 消息发送失败:', err);
+    });
+  } catch (err) {
+    // 同步错误（extension context 失效）
+    console.error('[Slow Jogging] Extension context 已失效:', err);
+  }
+}
+
 // 查找並附加到 YouTube 視頻元素
 function attachToYouTubeVideo() {
   const video = document.querySelector('video.html5-main-video');
@@ -47,9 +69,7 @@ function detachFromVideo() {
 
 function handleVideoPlay() {
   console.log('[Slow Jogging] 視頻播放中，發送 VIDEO_PLAY 消息');
-  chrome.runtime.sendMessage({ action: 'VIDEO_PLAY' }).catch(err => {
-    console.error('[Slow Jogging] 發送 VIDEO_PLAY 失敗:', err);
-  });
+  safeSendMessage({ action: 'VIDEO_PLAY' });
 }
 
 function handleVideoPause() {
@@ -57,16 +77,12 @@ function handleVideoPause() {
   if (videoElement && videoElement.ended) return;
 
   console.log('[Slow Jogging] 視頻暫停，發送 VIDEO_PAUSE 消息');
-  chrome.runtime.sendMessage({ action: 'VIDEO_PAUSE' }).catch(err => {
-    console.error('[Slow Jogging] 發送 VIDEO_PAUSE 失敗:', err);
-  });
+  safeSendMessage({ action: 'VIDEO_PAUSE' });
 }
 
 function handleVideoEnded() {
   console.log('[Slow Jogging] 視頻結束，發送 VIDEO_PAUSE 消息');
-  chrome.runtime.sendMessage({ action: 'VIDEO_PAUSE' }).catch(err => {
-    console.error('[Slow Jogging] 發送 VIDEO_PAUSE 失敗:', err);
-  });
+  safeSendMessage({ action: 'VIDEO_PAUSE' });
 }
 
 // 監聽 YouTube SPA 導航
@@ -132,7 +148,7 @@ function initializeYouTubeOverlay() {
         <div id="slowjogging-timer-display">00:00:00</div>
         <div id="slowjogging-bpm-container">
           <div class="slowjogging-beat-indicator" id="slowjogging-left-indicator"></div>
-          <div id="slowjogging-bpm-info">120 BPM</div>
+          <div id="slowjogging-bpm-info">190 BPM</div>
           <div class="slowjogging-beat-indicator" id="slowjogging-right-indicator"></div>
         </div>
       </div>
@@ -148,9 +164,19 @@ function initializeYouTubeOverlay() {
     if (request.action === 'updateTimer') {
       const display = document.getElementById('slowjogging-timer-display');
       const bpmInfo = document.getElementById('slowjogging-bpm-info');
+      const toggleBtn = document.getElementById('slowjogging-toggle-btn');
+      const content = document.getElementById('slowjogging-timer-content');
+
+      // 保存最新的時間
+      currentDisplayTime = request.time;
 
       if (display) display.textContent = request.time;
       if (bpmInfo) bpmInfo.textContent = request.bpm + ' BPM';
+
+      // 如果內容隱藏，按鈕顯示倒計時時間
+      if (content && toggleBtn && content.style.display === 'none') {
+        toggleBtn.textContent = currentDisplayTime;
+      }
     }
     if (request.action === 'toggleVisibility') {
       const content = document.getElementById('slowjogging-timer-content');
@@ -159,7 +185,15 @@ function initializeYouTubeOverlay() {
       if (content && toggleBtn) {
         const isHidden = content.style.display === 'none';
         content.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.textContent = isHidden ? '隱藏' : '顯示';
+
+        // 更新按鈕文字邏輯
+        if (isHidden) {
+          // 從隱藏切換到顯示
+          toggleBtn.textContent = '隱藏';
+        } else {
+          // 從顯示切換到隱藏，顯示倒計時時間
+          toggleBtn.textContent = currentDisplayTime;
+        }
 
         // 當隱藏時，讓按鈕變小
         const widget = document.getElementById('slowjogging-timer-widget');
@@ -200,7 +234,15 @@ function initializeYouTubeOverlay() {
       if (content && widget) {
         const isHidden = content.style.display === 'none';
         content.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.textContent = isHidden ? '隱藏' : '顯示';
+
+        // 更新按鈕文字邏輯
+        if (isHidden) {
+          // 從隱藏切換到顯示
+          toggleBtn.textContent = '隱藏';
+        } else {
+          // 從顯示切換到隱藏，顯示倒計時時間
+          toggleBtn.textContent = currentDisplayTime;
+        }
 
         // 當隱藏時，讓按鈕變小
         widget.classList.toggle('minimized', !isHidden);
@@ -245,4 +287,18 @@ if (document.readyState === 'loading') {
 } else {
   initializeYouTubeOverlay();
   initializeVideoSync();
+}
+
+// 检测 extension context 失效并清理事件监听器
+if (typeof chrome !== 'undefined' && chrome.runtime) {
+  try {
+    // 尝试连接到 background - 如果失败说明 context 已失效
+    const port = chrome.runtime.connect({ name: 'content-script-keepalive' });
+    port.onDisconnect.addListener(() => {
+      console.log('[Slow Jogging] Extension context 失效，清理事件监听器');
+      detachFromVideo();
+    });
+  } catch (err) {
+    console.warn('[Slow Jogging] 无法连接到 background:', err);
+  }
 }
