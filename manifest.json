@@ -39,7 +39,8 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "sounds/castanets.wav"
+        "sounds/castanets.wav",
+        "sounds/snaredrum.mp3"
       ],
       "matches": ["https://www.youtube.com/*"]
     }

@@ -10,6 +10,8 @@ async function playBPMSound(beatType = 'weak', currentSoundType = 'beep') {
     playBeepSound(beatType);
   } else if (soundType === 'castanets') {
     await playCastanetsSound(beatType);
+  } else if (soundType === 'snaredrum') {
+    await playSnaredrumSound(beatType);
   }
 }
 
@@ -187,6 +189,116 @@ async function preloadCastanets() {
   }
 }
 
+// 播放小鼓音效（音頻文件）
+// scheduledTime: AudioContext 時間軸上的絕對時間（秒），null 表示立即播放
+async function playSnaredrumSound(beatType = 'weak', scheduledTime = null) {
+  // 定義不同強度拍的音頻參數
+  const snaredrumConfigs = {
+    strong: {
+      volume: 1.0,        // 100% 音量（小鼓強拍較響板突出）
+      playbackRate: 1.1   // 110% 速度（更緊湊）
+    },
+    medium: {
+      volume: 0.7,        // 70% 音量
+      playbackRate: 1.0   // 正常速度
+    },
+    weak: {
+      volume: 0.45,       // 45% 音量
+      playbackRate: 0.95  // 95% 速度（稍低沈）
+    }
+  };
+
+  const config = snaredrumConfigs[beatType] || snaredrumConfigs.weak;
+
+  try {
+    // 確保 AudioContext 已初始化
+    if (!audioContext) {
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        console.error('AudioContext 初始化失敗:', e);
+        // 降級到嗶聲
+        playBeepSound(beatType, scheduledTime);
+        return;
+      }
+    }
+
+    // 加載音頻文件（如果尚未緩存）
+    if (!audioBuffers['snaredrum']) {
+      await loadSnaredrumAudio();
+    }
+
+    if (!audioBuffers['snaredrum']) {
+      console.warn('小鼓音效不可用，切換至嗶聲');
+      playBeepSound(beatType, scheduledTime);
+      return;
+    }
+
+    // ========== 支持預調度：使用指定時間或立即播放 ==========
+    const startTime = scheduledTime !== null
+      ? scheduledTime
+      : audioContext.currentTime;
+
+    const source = audioContext.createBufferSource();
+    const gainNode = audioContext.createGain();
+
+    source.buffer = audioBuffers['snaredrum'];
+    source.playbackRate.value = config.playbackRate;
+
+    source.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    gainNode.gain.setValueAtTime(config.volume, startTime);
+
+    // 預調度播放
+    source.start(startTime);
+  } catch (e) {
+    console.error('小鼓音效播放錯誤，使用嗶聲:', e);
+    playBeepSound(beatType, scheduledTime);
+  }
+}
+
+// 加載小鼓音頻文件
+async function loadSnaredrumAudio() {
+  if (!audioContext) {
+    try {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+      console.error('AudioContext 初始化失敗:', e);
+      return;
+    }
+  }
+
+  try {
+    const response = await fetch(chrome.runtime.getURL('sounds/snaredrum.mp3'));
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const arrayBuffer = await response.arrayBuffer();
+    audioBuffers['snaredrum'] = await audioContext.decodeAudioData(arrayBuffer);
+    console.log('小鼓音效加載成功');
+  } catch (error) {
+    console.error('小鼓音效加載失敗:', error);
+    audioBuffers['snaredrum'] = null;
+  }
+}
+
+// 預加載小鼓音效
+async function preloadSnaredrum() {
+  if (!audioContext) {
+    try {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+      console.error('AudioContext 初始化失敗:', e);
+      return;
+    }
+  }
+
+  if (!audioBuffers['snaredrum']) {
+    await loadSnaredrumAudio();
+  }
+}
+
 // 監聽來自 background 的消息
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // ========== 新增：預調度播放（階段二） ==========
@@ -213,12 +325,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (currentSoundType === 'beep') {
       playBeepSound(beatType, scheduledTime);
       sendResponse({ success: true });
-    } else {
+    } else if (currentSoundType === 'castanets') {
       // 正確處理 async
       playCastanetsSound(beatType, scheduledTime).then(() => {
         sendResponse({ success: true });
       }).catch(err => {
         console.error('響板播放失敗:', err);
+        // 降級到嗶聲
+        playBeepSound(beatType, scheduledTime);
+        sendResponse({ success: true });
+      });
+      return true;  // 保持消息通道開啟以支援異步回應
+    } else if (currentSoundType === 'snaredrum') {
+      // 正確處理 async
+      playSnaredrumSound(beatType, scheduledTime).then(() => {
+        sendResponse({ success: true });
+      }).catch(err => {
+        console.error('小鼓播放失敗:', err);
         // 降級到嗶聲
         playBeepSound(beatType, scheduledTime);
         sendResponse({ success: true });
@@ -238,6 +361,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (request.action === 'PRELOAD_CASTANETS') {
     preloadCastanets().then(() => {
+      sendResponse({ success: true });
+    });
+    return true; // 保持消息通道開啟以支援異步回應
+  }
+
+  if (request.action === 'PRELOAD_SNAREDRUM') {
+    preloadSnaredrum().then(() => {
       sendResponse({ success: true });
     });
     return true; // 保持消息通道開啟以支援異步回應

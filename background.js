@@ -586,9 +586,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       timerState.soundType = request.soundType;
       chrome.storage.local.set({ soundType: request.soundType });
 
-      // 預加載響板音效
+      // 預加載對應的音效
       if (request.soundType === 'castanets' && timerState.offscreenDocumentExists) {
         chrome.runtime.sendMessage({ action: 'PRELOAD_CASTANETS' }).catch(() => {});
+      } else if (request.soundType === 'snaredrum' && timerState.offscreenDocumentExists) {
+        chrome.runtime.sendMessage({ action: 'PRELOAD_SNAREDRUM' }).catch(() => {});
       }
 
       broadcastState();
