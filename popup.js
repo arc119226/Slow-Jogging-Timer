@@ -1,12 +1,13 @@
 // ========== UI 狀態變數 ==========
-let currentBPM = 190;
-let soundEnabled = true;
-let isPaused = false;
-let overlayOpacity = 100;
-let timeSignature = '4/4';
-let soundType = 'beep';
-let overlayVisible = true;
-let autoStartEnabled = false;
+// 移除硬編碼預設值 - 將從 background 初始化
+let currentBPM;
+let soundEnabled;
+let isPaused;
+let overlayOpacity;
+let timeSignature;
+let soundType;
+let overlayVisible;
+let autoStartEnabled;
 
 // ========== 取得 DOM 元素 ==========
 const timerDisplay = document.getElementById('timer');
@@ -94,6 +95,12 @@ function updateUIFromState(state) {
   if (state.autoStartEnabled !== undefined) {
     autoStartToggle.checked = state.autoStartEnabled;
     autoStartEnabled = state.autoStartEnabled;
+  }
+
+  // 更新覆蓋層可見性狀態
+  if (state.overlayVisible !== undefined) {
+    overlayVisible = state.overlayVisible;
+    toggleOverlayBtn.textContent = overlayVisible ? '隱藏計時器面板' : '顯示計時器面板';
   }
 }
 

@@ -224,6 +224,20 @@ function initializeYouTubeOverlay() {
     }
   });
 
+  // 從 storage 載入初始可見性狀態
+  chrome.storage.local.get(['overlayVisible'], (result) => {
+    const content = document.getElementById('slowjogging-timer-content');
+    const toggleBtn = document.getElementById('slowjogging-toggle-btn');
+    const widget = document.getElementById('slowjogging-timer-widget');
+
+    if (result.overlayVisible !== undefined && !result.overlayVisible) {
+      // 初始隱藏狀態
+      content.style.display = 'none';
+      toggleBtn.textContent = currentDisplayTime || '00:00';
+      widget.classList.add('minimized');
+    }
+  });
+
   // 切換顯示/隱藏
   const toggleBtn = document.getElementById('slowjogging-toggle-btn');
   if (toggleBtn) {

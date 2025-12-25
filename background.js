@@ -1,18 +1,27 @@
 // ========== 狀態管理 ==========
+// 預設設定（單一權威來源）
+const DEFAULT_SETTINGS = {
+  currentBPM: 190,
+  soundEnabled: true,
+  soundType: 'castanets',        // 使用響板聲
+  overlayOpacity: 30,             // 使用 30% 透明度
+  timeSignature: '2/4',           // 使用 2/4 拍
+  autoStartEnabled: false,
+  defaultDuration: 2700,
+  overlayVisible: true            // 新增：持久化覆蓋層可見性
+};
+
 let timerState = {
+  // 從預設設定初始化
+  ...DEFAULT_SETTINGS,
+
+  // 運行時狀態
   timerInterval: null,
   remainingSeconds: 0,
   isPaused: false,
-  currentBPM: 190,
-  soundEnabled: true,
-  soundType: 'beep',
-  overlayOpacity: 100,
-  timeSignature: '4/4',
   currentBeatInBar: 0,
   isRunning: false,
   offscreenDocumentExists: false,
-  autoStartEnabled: false,
-  defaultDuration: 2700,
 
   // 新增：增量節拍調度字段
   timerStartTime: 0,        // 計時器啟動的絕對時間戳
@@ -598,6 +607,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
 
     case 'TOGGLE_OVERLAY_VISIBILITY':
+      // 更新狀態並持久化
+      timerState.overlayVisible = request.visible;
+      chrome.storage.local.set({ overlayVisible: request.visible });  // 持久化
+
       // 通知所有 YouTube 標籤頁切換顯示狀態
       chrome.tabs.query({ url: 'https://www.youtube.com/*' }, (tabs) => {
         tabs.forEach(tab => {
@@ -623,7 +636,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           soundType: timerState.soundType,
           overlayOpacity: timerState.overlayOpacity,
           timeSignature: timerState.timeSignature,
-          autoStartEnabled: timerState.autoStartEnabled
+          autoStartEnabled: timerState.autoStartEnabled,
+          overlayVisible: timerState.overlayVisible  // 新增
         }
       });
       break;
@@ -685,26 +699,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // ========== 啟動監聽器 ==========
 chrome.runtime.onStartup.addListener(() => {
   console.log('Service worker 啟動');
-  chrome.storage.local.get([
-    'remainingSeconds',
-    'currentBPM',
-    'soundEnabled',
-    'soundType',
-    'overlayOpacity',
-    'timeSignature',
-    'isRunning',
-    'isPaused',
-    'autoStartEnabled',
-    'defaultDuration'
-  ], (result) => {
-    if (result.remainingSeconds) timerState.remainingSeconds = result.remainingSeconds;
-    if (result.currentBPM) timerState.currentBPM = result.currentBPM;
-    if (result.soundEnabled !== undefined) timerState.soundEnabled = result.soundEnabled;
-    if (result.soundType !== undefined) timerState.soundType = result.soundType;
-    if (result.overlayOpacity !== undefined) timerState.overlayOpacity = result.overlayOpacity;
-    if (result.timeSignature) timerState.timeSignature = result.timeSignature;
-    if (result.autoStartEnabled !== undefined) timerState.autoStartEnabled = result.autoStartEnabled;
-    if (result.defaultDuration) timerState.defaultDuration = result.defaultDuration;
+
+  // 載入所有設定鍵（包括預設設定和運行時狀態）
+  const settingsKeys = [...Object.keys(DEFAULT_SETTINGS), 'remainingSeconds', 'isRunning', 'isPaused'];
+  chrome.storage.local.get(settingsKeys, (result) => {
+    // 合併預設值（任何缺少的鍵使用預設值）
+    const settings = { ...DEFAULT_SETTINGS, ...result };
+    Object.assign(timerState, settings);
 
     // 如果計時器正在運行且未暫停，恢復執行
     if (result.isRunning && !result.isPaused && result.remainingSeconds > 0) {
@@ -716,23 +717,31 @@ chrome.runtime.onStartup.addListener(() => {
   });
 });
 
-chrome.runtime.onInstalled.addListener(() => {
-  console.log('Extension 已安裝/更新');
-  chrome.storage.local.get([
-    'currentBPM',
-    'soundEnabled',
-    'soundType',
-    'overlayOpacity',
-    'timeSignature',
-    'autoStartEnabled',
-    'defaultDuration'
-  ], (result) => {
-    if (result.currentBPM) timerState.currentBPM = result.currentBPM;
-    if (result.soundEnabled !== undefined) timerState.soundEnabled = result.soundEnabled;
-    if (result.soundType !== undefined) timerState.soundType = result.soundType;
-    if (result.overlayOpacity !== undefined) timerState.overlayOpacity = result.overlayOpacity;
-    if (result.timeSignature) timerState.timeSignature = result.timeSignature;
-    if (result.autoStartEnabled !== undefined) timerState.autoStartEnabled = result.autoStartEnabled;
-    if (result.defaultDuration) timerState.defaultDuration = result.defaultDuration;
-  });
+chrome.runtime.onInstalled.addListener((details) => {
+  console.log('Extension 已安裝/更新:', details.reason);
+
+  if (details.reason === 'install') {
+    // 全新安裝：寫入所有預設值到 storage
+    chrome.storage.local.set(DEFAULT_SETTINGS, () => {
+      console.log('預設設定已初始化');
+      Object.assign(timerState, DEFAULT_SETTINGS);
+    });
+  } else if (details.reason === 'update') {
+    // 擴展更新：合併新預設值與現有設定
+    chrome.storage.local.get(Object.keys(DEFAULT_SETTINGS), (result) => {
+      const mergedSettings = { ...DEFAULT_SETTINGS, ...result };
+      chrome.storage.local.set(mergedSettings);
+      Object.assign(timerState, mergedSettings);
+    });
+  }
+
+  // 清理現有的 offscreen document（如果存在）
+  chrome.offscreen.hasDocument().then((hasDoc) => {
+    if (hasDoc) {
+      chrome.offscreen.closeDocument().then(() => {
+        timerState.offscreenDocumentExists = false;
+        console.log('已清理 offscreen document');
+      });
+    }
+  }).catch(err => console.log('檢查 offscreen document 時發生錯誤:', err));
 });
