@@ -14,15 +14,16 @@
 - 音效類型選擇
 - 拍號選擇
 - 面板透明度
+- 自動啟動設置
+- 預設計時器時長
 
 所有數據僅存儲在您的本地設備上，不會上傳到任何服務器。
 
 ### 權限說明
 - **storage**：用於保存您的設置
-- **activeTab**：用於在當前 YouTube 標籤頁上顯示計時器
-- **scripting**：用於注入計時器覆蓋層
 - **tabs**：用於檢測 YouTube 頁面
 - **offscreen**：用於在後台播放節拍音效
+- **host_permissions (YouTube)**：僅訪問 YouTube 網站以顯示計時器覆蓋層
 
 ### 第三方服務
 本擴充功能不使用任何第三方分析、追蹤或廣告服務。
@@ -49,15 +50,16 @@ This Extension uses Chrome's local storage (chrome.storage.local) to save your p
 - Sound type selection
 - Time signature selection
 - Panel opacity
+- Auto-start settings
+- Default timer duration
 
 All data is stored locally on your device only and is never uploaded to any server.
 
 ### Permissions Explained
 - **storage**: To save your settings
-- **activeTab**: To display the timer overlay on the current YouTube tab
-- **scripting**: To inject the timer overlay
 - **tabs**: To detect YouTube pages
 - **offscreen**: To play beat sounds in the background
+- **host_permissions (YouTube)**: To access YouTube website only for displaying the timer overlay
 
 ### Third-Party Services
 This Extension does not use any third-party analytics, tracking, or advertising services.
