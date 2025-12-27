@@ -208,7 +208,8 @@ function handleBPMChange(now) {
             remainingSeconds: timerState.remainingSeconds,
             currentBPM: timerState.currentBPM,
             isRunning: timerState.isRunning,
-            isPaused: timerState.isPaused
+            isPaused: timerState.isPaused,
+            defaultDuration: timerState.defaultDuration
           });
           broadcastState();
         } else {
@@ -394,7 +395,8 @@ function runTimer() {
           remainingSeconds: timerState.remainingSeconds,
           currentBPM: timerState.currentBPM,
           isRunning: timerState.isRunning,
-          isPaused: timerState.isPaused
+          isPaused: timerState.isPaused,
+          defaultDuration: timerState.defaultDuration
         });
 
         // 廣播狀態到 popup（如果開啟）
@@ -727,11 +729,34 @@ chrome.runtime.onInstalled.addListener((details) => {
       Object.assign(timerState, DEFAULT_SETTINGS);
     });
   } else if (details.reason === 'update') {
-    // 擴展更新：合併新預設值與現有設定
-    chrome.storage.local.get(Object.keys(DEFAULT_SETTINGS), (result) => {
+    // ========== 修復：恢復所有狀態（包括運行時狀態）==========
+    const allKeys = [
+      ...Object.keys(DEFAULT_SETTINGS),
+      'remainingSeconds',  // 新增：恢复剩余时间
+      'isRunning',         // 新增：恢复运行状态
+      'isPaused',          // 新增：恢复暂停状态
+      'defaultDuration'    // 新增：恢复默认时长
+    ];
+
+    chrome.storage.local.get(allKeys, (result) => {
+      // 合併策略：現有值優先，新預設值補充缺失項
       const mergedSettings = { ...DEFAULT_SETTINGS, ...result };
       chrome.storage.local.set(mergedSettings);
       Object.assign(timerState, mergedSettings);
+
+      // 如果計時器正在運行且未暫停，自動恢復執行
+      if (result.isRunning && !result.isPaused && result.remainingSeconds > 0) {
+        console.log('[update] 恢復計時器運行，剩餘:', result.remainingSeconds, '秒');
+        createOffscreenDocument().then(() => {
+          runTimer();
+        }).catch(err => {
+          console.error('[update] 恢復計時器失敗:', err);
+        });
+      } else if (result.isRunning && result.isPaused) {
+        console.log('[update] 計時器處於暫停狀態');
+      } else {
+        console.log('[update] 計時器未運行');
+      }
     });
   }
 
