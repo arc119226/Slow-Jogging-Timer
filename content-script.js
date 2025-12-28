@@ -243,23 +243,16 @@ function initializeYouTubeOverlay() {
   if (toggleBtn) {
     toggleBtn.addEventListener('click', () => {
       const content = document.getElementById('slowjogging-timer-content');
-      const widget = document.getElementById('slowjogging-timer-widget');
 
-      if (content && widget) {
+      if (content) {
         const isHidden = content.style.display === 'none';
-        content.style.display = isHidden ? 'block' : 'none';
+        const newVisibleState = isHidden; // 即將顯示
 
-        // 更新按鈕文字邏輯
-        if (isHidden) {
-          // 從隱藏切換到顯示
-          toggleBtn.textContent = '隱藏';
-        } else {
-          // 從顯示切換到隱藏，顯示倒計時時間
-          toggleBtn.textContent = currentDisplayTime;
-        }
-
-        // 當隱藏時，讓按鈕變小
-        widget.classList.toggle('minimized', !isHidden);
+        // 只發送訊息給 background，等廣播回來更新 DOM
+        safeSendMessage({
+          action: 'TOGGLE_OVERLAY_VISIBILITY',
+          visible: newVisibleState
+        });
       }
     });
   }

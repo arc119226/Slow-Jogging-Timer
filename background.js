@@ -327,7 +327,9 @@ function broadcastState() {
       soundType: timerState.soundType,
       overlayOpacity: timerState.overlayOpacity,
       timeSignature: timerState.timeSignature,
-      autoStartEnabled: timerState.autoStartEnabled
+      autoStartEnabled: timerState.autoStartEnabled,
+      overlayVisible: timerState.overlayVisible,
+      defaultDuration: timerState.defaultDuration
     }
   }).catch(() => {
     // Popup 可能已關閉，忽略錯誤
@@ -685,6 +687,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     case 'TOGGLE_AUTO_START':
       timerState.autoStartEnabled = request.enabled;
       chrome.storage.local.set({ autoStartEnabled: request.enabled });
+      broadcastState();
+      sendResponse({ success: true });
+      break;
+
+    case 'UPDATE_DEFAULT_DURATION':
+      timerState.defaultDuration = request.duration;
+      chrome.storage.local.set({ defaultDuration: request.duration });
       broadcastState();
       sendResponse({ success: true });
       break;

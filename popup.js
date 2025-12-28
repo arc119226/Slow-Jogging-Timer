@@ -47,6 +47,11 @@ function updateUIFromState(state) {
   bpmSlider.value = state.currentBPM;
   soundToggle.checked = state.soundEnabled;
 
+  // 還原 durationInput 值（僅在計時器未運行時）
+  if (state.defaultDuration !== undefined && !state.isRunning) {
+    durationInput.value = state.defaultDuration;
+  }
+
   // 更新透明度（如果存在）
   if (state.overlayOpacity !== undefined) {
     opacityInput.value = state.overlayOpacity;
@@ -153,6 +158,17 @@ stopBtn.addEventListener('click', () => {
   durationInput.disabled = false;
   // BPM 滑桿保持可用
   isPaused = false;
+});
+
+// durationInput 即時儲存
+durationInput.addEventListener('change', (e) => {
+  const duration = parseInt(e.target.value);
+  if (!isNaN(duration) && duration > 0) {
+    chrome.runtime.sendMessage({
+      action: 'UPDATE_DEFAULT_DURATION',
+      duration: duration
+    });
+  }
 });
 
 // BPM 滑塊即時更新
