@@ -47,8 +47,8 @@ function updateUIFromState(state) {
   bpmSlider.value = state.currentBPM;
   soundToggle.checked = state.soundEnabled;
 
-  // 還原 durationInput 值（僅在計時器未運行時）
-  if (state.defaultDuration !== undefined && !state.isRunning) {
+  // 還原 durationInput 值（始終顯示保存的值）
+  if (state.defaultDuration !== undefined) {
     durationInput.value = state.defaultDuration;
   }
 
