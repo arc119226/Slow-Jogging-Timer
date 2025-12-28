@@ -641,7 +641,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           overlayOpacity: timerState.overlayOpacity,
           timeSignature: timerState.timeSignature,
           autoStartEnabled: timerState.autoStartEnabled,
-          overlayVisible: timerState.overlayVisible  // 新增
+          overlayVisible: timerState.overlayVisible,
+          defaultDuration: timerState.defaultDuration
         }
       });
       break;
