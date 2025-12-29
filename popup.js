@@ -2,6 +2,9 @@
 import { formatTime } from './utils/time-utils.js';
 import { BPM_MIN, BPM_MAX, OPACITY_MIN, OPACITY_MAX } from './utils/constants.js';
 import { ACTIONS } from './utils/message-actions.js';
+import { createLogger } from './utils/logger.js';
+
+const logger = createLogger('Popup');
 
 // ========== UI 狀態變數 ==========
 // 移除硬編碼預設值 - 將從 background 初始化

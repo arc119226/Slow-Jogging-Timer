@@ -15,6 +15,13 @@ const ACTIONS = {
   STATE_UPDATE: 'STATE_UPDATE'
 };
 
+// Logger (synced with utils/logger.js)
+const logger = {
+  info: (...args) => console.log('[ContentScript]', ...args),
+  warn: (...args) => console.warn('[ContentScript]', ...args),
+  error: (...args) => console.error('[ContentScript]', ...args)
+};
+
 // YouTube 視頻同步狀態
 let videoElement = null;
 let isVideoAttached = false;
@@ -29,18 +36,18 @@ let currentDisplayTime = '00:00:00';
 function safeSendMessage(message) {
   // 检查 extension context 是否仍然有效
   if (!chrome.runtime?.id) {
-    console.warn('[Slow Jogging] Extension context 已失效，跳过消息发送');
+    logger.warn('[Slow Jogging] Extension context 已失效，跳过消息发送');
     return;
   }
 
   try {
     chrome.runtime.sendMessage(message).catch(err => {
       // Promise rejection（异步错误）
-      console.error('[Slow Jogging] 消息发送失败:', err);
+      logger.error('[Slow Jogging] 消息发送失败:', err);
     });
   } catch (err) {
     // 同步错误（extension context 失效）
-    console.error('[Slow Jogging] Extension context 已失效:', err);
+    logger.error('[Slow Jogging] Extension context 已失效:', err);
   }
 }
 
@@ -70,7 +77,7 @@ function attachToYouTubeVideo() {
   videoElement.addEventListener('ended', handleVideoEnded);
 
   isVideoAttached = true;
-  console.log('[Slow Jogging] 已連接到 YouTube 視頻');
+  logger.info('[Slow Jogging] 已連接到 YouTube 視頻');
   return true;
 }
 
@@ -85,7 +92,7 @@ function detachFromVideo() {
 }
 
 function handleVideoPlay() {
-  console.log('[Slow Jogging] 視頻播放中，發送 VIDEO_PLAY 消息');
+  logger.info('[Slow Jogging] 視頻播放中，發送 VIDEO_PLAY 消息');
   safeSendMessage({ action: ACTIONS.VIDEO_PLAY });
 }
 
@@ -93,12 +100,12 @@ function handleVideoPause() {
   // 如果視頻已結束，不發送暫停消息（由 ended 事件處理）
   if (videoElement && videoElement.ended) return;
 
-  console.log('[Slow Jogging] 視頻暫停，發送 VIDEO_PAUSE 消息');
+  logger.info('[Slow Jogging] 視頻暫停，發送 VIDEO_PAUSE 消息');
   safeSendMessage({ action: ACTIONS.VIDEO_PAUSE });
 }
 
 function handleVideoEnded() {
-  console.log('[Slow Jogging] 視頻結束，發送 VIDEO_PAUSE 消息');
+  logger.info('[Slow Jogging] 視頻結束，發送 VIDEO_PAUSE 消息');
   safeSendMessage({ action: ACTIONS.VIDEO_PAUSE });
 }
 
@@ -110,7 +117,7 @@ function observeNavigation() {
     const currentUrl = location.href;
     if (currentUrl !== lastUrl) {
       lastUrl = currentUrl;
-      console.log('[Slow Jogging] YouTube 頁面導航，重新連接視頻');
+      logger.info('[Slow Jogging] YouTube 頁面導航，重新連接視頻');
 
       // 給 YouTube 時間加載新視頻
       setTimeout(() => {
@@ -319,10 +326,10 @@ if (typeof chrome !== 'undefined' && chrome.runtime) {
     // 尝试连接到 background - 如果失败说明 context 已失效
     const port = chrome.runtime.connect({ name: 'content-script-keepalive' });
     port.onDisconnect.addListener(() => {
-      console.log('[Slow Jogging] Extension context 失效，清理事件监听器');
+      logger.info('[Slow Jogging] Extension context 失效，清理事件监听器');
       detachFromVideo();
     });
   } catch (err) {
-    console.warn('[Slow Jogging] 无法连接到 background:', err);
+    logger.warn('[Slow Jogging] 无法连接到 background:', err);
   }
 }

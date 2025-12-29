@@ -7,6 +7,9 @@ import {
   SLEEP_DETECTION_THRESHOLD_MS
 } from './utils/constants.js';
 import { ACTIONS } from './utils/message-actions.js';
+import { createLogger } from './utils/logger.js';
+
+const logger = createLogger('Background');
 
 // ========== 狀態管理 ==========
 // 預設設定（單一權威來源）
@@ -59,14 +62,14 @@ async function createOffscreenDocument() {
       justification: '播放超慢跑計時器的 BPM 節拍音效'
     });
     timerState.offscreenDocumentExists = true;
-    console.log('Offscreen document 已創建');
+    logger.info('Offscreen document 已創建');
   } catch (error) {
     // 如果已經存在，也標記為 true
     if (error.message?.includes('Only a single offscreen')) {
       timerState.offscreenDocumentExists = true;
-      console.log('Offscreen document 已存在');
+      logger.info('Offscreen document 已存在');
     } else {
-      console.error('創建 offscreen document 失敗:', error);
+      logger.error('創建 offscreen document 失敗:', error);
     }
   }
 }
@@ -77,11 +80,11 @@ async function closeOffscreenDocument() {
   try {
     await chrome.offscreen.closeDocument();
     timerState.offscreenDocumentExists = false;
-    console.log('Offscreen document 已關閉');
+    logger.info('Offscreen document 已關閉');
   } catch (error) {
     // 如果已經不存在，也重置標記
     timerState.offscreenDocumentExists = false;
-    console.log('Offscreen document 不存在或已關閉:', error);
+    logger.info('Offscreen document 不存在或已關閉:', error);
   }
 }
 
@@ -119,7 +122,7 @@ async function playBeep(beatType = 'weak') {
     });
   } catch (error) {
     // Offscreen 可能已關閉，重置標記並重試一次
-    console.log('Offscreen 通訊失敗，嘗試重新創建:', error);
+    logger.info('Offscreen 通訊失敗，嘗試重新創建:', error);
     timerState.offscreenDocumentExists = false;
 
     try {
@@ -131,7 +134,7 @@ async function playBeep(beatType = 'weak') {
         soundType: timerState.soundType
       });
     } catch (retryError) {
-      console.error('重試後仍然失敗:', retryError);
+      logger.error('重試後仍然失敗:', retryError);
     }
   }
 }
@@ -154,7 +157,7 @@ function scheduleNextBeat() {
  * 處理 BPM 調整，保持節奏連續性
  */
 function handleBPMChange(now) {
-  console.log(`[BPM Change] ${timerState.lastBPM} -> ${timerState.currentBPM} BPM`);
+  logger.info(`[BPM Change] ${timerState.lastBPM} -> ${timerState.currentBPM} BPM`);
 
   const elapsedTime = now - timerState.timerStartTime;
   const oldBeatInterval = BPM_FORMULA_MS / timerState.lastBPM;
@@ -220,7 +223,7 @@ function handleBPMChange(now) {
       // 檢測系統休眠（時間跳躍 > 1 秒）
       const timeSinceLastTick = now - (timerState.lastTickTime || now);
       if (timeSinceLastTick > 1000) {
-        console.log('[Sleep Detected] 重置節拍計時');
+        logger.info('[Sleep Detected] 重置節拍計時');
         timerState.timerStartTime = now;
         timerState.expectedBeatNumber = 0;
         const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
@@ -248,7 +251,7 @@ function handleBPMChange(now) {
             delay: delay,
             soundType: timerState.soundType
           }).catch(err => {
-            console.error('預調度失敗:', err);
+            logger.error('預調度失敗:', err);
             playBeep(beatType);
           });
         }
@@ -412,7 +415,7 @@ function runTimer() {
     // 檢測系統休眠（時間跳躍 > 1 秒）
     const timeSinceLastTick = now - (timerState.lastTickTime || now);
     if (timeSinceLastTick > 1000) {
-      console.log('[Sleep Detected] 重置節拍計時');
+      logger.info('[Sleep Detected] 重置節拍計時');
       timerState.timerStartTime = now;
       timerState.expectedBeatNumber = 0;
       const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
@@ -445,7 +448,7 @@ function runTimer() {
           delay: delay,
           soundType: timerState.soundType
         }).catch(err => {
-          console.error('預調度失敗:', err);
+          logger.error('預調度失敗:', err);
           // 降級：立即播放
           playBeep(beatType);
         });
@@ -697,7 +700,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
 
     case ACTIONS.OFFSCREEN_READY:
-      console.log('Offscreen document 已就緒');
+      logger.info('Offscreen document 已就緒');
       sendResponse({ success: true });
       break;
   }
@@ -707,7 +710,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // ========== 啟動監聽器 ==========
 chrome.runtime.onStartup.addListener(() => {
-  console.log('Service worker 啟動');
+  logger.info('Service worker 啟動');
 
   // 載入所有設定鍵（包括預設設定和運行時狀態）
   const settingsKeys = [...Object.keys(DEFAULT_SETTINGS), 'remainingSeconds', 'isRunning', 'isPaused'];
@@ -718,7 +721,7 @@ chrome.runtime.onStartup.addListener(() => {
 
     // 如果計時器正在運行且未暫停，恢復執行
     if (result.isRunning && !result.isPaused && result.remainingSeconds > 0) {
-      console.log('恢復計時器運行');
+      logger.info('恢復計時器運行');
       createOffscreenDocument().then(() => {
         runTimer();
       });
@@ -727,12 +730,12 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 chrome.runtime.onInstalled.addListener((details) => {
-  console.log('Extension 已安裝/更新:', details.reason);
+  logger.info('Extension 已安裝/更新:', details.reason);
 
   if (details.reason === 'install') {
     // 全新安裝：寫入所有預設值到 storage
     chrome.storage.local.set(DEFAULT_SETTINGS, () => {
-      console.log('預設設定已初始化');
+      logger.info('預設設定已初始化');
       Object.assign(timerState, DEFAULT_SETTINGS);
     });
   } else if (details.reason === 'update') {
@@ -753,16 +756,16 @@ chrome.runtime.onInstalled.addListener((details) => {
 
       // 如果計時器正在運行且未暫停，自動恢復執行
       if (result.isRunning && !result.isPaused && result.remainingSeconds > 0) {
-        console.log('[update] 恢復計時器運行，剩餘:', result.remainingSeconds, '秒');
+        logger.info('[update] 恢復計時器運行，剩餘:', result.remainingSeconds, '秒');
         createOffscreenDocument().then(() => {
           runTimer();
         }).catch(err => {
-          console.error('[update] 恢復計時器失敗:', err);
+          logger.error('[update] 恢復計時器失敗:', err);
         });
       } else if (result.isRunning && result.isPaused) {
-        console.log('[update] 計時器處於暫停狀態');
+        logger.info('[update] 計時器處於暫停狀態');
       } else {
-        console.log('[update] 計時器未運行');
+        logger.info('[update] 計時器未運行');
       }
     });
   }
@@ -772,8 +775,8 @@ chrome.runtime.onInstalled.addListener((details) => {
     if (hasDoc) {
       chrome.offscreen.closeDocument().then(() => {
         timerState.offscreenDocumentExists = false;
-        console.log('已清理 offscreen document');
+        logger.info('已清理 offscreen document');
       });
     }
-  }).catch(err => console.log('檢查 offscreen document 時發生錯誤:', err));
+  }).catch(err => logger.info('檢查 offscreen document 時發生錯誤:', err));
 });
