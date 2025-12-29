@@ -1,8 +1,19 @@
 // ========== 常數定義 ==========
-// Note: Content scripts不支持ES modules，這些常數與utils/constants.js保持同步
+// Note: Content scripts不支持ES modules，這些常數與utils/保持同步
 const MAX_VIDEO_ATTACH_RETRIES = 20;
 const VIDEO_ATTACH_RETRY_INTERVAL_MS = 500;
 const BEAT_PULSE_DURATION_MS = 150;
+
+// Message actions (synced with utils/message-actions.js)
+const ACTIONS = {
+  VIDEO_PLAY: 'VIDEO_PLAY',
+  VIDEO_PAUSE: 'VIDEO_PAUSE',
+  UPDATE_TIMER: 'updateTimer',
+  TOGGLE_VISIBILITY: 'toggleVisibility',
+  UPDATE_OPACITY_DISPLAY: 'updateOpacity',
+  BEAT_PULSE: 'BEAT_PULSE',
+  STATE_UPDATE: 'STATE_UPDATE'
+};
 
 // YouTube 視頻同步狀態
 let videoElement = null;
@@ -75,7 +86,7 @@ function detachFromVideo() {
 
 function handleVideoPlay() {
   console.log('[Slow Jogging] 視頻播放中，發送 VIDEO_PLAY 消息');
-  safeSendMessage({ action: 'VIDEO_PLAY' });
+  safeSendMessage({ action: ACTIONS.VIDEO_PLAY });
 }
 
 function handleVideoPause() {
@@ -83,12 +94,12 @@ function handleVideoPause() {
   if (videoElement && videoElement.ended) return;
 
   console.log('[Slow Jogging] 視頻暫停，發送 VIDEO_PAUSE 消息');
-  safeSendMessage({ action: 'VIDEO_PAUSE' });
+  safeSendMessage({ action: ACTIONS.VIDEO_PAUSE });
 }
 
 function handleVideoEnded() {
   console.log('[Slow Jogging] 視頻結束，發送 VIDEO_PAUSE 消息');
-  safeSendMessage({ action: 'VIDEO_PAUSE' });
+  safeSendMessage({ action: ACTIONS.VIDEO_PAUSE });
 }
 
 // 監聽 YouTube SPA 導航
@@ -167,7 +178,7 @@ function initializeYouTubeOverlay() {
 
   // 監聽來自 popup 的消息
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'updateTimer') {
+    if (request.action === ACTIONS.UPDATE_TIMER) {
       const display = document.getElementById('slowjogging-timer-display');
       const bpmInfo = document.getElementById('slowjogging-bpm-info');
       const toggleBtn = document.getElementById('slowjogging-toggle-btn');
@@ -184,7 +195,7 @@ function initializeYouTubeOverlay() {
         toggleBtn.textContent = currentDisplayTime;
       }
     }
-    if (request.action === 'toggleVisibility') {
+    if (request.action === ACTIONS.TOGGLE_VISIBILITY) {
       const content = document.getElementById('slowjogging-timer-content');
       const toggleBtn = document.getElementById('slowjogging-toggle-btn');
 
@@ -208,7 +219,7 @@ function initializeYouTubeOverlay() {
         }
       }
     }
-    if (request.action === 'updateOpacity') {
+    if (request.action === ACTIONS.UPDATE_OPACITY_DISPLAY) {
       const widget = document.getElementById('slowjogging-timer-widget');
       if (widget) {
         // 將 0-100 的百分比轉換為 0-1 的透明度值
@@ -216,7 +227,7 @@ function initializeYouTubeOverlay() {
         widget.style.setProperty('--overlay-opacity', opacityValue);
       }
     }
-    if (request.action === 'BEAT_PULSE') {
+    if (request.action === ACTIONS.BEAT_PULSE) {
       handleBeatPulse(request.beatIndex, request.beatType);
     }
   });

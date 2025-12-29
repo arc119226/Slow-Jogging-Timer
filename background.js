@@ -6,6 +6,7 @@ import {
   DRIFT_SAMPLE_SIZE,
   SLEEP_DETECTION_THRESHOLD_MS
 } from './utils/constants.js';
+import { ACTIONS } from './utils/message-actions.js';
 
 // ========== 狀態管理 ==========
 // 預設設定（單一權威來源）
@@ -111,7 +112,7 @@ async function playBeep(beatType = 'weak') {
 
   try {
     await chrome.runtime.sendMessage({
-      action: 'PLAY_BEEP',
+      action: ACTIONS.PLAY_BEEP,
       bpm: timerState.currentBPM,
       beatType: beatType,
       soundType: timerState.soundType
@@ -124,7 +125,7 @@ async function playBeep(beatType = 'weak') {
     try {
       await createOffscreenDocument();
       await chrome.runtime.sendMessage({
-        action: 'PLAY_BEEP',
+        action: ACTIONS.PLAY_BEEP,
         bpm: timerState.currentBPM,
         beatType: beatType,
         soundType: timerState.soundType
@@ -242,7 +243,7 @@ function handleBPMChange(now) {
 
         if (timerState.soundEnabled) {
           chrome.runtime.sendMessage({
-            action: 'SCHEDULE_BEEP',
+            action: ACTIONS.SCHEDULE_BEEP,
             beatType: beatType,
             delay: delay,
             soundType: timerState.soundType
@@ -301,7 +302,7 @@ function broadcastBeatEvent(beatIndex, beatType) {
   chrome.tabs.query({ url: 'https://www.youtube.com/*' }, (tabs) => {
     tabs.forEach(tab => {
       chrome.tabs.sendMessage(tab.id, {
-        action: 'BEAT_PULSE',
+        action: ACTIONS.BEAT_PULSE,
         beatIndex: beatIndex,
         beatType: beatType
       }).catch(() => {
@@ -313,7 +314,7 @@ function broadcastBeatEvent(beatIndex, beatType) {
 
 function broadcastState() {
   chrome.runtime.sendMessage({
-    action: 'STATE_UPDATE',
+    action: ACTIONS.STATE_UPDATE,
     state: {
       remainingSeconds: timerState.remainingSeconds,
       currentBPM: timerState.currentBPM,
@@ -485,7 +486,7 @@ function stopTimer() {
 // ========== 消息處理器 ==========
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.action) {
-    case 'START_TIMER':
+    case ACTIONS.START_TIMER:
       timerState.remainingSeconds = request.duration;
       timerState.defaultDuration = request.duration;
       timerState.isPaused = false;
@@ -507,7 +508,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
       break;
 
-    case 'PAUSE_TIMER':
+    case ACTIONS.PAUSE_TIMER:
       timerState.isPaused = true;
       if (timerState.timerInterval) {
         clearInterval(timerState.timerInterval);
@@ -518,7 +519,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'RESUME_TIMER':
+    case ACTIONS.RESUME_TIMER:
       timerState.isPaused = false;
 
       // 新增：恢復時重置節拍（避免時間跳躍）
@@ -538,7 +539,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'STOP_TIMER':
+    case ACTIONS.STOP_TIMER:
       stopTimer();
       timerState.remainingSeconds = 0;
       updateContentScript(); // 更新 YouTube 覆蓋層顯示
@@ -546,7 +547,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'UPDATE_BPM':
+    case ACTIONS.UPDATE_BPM:
       timerState.currentBPM = request.bpm;
       chrome.storage.local.set({ currentBPM: request.bpm });
 
@@ -556,14 +557,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'TOGGLE_SOUND':
+    case ACTIONS.TOGGLE_SOUND:
       timerState.soundEnabled = request.enabled;
       chrome.storage.local.set({ soundEnabled: request.enabled });
       broadcastState();
       sendResponse({ success: true });
       break;
 
-    case 'UPDATE_OPACITY':
+    case ACTIONS.UPDATE_OPACITY:
       timerState.overlayOpacity = request.opacity;
       chrome.storage.local.set({ overlayOpacity: request.opacity });
 
@@ -583,7 +584,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'UPDATE_TIME_SIGNATURE':
+    case ACTIONS.UPDATE_TIME_SIGNATURE:
       timerState.timeSignature = request.timeSignature;
       timerState.currentBeatInBar = 0; // 切換拍號時重置計數器，從強拍開始
       chrome.storage.local.set({ timeSignature: request.timeSignature });
@@ -591,22 +592,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'UPDATE_SOUND_TYPE':
+    case ACTIONS.UPDATE_SOUND_TYPE:
       timerState.soundType = request.soundType;
       chrome.storage.local.set({ soundType: request.soundType });
 
       // 預加載對應的音效
       if (request.soundType === 'castanets' && timerState.offscreenDocumentExists) {
-        chrome.runtime.sendMessage({ action: 'PRELOAD_CASTANETS' }).catch(() => {});
+        chrome.runtime.sendMessage({ action: ACTIONS.PRELOAD_CASTANETS }).catch(() => {});
       } else if (request.soundType === 'snaredrum' && timerState.offscreenDocumentExists) {
-        chrome.runtime.sendMessage({ action: 'PRELOAD_SNAREDRUM' }).catch(() => {});
+        chrome.runtime.sendMessage({ action: ACTIONS.PRELOAD_SNAREDRUM }).catch(() => {});
       }
 
       broadcastState();
       sendResponse({ success: true });
       break;
 
-    case 'TOGGLE_OVERLAY_VISIBILITY':
+    case ACTIONS.TOGGLE_OVERLAY_VISIBILITY:
       // 更新狀態並持久化
       timerState.overlayVisible = request.visible;
       chrome.storage.local.set({ overlayVisible: request.visible });  // 持久化
@@ -625,7 +626,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'GET_STATE':
+    case ACTIONS.GET_STATE:
       sendResponse({
         state: {
           remainingSeconds: timerState.remainingSeconds,
@@ -643,7 +644,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
       break;
 
-    case 'VIDEO_PLAY':
+    case ACTIONS.VIDEO_PLAY:
       // 只在啟用自動啟動 && 計時器未運行時啟動
       if (timerState.autoStartEnabled && !timerState.isRunning) {
         timerState.remainingSeconds = timerState.defaultDuration;
@@ -667,7 +668,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'VIDEO_PAUSE':
+    case ACTIONS.VIDEO_PAUSE:
       // 只在啟用自動啟動 && 計時器正在運行且未暫停時暫停
       if (timerState.autoStartEnabled && timerState.isRunning && !timerState.isPaused) {
         timerState.isPaused = true;
@@ -681,21 +682,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'TOGGLE_AUTO_START':
+    case ACTIONS.TOGGLE_AUTO_START:
       timerState.autoStartEnabled = request.enabled;
       chrome.storage.local.set({ autoStartEnabled: request.enabled });
       broadcastState();
       sendResponse({ success: true });
       break;
 
-    case 'UPDATE_DEFAULT_DURATION':
+    case ACTIONS.UPDATE_DEFAULT_DURATION:
       timerState.defaultDuration = request.duration;
       chrome.storage.local.set({ defaultDuration: request.duration });
       broadcastState();
       sendResponse({ success: true });
       break;
 
-    case 'OFFSCREEN_READY':
+    case ACTIONS.OFFSCREEN_READY:
       console.log('Offscreen document 已就緒');
       sendResponse({ success: true });
       break;

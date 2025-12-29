@@ -1,3 +1,6 @@
+// ========== 工具函數導入 ==========
+import { ACTIONS } from './utils/message-actions.js';
+
 let audioContext = null;
 let audioBuffers = {}; // 音頻緩存
 let soundType = 'beep'; // 當前音效類型
@@ -302,7 +305,7 @@ async function preloadSnaredrum() {
 // 監聽來自 background 的消息
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // ========== 新增：預調度播放（階段二） ==========
-  if (request.action === 'SCHEDULE_BEEP') {
+  if (request.action === ACTIONS.SCHEDULE_BEEP) {
     const currentSoundType = request.soundType || soundType;
     const beatType = request.beatType || 'weak';
     const delay = request.delay;  // 相對延遲（毫秒）
@@ -353,20 +356,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   // ========== 保留：立即播放（向後兼容） ==========
-  if (request.action === 'PLAY_BEEP') {
+  if (request.action === ACTIONS.PLAY_BEEP) {
     const currentSoundType = request.soundType || soundType;
     playBPMSound(request.beatType || 'weak', currentSoundType);
     sendResponse({ success: true });
   }
 
-  if (request.action === 'PRELOAD_CASTANETS') {
+  if (request.action === ACTIONS.PRELOAD_CASTANETS) {
     preloadCastanets().then(() => {
       sendResponse({ success: true });
     });
     return true; // 保持消息通道開啟以支援異步回應
   }
 
-  if (request.action === 'PRELOAD_SNAREDRUM') {
+  if (request.action === ACTIONS.PRELOAD_SNAREDRUM) {
     preloadSnaredrum().then(() => {
       sendResponse({ success: true });
     });
@@ -377,6 +380,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 // 通知 background offscreen 已就緒
-chrome.runtime.sendMessage({ action: 'OFFSCREEN_READY' }).catch(() => {
+chrome.runtime.sendMessage({ action: ACTIONS.OFFSCREEN_READY }).catch(() => {
   // Background 可能尚未準備好，忽略錯誤
 });
