@@ -1,5 +1,11 @@
 // ========== 工具函數導入 ==========
 import { formatTime } from './utils/time-utils.js';
+import {
+  BPM_FORMULA_MS,
+  SCHEDULE_AHEAD_TIME_MS,
+  DRIFT_SAMPLE_SIZE,
+  SLEEP_DETECTION_THRESHOLD_MS
+} from './utils/constants.js';
 
 // ========== 狀態管理 ==========
 // 預設設定（單一權威來源）
@@ -33,12 +39,12 @@ let timerState = {
   lastBPM: 190,             // 追踪 BPM 變化（用於檢測調整）
 
   // 新增：漂移補償
-  driftSamples: [],         // 最近 10 次的漂移測量值（毫秒）
+  driftSamples: [],         // 最近 N 次的漂移測量值（毫秒）
   avgDrift: 0,              // 平均漂移（用於補償）
   lastTickTime: 0,          // 上次 tick 的時間（用於檢測系統休眠）
 
   // 新增：預調度參數（階段二）
-  scheduleAheadTime: 100    // 提前 100ms 調度音效（消除通訊延遲）
+  scheduleAheadTime: SCHEDULE_AHEAD_TIME_MS    // 提前調度音效（消除通訊延遲）
 };
 
 // ========== Offscreen 生命週期管理 ==========
@@ -135,7 +141,7 @@ async function playBeep(beatType = 'weak') {
 function scheduleNextBeat() {
   timerState.expectedBeatNumber++;
 
-  const beatInterval = 60000 / timerState.currentBPM;
+  const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
   const theoreticalNextBeat = timerState.timerStartTime +
                               (timerState.expectedBeatNumber * beatInterval);
 
@@ -150,11 +156,11 @@ function handleBPMChange(now) {
   console.log(`[BPM Change] ${timerState.lastBPM} -> ${timerState.currentBPM} BPM`);
 
   const elapsedTime = now - timerState.timerStartTime;
-  const oldBeatInterval = 60000 / timerState.lastBPM;
+  const oldBeatInterval = BPM_FORMULA_MS / timerState.lastBPM;
   const beatsSoFar = Math.floor(elapsedTime / oldBeatInterval);
 
   // 重新計算起始時間，讓轉換無縫
-  const newBeatInterval = 60000 / timerState.currentBPM;
+  const newBeatInterval = BPM_FORMULA_MS / timerState.currentBPM;
   timerState.timerStartTime = now - (beatsSoFar * newBeatInterval);
   timerState.expectedBeatNumber = beatsSoFar;
   timerState.nextBeatTime = timerState.timerStartTime +
@@ -216,7 +222,7 @@ function handleBPMChange(now) {
         console.log('[Sleep Detected] 重置節拍計時');
         timerState.timerStartTime = now;
         timerState.expectedBeatNumber = 0;
-        const beatInterval = 60000 / timerState.currentBPM;
+        const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
         timerState.nextBeatTime = now + beatInterval;
         timerState.driftSamples = [];
         timerState.avgDrift = 0;
@@ -267,7 +273,7 @@ function trackDrift(drift) {
   timerState.driftSamples.push(drift);
 
   // 保留最近 10 個樣本
-  if (timerState.driftSamples.length > 10) {
+  if (timerState.driftSamples.length > DRIFT_SAMPLE_SIZE) {
     timerState.driftSamples.shift();
   }
 
@@ -339,7 +345,7 @@ function runTimer() {
   timerState.expectedBeatNumber = 0;
   timerState.lastBPM = timerState.currentBPM;
 
-  const beatInterval = 60000 / timerState.currentBPM;
+  const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
   timerState.nextBeatTime = timerState.timerStartTime + beatInterval;
 
   // 重置漂移追踪
@@ -408,7 +414,7 @@ function runTimer() {
       console.log('[Sleep Detected] 重置節拍計時');
       timerState.timerStartTime = now;
       timerState.expectedBeatNumber = 0;
-      const beatInterval = 60000 / timerState.currentBPM;
+      const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
       timerState.nextBeatTime = now + beatInterval;
       timerState.driftSamples = [];
       timerState.avgDrift = 0;
@@ -518,7 +524,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       // 新增：恢復時重置節拍（避免時間跳躍）
       timerState.timerStartTime = Date.now();
       timerState.expectedBeatNumber = 0;
-      const beatInterval = 60000 / timerState.currentBPM;
+      const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
       timerState.nextBeatTime = timerState.timerStartTime + beatInterval;
       timerState.lastBPM = timerState.currentBPM;
       timerState.currentBeatInBar = 0;
