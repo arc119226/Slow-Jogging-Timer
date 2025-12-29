@@ -1,3 +1,11 @@
+// ========== 工具函數導入 ==========
+import { formatTime } from './utils/time-utils.js';
+import { BPM_MIN, BPM_MAX, OPACITY_MIN, OPACITY_MAX } from './utils/constants.js';
+import { ACTIONS } from './utils/message-actions.js';
+import { createLogger } from './utils/logger.js';
+
+const logger = createLogger('Popup');
+
 // ========== UI 狀態變數 ==========
 // 移除硬編碼預設值 - 將從 background 初始化
 let currentBPM;
@@ -27,19 +35,6 @@ const statusText = document.getElementById('statusText');
 const autoStartToggle = document.getElementById('autoStartToggle');
 
 // ========== 輔助函數 ==========
-function formatTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
-
-  // 如果超過 1 小時，顯示 HH:MM:SS，否則只顯示 MM:SS
-  if (hours > 0) {
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  } else {
-    return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  }
-}
-
 function updateUIFromState(state) {
   // 更新顯示
   timerDisplay.textContent = formatTime(state.remainingSeconds);
@@ -116,7 +111,7 @@ startBtn.addEventListener('click', () => {
   const duration = parseInt(durationInput.value) || 300;
 
   chrome.runtime.sendMessage({
-    action: 'START_TIMER',
+    action: ACTIONS.START_TIMER,
     duration: duration
   });
 
@@ -132,12 +127,12 @@ startBtn.addEventListener('click', () => {
 // 暫停/繼續計時
 pauseBtn.addEventListener('click', () => {
   if (isPaused) {
-    chrome.runtime.sendMessage({ action: 'RESUME_TIMER' });
+    chrome.runtime.sendMessage({ action: ACTIONS.RESUME_TIMER });
     isPaused = false;
     pauseBtn.textContent = '暫停';
     statusText.textContent = '計時中...';
   } else {
-    chrome.runtime.sendMessage({ action: 'PAUSE_TIMER' });
+    chrome.runtime.sendMessage({ action: ACTIONS.PAUSE_TIMER });
     isPaused = true;
     pauseBtn.textContent = '繼續';
     statusText.textContent = '已暫停';
@@ -146,7 +141,7 @@ pauseBtn.addEventListener('click', () => {
 
 // 停止計時
 stopBtn.addEventListener('click', () => {
-  chrome.runtime.sendMessage({ action: 'STOP_TIMER' });
+  chrome.runtime.sendMessage({ action: ACTIONS.STOP_TIMER });
 
   // 立即更新 UI 狀態
   timerDisplay.textContent = formatTime(0);
@@ -165,7 +160,7 @@ durationInput.addEventListener('change', (e) => {
   const duration = parseInt(e.target.value);
   if (!isNaN(duration) && duration > 0) {
     chrome.runtime.sendMessage({
-      action: 'UPDATE_DEFAULT_DURATION',
+      action: ACTIONS.UPDATE_DEFAULT_DURATION,
       duration: duration
     });
   }
@@ -178,7 +173,7 @@ bpmSlider.addEventListener('input', (e) => {
   bpmInput.value = bpm; // 同步到輸入框
 
   chrome.runtime.sendMessage({
-    action: 'UPDATE_BPM',
+    action: ACTIONS.UPDATE_BPM,
     bpm: bpm
   });
 });
@@ -197,7 +192,7 @@ bpmInput.addEventListener('input', (e) => {
   bpmInput.value = bpm;  // 更新輸入框（處理超出範圍的情況）
 
   chrome.runtime.sendMessage({
-    action: 'UPDATE_BPM',
+    action: ACTIONS.UPDATE_BPM,
     bpm: bpm
   });
 });
@@ -207,7 +202,7 @@ soundToggle.addEventListener('change', (e) => {
   soundEnabled = e.target.checked;
 
   chrome.runtime.sendMessage({
-    action: 'TOGGLE_SOUND',
+    action: ACTIONS.TOGGLE_SOUND,
     enabled: e.target.checked
   });
 });
@@ -219,7 +214,7 @@ opacitySlider.addEventListener('input', (e) => {
   opacityInput.value = opacity; // 同步到輸入框
 
   chrome.runtime.sendMessage({
-    action: 'UPDATE_OPACITY',
+    action: ACTIONS.UPDATE_OPACITY,
     opacity: opacity
   });
 });
@@ -238,7 +233,7 @@ opacityInput.addEventListener('input', (e) => {
   opacityInput.value = opacity;  // 更新輸入框（處理超出範圍的情況）
 
   chrome.runtime.sendMessage({
-    action: 'UPDATE_OPACITY',
+    action: ACTIONS.UPDATE_OPACITY,
     opacity: opacity
   });
 });
@@ -248,7 +243,7 @@ timeSignatureSelect.addEventListener('change', (e) => {
   timeSignature = e.target.value;
 
   chrome.runtime.sendMessage({
-    action: 'UPDATE_TIME_SIGNATURE',
+    action: ACTIONS.UPDATE_TIME_SIGNATURE,
     timeSignature: timeSignature
   });
 });
@@ -258,7 +253,7 @@ soundTypeSelect.addEventListener('change', (e) => {
   soundType = e.target.value;
 
   chrome.runtime.sendMessage({
-    action: 'UPDATE_SOUND_TYPE',
+    action: ACTIONS.UPDATE_SOUND_TYPE,
     soundType: soundType
   });
 });
@@ -269,7 +264,7 @@ toggleOverlayBtn.addEventListener('click', () => {
   toggleOverlayBtn.textContent = overlayVisible ? '隱藏計時器面板' : '顯示計時器面板';
 
   chrome.runtime.sendMessage({
-    action: 'TOGGLE_OVERLAY_VISIBILITY',
+    action: ACTIONS.TOGGLE_OVERLAY_VISIBILITY,
     visible: overlayVisible
   });
 });
@@ -279,7 +274,7 @@ autoStartToggle.addEventListener('change', (e) => {
   autoStartEnabled = e.target.checked;
 
   chrome.runtime.sendMessage({
-    action: 'TOGGLE_AUTO_START',
+    action: ACTIONS.TOGGLE_AUTO_START,
     enabled: e.target.checked
   });
 });
@@ -294,7 +289,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // ========== Popup 開啟時同步狀態 ==========
 document.addEventListener('DOMContentLoaded', () => {
   // 請求當前狀態
-  chrome.runtime.sendMessage({ action: 'GET_STATE' }, (response) => {
+  chrome.runtime.sendMessage({ action: ACTIONS.GET_STATE }, (response) => {
     if (response && response.state) {
       updateUIFromState(response.state);
     }

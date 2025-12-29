@@ -1,3 +1,16 @@
+// ========== 工具函數導入 ==========
+import { formatTime } from './utils/time-utils.js';
+import {
+  BPM_FORMULA_MS,
+  SCHEDULE_AHEAD_TIME_MS,
+  DRIFT_SAMPLE_SIZE,
+  SLEEP_DETECTION_THRESHOLD_MS
+} from './utils/constants.js';
+import { ACTIONS } from './utils/message-actions.js';
+import { createLogger } from './utils/logger.js';
+
+const logger = createLogger('Background');
+
 // ========== 狀態管理 ==========
 // 預設設定（單一權威來源）
 const DEFAULT_SETTINGS = {
@@ -30,12 +43,12 @@ let timerState = {
   lastBPM: 190,             // 追踪 BPM 變化（用於檢測調整）
 
   // 新增：漂移補償
-  driftSamples: [],         // 最近 10 次的漂移測量值（毫秒）
+  driftSamples: [],         // 最近 N 次的漂移測量值（毫秒）
   avgDrift: 0,              // 平均漂移（用於補償）
   lastTickTime: 0,          // 上次 tick 的時間（用於檢測系統休眠）
 
   // 新增：預調度參數（階段二）
-  scheduleAheadTime: 100    // 提前 100ms 調度音效（消除通訊延遲）
+  scheduleAheadTime: SCHEDULE_AHEAD_TIME_MS    // 提前調度音效（消除通訊延遲）
 };
 
 // ========== Offscreen 生命週期管理 ==========
@@ -49,14 +62,14 @@ async function createOffscreenDocument() {
       justification: '播放超慢跑計時器的 BPM 節拍音效'
     });
     timerState.offscreenDocumentExists = true;
-    console.log('Offscreen document 已創建');
+    logger.info('Offscreen document 已創建');
   } catch (error) {
     // 如果已經存在，也標記為 true
     if (error.message?.includes('Only a single offscreen')) {
       timerState.offscreenDocumentExists = true;
-      console.log('Offscreen document 已存在');
+      logger.info('Offscreen document 已存在');
     } else {
-      console.error('創建 offscreen document 失敗:', error);
+      logger.error('創建 offscreen document 失敗:', error);
     }
   }
 }
@@ -67,28 +80,15 @@ async function closeOffscreenDocument() {
   try {
     await chrome.offscreen.closeDocument();
     timerState.offscreenDocumentExists = false;
-    console.log('Offscreen document 已關閉');
+    logger.info('Offscreen document 已關閉');
   } catch (error) {
     // 如果已經不存在，也重置標記
     timerState.offscreenDocumentExists = false;
-    console.log('Offscreen document 不存在或已關閉:', error);
+    logger.info('Offscreen document 不存在或已關閉:', error);
   }
 }
 
 // ========== 輔助函數 ==========
-function formatTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
-
-  // 如果超過 1 小時，顯示 HH:MM:SS，否則只顯示 MM:SS
-  if (hours > 0) {
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  } else {
-    return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  }
-}
-
 function getBeatsPerBar(timeSignature) {
   return parseInt(timeSignature.split('/')[0]);
 }
@@ -115,26 +115,26 @@ async function playBeep(beatType = 'weak') {
 
   try {
     await chrome.runtime.sendMessage({
-      action: 'PLAY_BEEP',
+      action: ACTIONS.PLAY_BEEP,
       bpm: timerState.currentBPM,
       beatType: beatType,
       soundType: timerState.soundType
     });
   } catch (error) {
     // Offscreen 可能已關閉，重置標記並重試一次
-    console.log('Offscreen 通訊失敗，嘗試重新創建:', error);
+    logger.info('Offscreen 通訊失敗，嘗試重新創建:', error);
     timerState.offscreenDocumentExists = false;
 
     try {
       await createOffscreenDocument();
       await chrome.runtime.sendMessage({
-        action: 'PLAY_BEEP',
+        action: ACTIONS.PLAY_BEEP,
         bpm: timerState.currentBPM,
         beatType: beatType,
         soundType: timerState.soundType
       });
     } catch (retryError) {
-      console.error('重試後仍然失敗:', retryError);
+      logger.error('重試後仍然失敗:', retryError);
     }
   }
 }
@@ -145,7 +145,7 @@ async function playBeep(beatType = 'weak') {
 function scheduleNextBeat() {
   timerState.expectedBeatNumber++;
 
-  const beatInterval = 60000 / timerState.currentBPM;
+  const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
   const theoreticalNextBeat = timerState.timerStartTime +
                               (timerState.expectedBeatNumber * beatInterval);
 
@@ -157,14 +157,14 @@ function scheduleNextBeat() {
  * 處理 BPM 調整，保持節奏連續性
  */
 function handleBPMChange(now) {
-  console.log(`[BPM Change] ${timerState.lastBPM} -> ${timerState.currentBPM} BPM`);
+  logger.info(`[BPM Change] ${timerState.lastBPM} -> ${timerState.currentBPM} BPM`);
 
   const elapsedTime = now - timerState.timerStartTime;
-  const oldBeatInterval = 60000 / timerState.lastBPM;
+  const oldBeatInterval = BPM_FORMULA_MS / timerState.lastBPM;
   const beatsSoFar = Math.floor(elapsedTime / oldBeatInterval);
 
   // 重新計算起始時間，讓轉換無縫
-  const newBeatInterval = 60000 / timerState.currentBPM;
+  const newBeatInterval = BPM_FORMULA_MS / timerState.currentBPM;
   timerState.timerStartTime = now - (beatsSoFar * newBeatInterval);
   timerState.expectedBeatNumber = beatsSoFar;
   timerState.nextBeatTime = timerState.timerStartTime +
@@ -223,10 +223,10 @@ function handleBPMChange(now) {
       // 檢測系統休眠（時間跳躍 > 1 秒）
       const timeSinceLastTick = now - (timerState.lastTickTime || now);
       if (timeSinceLastTick > 1000) {
-        console.log('[Sleep Detected] 重置節拍計時');
+        logger.info('[Sleep Detected] 重置節拍計時');
         timerState.timerStartTime = now;
         timerState.expectedBeatNumber = 0;
-        const beatInterval = 60000 / timerState.currentBPM;
+        const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
         timerState.nextBeatTime = now + beatInterval;
         timerState.driftSamples = [];
         timerState.avgDrift = 0;
@@ -246,12 +246,12 @@ function handleBPMChange(now) {
 
         if (timerState.soundEnabled) {
           chrome.runtime.sendMessage({
-            action: 'SCHEDULE_BEEP',
+            action: ACTIONS.SCHEDULE_BEEP,
             beatType: beatType,
             delay: delay,
             soundType: timerState.soundType
           }).catch(err => {
-            console.error('預調度失敗:', err);
+            logger.error('預調度失敗:', err);
             playBeep(beatType);
           });
         }
@@ -277,7 +277,7 @@ function trackDrift(drift) {
   timerState.driftSamples.push(drift);
 
   // 保留最近 10 個樣本
-  if (timerState.driftSamples.length > 10) {
+  if (timerState.driftSamples.length > DRIFT_SAMPLE_SIZE) {
     timerState.driftSamples.shift();
   }
 
@@ -305,7 +305,7 @@ function broadcastBeatEvent(beatIndex, beatType) {
   chrome.tabs.query({ url: 'https://www.youtube.com/*' }, (tabs) => {
     tabs.forEach(tab => {
       chrome.tabs.sendMessage(tab.id, {
-        action: 'BEAT_PULSE',
+        action: ACTIONS.BEAT_PULSE,
         beatIndex: beatIndex,
         beatType: beatType
       }).catch(() => {
@@ -317,7 +317,7 @@ function broadcastBeatEvent(beatIndex, beatType) {
 
 function broadcastState() {
   chrome.runtime.sendMessage({
-    action: 'STATE_UPDATE',
+    action: ACTIONS.STATE_UPDATE,
     state: {
       remainingSeconds: timerState.remainingSeconds,
       currentBPM: timerState.currentBPM,
@@ -349,7 +349,7 @@ function runTimer() {
   timerState.expectedBeatNumber = 0;
   timerState.lastBPM = timerState.currentBPM;
 
-  const beatInterval = 60000 / timerState.currentBPM;
+  const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
   timerState.nextBeatTime = timerState.timerStartTime + beatInterval;
 
   // 重置漂移追踪
@@ -415,10 +415,10 @@ function runTimer() {
     // 檢測系統休眠（時間跳躍 > 1 秒）
     const timeSinceLastTick = now - (timerState.lastTickTime || now);
     if (timeSinceLastTick > 1000) {
-      console.log('[Sleep Detected] 重置節拍計時');
+      logger.info('[Sleep Detected] 重置節拍計時');
       timerState.timerStartTime = now;
       timerState.expectedBeatNumber = 0;
-      const beatInterval = 60000 / timerState.currentBPM;
+      const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
       timerState.nextBeatTime = now + beatInterval;
       timerState.driftSamples = [];
       timerState.avgDrift = 0;
@@ -448,7 +448,7 @@ function runTimer() {
           delay: delay,
           soundType: timerState.soundType
         }).catch(err => {
-          console.error('預調度失敗:', err);
+          logger.error('預調度失敗:', err);
           // 降級：立即播放
           playBeep(beatType);
         });
@@ -489,7 +489,7 @@ function stopTimer() {
 // ========== 消息處理器 ==========
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.action) {
-    case 'START_TIMER':
+    case ACTIONS.START_TIMER:
       timerState.remainingSeconds = request.duration;
       timerState.defaultDuration = request.duration;
       timerState.isPaused = false;
@@ -511,7 +511,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
       break;
 
-    case 'PAUSE_TIMER':
+    case ACTIONS.PAUSE_TIMER:
       timerState.isPaused = true;
       if (timerState.timerInterval) {
         clearInterval(timerState.timerInterval);
@@ -522,13 +522,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'RESUME_TIMER':
+    case ACTIONS.RESUME_TIMER:
       timerState.isPaused = false;
 
       // 新增：恢復時重置節拍（避免時間跳躍）
       timerState.timerStartTime = Date.now();
       timerState.expectedBeatNumber = 0;
-      const beatInterval = 60000 / timerState.currentBPM;
+      const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
       timerState.nextBeatTime = timerState.timerStartTime + beatInterval;
       timerState.lastBPM = timerState.currentBPM;
       timerState.currentBeatInBar = 0;
@@ -542,7 +542,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'STOP_TIMER':
+    case ACTIONS.STOP_TIMER:
       stopTimer();
       timerState.remainingSeconds = 0;
       updateContentScript(); // 更新 YouTube 覆蓋層顯示
@@ -550,7 +550,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'UPDATE_BPM':
+    case ACTIONS.UPDATE_BPM:
       timerState.currentBPM = request.bpm;
       chrome.storage.local.set({ currentBPM: request.bpm });
 
@@ -560,14 +560,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'TOGGLE_SOUND':
+    case ACTIONS.TOGGLE_SOUND:
       timerState.soundEnabled = request.enabled;
       chrome.storage.local.set({ soundEnabled: request.enabled });
       broadcastState();
       sendResponse({ success: true });
       break;
 
-    case 'UPDATE_OPACITY':
+    case ACTIONS.UPDATE_OPACITY:
       timerState.overlayOpacity = request.opacity;
       chrome.storage.local.set({ overlayOpacity: request.opacity });
 
@@ -587,7 +587,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'UPDATE_TIME_SIGNATURE':
+    case ACTIONS.UPDATE_TIME_SIGNATURE:
       timerState.timeSignature = request.timeSignature;
       timerState.currentBeatInBar = 0; // 切換拍號時重置計數器，從強拍開始
       chrome.storage.local.set({ timeSignature: request.timeSignature });
@@ -595,22 +595,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'UPDATE_SOUND_TYPE':
+    case ACTIONS.UPDATE_SOUND_TYPE:
       timerState.soundType = request.soundType;
       chrome.storage.local.set({ soundType: request.soundType });
 
       // 預加載對應的音效
       if (request.soundType === 'castanets' && timerState.offscreenDocumentExists) {
-        chrome.runtime.sendMessage({ action: 'PRELOAD_CASTANETS' }).catch(() => {});
+        chrome.runtime.sendMessage({ action: ACTIONS.PRELOAD_CASTANETS }).catch(err =>
+          logger.warn('Preload castanets message failed:', err));
       } else if (request.soundType === 'snaredrum' && timerState.offscreenDocumentExists) {
-        chrome.runtime.sendMessage({ action: 'PRELOAD_SNAREDRUM' }).catch(() => {});
+        chrome.runtime.sendMessage({ action: ACTIONS.PRELOAD_SNAREDRUM }).catch(err =>
+          logger.warn('Preload snaredrum message failed:', err));
       }
 
       broadcastState();
       sendResponse({ success: true });
       break;
 
-    case 'TOGGLE_OVERLAY_VISIBILITY':
+    case ACTIONS.TOGGLE_OVERLAY_VISIBILITY:
       // 更新狀態並持久化
       timerState.overlayVisible = request.visible;
       chrome.storage.local.set({ overlayVisible: request.visible });  // 持久化
@@ -629,7 +631,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'GET_STATE':
+    case ACTIONS.GET_STATE:
       sendResponse({
         state: {
           remainingSeconds: timerState.remainingSeconds,
@@ -647,7 +649,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
       break;
 
-    case 'VIDEO_PLAY':
+    case ACTIONS.VIDEO_PLAY:
       // 只在啟用自動啟動 && 計時器未運行時啟動
       if (timerState.autoStartEnabled && !timerState.isRunning) {
         timerState.remainingSeconds = timerState.defaultDuration;
@@ -671,7 +673,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'VIDEO_PAUSE':
+    case ACTIONS.VIDEO_PAUSE:
       // 只在啟用自動啟動 && 計時器正在運行且未暫停時暫停
       if (timerState.autoStartEnabled && timerState.isRunning && !timerState.isPaused) {
         timerState.isPaused = true;
@@ -685,22 +687,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
-    case 'TOGGLE_AUTO_START':
+    case ACTIONS.TOGGLE_AUTO_START:
       timerState.autoStartEnabled = request.enabled;
       chrome.storage.local.set({ autoStartEnabled: request.enabled });
       broadcastState();
       sendResponse({ success: true });
       break;
 
-    case 'UPDATE_DEFAULT_DURATION':
+    case ACTIONS.UPDATE_DEFAULT_DURATION:
       timerState.defaultDuration = request.duration;
       chrome.storage.local.set({ defaultDuration: request.duration });
       broadcastState();
       sendResponse({ success: true });
       break;
 
-    case 'OFFSCREEN_READY':
-      console.log('Offscreen document 已就緒');
+    case ACTIONS.OFFSCREEN_READY:
+      logger.info('Offscreen document 已就緒');
       sendResponse({ success: true });
       break;
   }
@@ -710,7 +712,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // ========== 啟動監聽器 ==========
 chrome.runtime.onStartup.addListener(() => {
-  console.log('Service worker 啟動');
+  logger.info('Service worker 啟動');
 
   // 載入所有設定鍵（包括預設設定和運行時狀態）
   const settingsKeys = [...Object.keys(DEFAULT_SETTINGS), 'remainingSeconds', 'isRunning', 'isPaused'];
@@ -721,7 +723,7 @@ chrome.runtime.onStartup.addListener(() => {
 
     // 如果計時器正在運行且未暫停，恢復執行
     if (result.isRunning && !result.isPaused && result.remainingSeconds > 0) {
-      console.log('恢復計時器運行');
+      logger.info('恢復計時器運行');
       createOffscreenDocument().then(() => {
         runTimer();
       });
@@ -730,12 +732,12 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 chrome.runtime.onInstalled.addListener((details) => {
-  console.log('Extension 已安裝/更新:', details.reason);
+  logger.info('Extension 已安裝/更新:', details.reason);
 
   if (details.reason === 'install') {
     // 全新安裝：寫入所有預設值到 storage
     chrome.storage.local.set(DEFAULT_SETTINGS, () => {
-      console.log('預設設定已初始化');
+      logger.info('預設設定已初始化');
       Object.assign(timerState, DEFAULT_SETTINGS);
     });
   } else if (details.reason === 'update') {
@@ -756,16 +758,16 @@ chrome.runtime.onInstalled.addListener((details) => {
 
       // 如果計時器正在運行且未暫停，自動恢復執行
       if (result.isRunning && !result.isPaused && result.remainingSeconds > 0) {
-        console.log('[update] 恢復計時器運行，剩餘:', result.remainingSeconds, '秒');
+        logger.info('[update] 恢復計時器運行，剩餘:', result.remainingSeconds, '秒');
         createOffscreenDocument().then(() => {
           runTimer();
         }).catch(err => {
-          console.error('[update] 恢復計時器失敗:', err);
+          logger.error('[update] 恢復計時器失敗:', err);
         });
       } else if (result.isRunning && result.isPaused) {
-        console.log('[update] 計時器處於暫停狀態');
+        logger.info('[update] 計時器處於暫停狀態');
       } else {
-        console.log('[update] 計時器未運行');
+        logger.info('[update] 計時器未運行');
       }
     });
   }
@@ -775,8 +777,8 @@ chrome.runtime.onInstalled.addListener((details) => {
     if (hasDoc) {
       chrome.offscreen.closeDocument().then(() => {
         timerState.offscreenDocumentExists = false;
-        console.log('已清理 offscreen document');
+        logger.info('已清理 offscreen document');
       });
     }
-  }).catch(err => console.log('檢查 offscreen document 時發生錯誤:', err));
+  }).catch(err => logger.info('檢查 offscreen document 時發生錯誤:', err));
 });
