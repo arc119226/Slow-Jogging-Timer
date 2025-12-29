@@ -1,3 +1,9 @@
+// ========== 常數定義 ==========
+// Note: Content scripts不支持ES modules，這些常數與utils/constants.js保持同步
+const MAX_VIDEO_ATTACH_RETRIES = 20;
+const VIDEO_ATTACH_RETRY_INTERVAL_MS = 500;
+const BEAT_PULSE_DURATION_MS = 150;
+
 // YouTube 視頻同步狀態
 let videoElement = null;
 let isVideoAttached = false;
@@ -116,9 +122,9 @@ function initializeVideoSync() {
   const attached = attachToYouTubeVideo();
 
   if (!attached) {
-    // 如果未找到，進行重試（最多 10 秒）
+    // 如果未找到，進行重試
     let retryCount = 0;
-    const maxRetries = 20;
+    const maxRetries = MAX_VIDEO_ATTACH_RETRIES;
 
     const retryInterval = setInterval(() => {
       retryCount++;
@@ -127,7 +133,7 @@ function initializeVideoSync() {
       if (success || retryCount >= maxRetries) {
         clearInterval(retryInterval);
       }
-    }, 500);
+    }, VIDEO_ATTACH_RETRY_INTERVAL_MS);
   }
 
   // 監聽 SPA 導航
@@ -278,11 +284,11 @@ function handleBeatPulse(beatIndex, beatType) {
     currentActiveSide = 'left';
   }
 
-  // 150ms 後自動熄滅（與 CSS transition 時間一致）
+  // 自動熄滅（與 CSS transition 時間一致）
   setTimeout(() => {
     leftIndicator.classList.remove('active');
     rightIndicator.classList.remove('active');
-  }, 150);
+  }, BEAT_PULSE_DURATION_MS);
 }
 
 // 頁面加載完成後初始化
