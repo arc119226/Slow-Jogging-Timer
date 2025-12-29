@@ -19,18 +19,18 @@ let autoStartEnabled;
 
 // ========== 取得 DOM 元素 ==========
 const timerDisplay = document.getElementById('timer');
-const durationInput = document.getElementById('durationInput');
+const durationPreset = document.getElementById('durationPreset');
+const customDurationInput = document.getElementById('customDurationInput');
 const startBtn = document.getElementById('startBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 const stopBtn = document.getElementById('stopBtn');
 const bpmSlider = document.getElementById('bpmSlider');
-const bpmInput = document.getElementById('bpmInput');
+const bpmValue = document.getElementById('bpmValue');
 const soundToggle = document.getElementById('soundToggle');
 const opacitySlider = document.getElementById('opacitySlider');
-const opacityInput = document.getElementById('opacityInput');
+const opacityValue = document.getElementById('opacityValue');
 const timeSignatureSelect = document.getElementById('timeSignatureSelect');
 const soundTypeSelect = document.getElementById('soundTypeSelect');
-const toggleOverlayBtn = document.getElementById('toggleOverlayBtn');
 const statusText = document.getElementById('statusText');
 const autoStartToggle = document.getElementById('autoStartToggle');
 
@@ -38,18 +38,28 @@ const autoStartToggle = document.getElementById('autoStartToggle');
 function updateUIFromState(state) {
   // 更新顯示
   timerDisplay.textContent = formatTime(state.remainingSeconds);
-  bpmInput.value = state.currentBPM;
+  bpmValue.textContent = state.currentBPM;
   bpmSlider.value = state.currentBPM;
   soundToggle.checked = state.soundEnabled;
 
-  // 還原 durationInput 值（始終顯示保存的值）
+  // 還原 duration 值（始終顯示保存的值）
   if (state.defaultDuration !== undefined) {
-    durationInput.value = state.defaultDuration;
+    const duration = state.defaultDuration;
+    // 檢查是否為預設值（15/30/45 分鐘）
+    if (duration === 900 || duration === 1800 || duration === 2700) {
+      durationPreset.value = duration.toString();
+      customDurationInput.style.display = 'none';
+    } else {
+      // 自訂值
+      durationPreset.value = 'custom';
+      customDurationInput.value = Math.round(duration / 60);
+      customDurationInput.style.display = 'inline-block';
+    }
   }
 
   // 更新透明度（如果存在）
   if (state.overlayOpacity !== undefined) {
-    opacityInput.value = state.overlayOpacity;
+    opacityValue.textContent = state.overlayOpacity;
     opacitySlider.value = state.overlayOpacity;
     overlayOpacity = state.overlayOpacity;
   }
@@ -75,7 +85,8 @@ function updateUIFromState(state) {
   startBtn.disabled = state.isRunning;
   pauseBtn.disabled = !state.isRunning;
   stopBtn.disabled = !state.isRunning;
-  durationInput.disabled = state.isRunning;
+  durationPreset.disabled = state.isRunning;
+  customDurationInput.disabled = state.isRunning;
   // BPM 應隨時可調整，不受計時器狀態影響
 
   // 更新按鈕文字和狀態文字
@@ -96,19 +107,21 @@ function updateUIFromState(state) {
     autoStartToggle.checked = state.autoStartEnabled;
     autoStartEnabled = state.autoStartEnabled;
   }
-
-  // 更新覆蓋層可見性狀態
-  if (state.overlayVisible !== undefined) {
-    overlayVisible = state.overlayVisible;
-    toggleOverlayBtn.textContent = overlayVisible ? '隱藏計時器面板' : '顯示計時器面板';
-  }
 }
 
 // ========== 事件處理器 ==========
 
 // 開始計時
 startBtn.addEventListener('click', () => {
-  const duration = parseInt(durationInput.value) || 300;
+  let duration;
+
+  // 從預設值或自訂輸入獲取時長
+  if (durationPreset.value === 'custom') {
+    const minutes = parseInt(customDurationInput.value) || 30;
+    duration = minutes * 60; // 轉換為秒
+  } else {
+    duration = parseInt(durationPreset.value);
+  }
 
   chrome.runtime.sendMessage({
     action: ACTIONS.START_TIMER,
@@ -119,7 +132,8 @@ startBtn.addEventListener('click', () => {
   startBtn.disabled = true;
   pauseBtn.disabled = false;
   stopBtn.disabled = false;
-  durationInput.disabled = true;
+  durationPreset.disabled = true;
+  customDurationInput.disabled = true;
   // BPM 滑桿保持可用
   statusText.textContent = '計時中...';
 });
@@ -150,15 +164,32 @@ stopBtn.addEventListener('click', () => {
   pauseBtn.disabled = true;
   pauseBtn.textContent = '暫停';
   stopBtn.disabled = true;
-  durationInput.disabled = false;
+  durationPreset.disabled = false;
+  customDurationInput.disabled = false;
   // BPM 滑桿保持可用
   isPaused = false;
 });
 
-// durationInput 即時儲存
-durationInput.addEventListener('change', (e) => {
-  const duration = parseInt(e.target.value);
-  if (!isNaN(duration) && duration > 0) {
+// Duration preset 變更 - 顯示/隱藏自訂輸入
+durationPreset.addEventListener('change', (e) => {
+  if (e.target.value === 'custom') {
+    customDurationInput.style.display = 'inline-block';
+    customDurationInput.focus();
+  } else {
+    customDurationInput.style.display = 'none';
+    const duration = parseInt(e.target.value);
+    chrome.runtime.sendMessage({
+      action: ACTIONS.UPDATE_DEFAULT_DURATION,
+      duration: duration
+    });
+  }
+});
+
+// Custom duration input 即時儲存
+customDurationInput.addEventListener('change', (e) => {
+  const minutes = parseInt(e.target.value);
+  if (!isNaN(minutes) && minutes > 0) {
+    const duration = minutes * 60; // 轉換為秒
     chrome.runtime.sendMessage({
       action: ACTIONS.UPDATE_DEFAULT_DURATION,
       duration: duration
@@ -170,26 +201,7 @@ durationInput.addEventListener('change', (e) => {
 bpmSlider.addEventListener('input', (e) => {
   const bpm = parseInt(e.target.value);
   currentBPM = bpm;
-  bpmInput.value = bpm; // 同步到輸入框
-
-  chrome.runtime.sendMessage({
-    action: ACTIONS.UPDATE_BPM,
-    bpm: bpm
-  });
-});
-
-// BPM 輸入框變更
-bpmInput.addEventListener('input', (e) => {
-  let bpm = parseInt(e.target.value);
-
-  // 驗證範圍（60-360）
-  if (isNaN(bpm)) return;
-  if (bpm < 60) bpm = 60;
-  if (bpm > 360) bpm = 360;
-
-  currentBPM = bpm;
-  bpmSlider.value = bpm; // 同步到滑桿
-  bpmInput.value = bpm;  // 更新輸入框（處理超出範圍的情況）
+  bpmValue.textContent = bpm; // 更新顯示值
 
   chrome.runtime.sendMessage({
     action: ACTIONS.UPDATE_BPM,
@@ -211,26 +223,7 @@ soundToggle.addEventListener('change', (e) => {
 opacitySlider.addEventListener('input', (e) => {
   const opacity = parseInt(e.target.value);
   overlayOpacity = opacity;
-  opacityInput.value = opacity; // 同步到輸入框
-
-  chrome.runtime.sendMessage({
-    action: ACTIONS.UPDATE_OPACITY,
-    opacity: opacity
-  });
-});
-
-// 透明度輸入框變更
-opacityInput.addEventListener('input', (e) => {
-  let opacity = parseInt(e.target.value);
-
-  // 驗證範圍（0-100）
-  if (isNaN(opacity)) return;
-  if (opacity < 0) opacity = 0;
-  if (opacity > 100) opacity = 100;
-
-  overlayOpacity = opacity;
-  opacitySlider.value = opacity; // 同步到滑桿
-  opacityInput.value = opacity;  // 更新輸入框（處理超出範圍的情況）
+  opacityValue.textContent = opacity; // 更新顯示值
 
   chrome.runtime.sendMessage({
     action: ACTIONS.UPDATE_OPACITY,
@@ -255,17 +248,6 @@ soundTypeSelect.addEventListener('change', (e) => {
   chrome.runtime.sendMessage({
     action: ACTIONS.UPDATE_SOUND_TYPE,
     soundType: soundType
-  });
-});
-
-// 顯示/隱藏計時器面板
-toggleOverlayBtn.addEventListener('click', () => {
-  overlayVisible = !overlayVisible;
-  toggleOverlayBtn.textContent = overlayVisible ? '隱藏計時器面板' : '顯示計時器面板';
-
-  chrome.runtime.sendMessage({
-    action: ACTIONS.TOGGLE_OVERLAY_VISIBILITY,
-    visible: overlayVisible
   });
 });
 

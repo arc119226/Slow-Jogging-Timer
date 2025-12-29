@@ -1,3 +1,88 @@
+/* ========== 按鈕樣式 ========== */
+
+.btn-start {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-start:hover:not(:disabled) {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.btn-pause {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-pause:hover:not(:disabled) {
+  background: linear-gradient(135deg, #F57C00, #E65100);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+.btn-stop {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-stop:hover:not(:disabled) {
+  background: linear-gradient(135deg, #d32f2f, #b71c1c);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* ========== Timer 顯示強化 ========== */
+
+.timer-display {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 16px 0;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+#timer {
+  font-size: 48px;
+  font-weight: 700;
+  text-align: center;
+  color: white;
+  letter-spacing: 4px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-variant-numeric: tabular-nums;
+}
+
 .bpm-controls {
   padding: 15px;
   background: #f8f9fa;
@@ -66,6 +151,63 @@
 .bpm-controls input[type="checkbox"] {
   margin-right: 8px;
   cursor: pointer;
+}
+
+/* ========== 進階設定樣式 ========== */
+
+.advanced-settings {
+  margin-top: 12px;
+  margin-bottom: 20px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 12px;
+}
+
+.advanced-settings summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: #667eea;
+  list-style: none; /* 移除預設箭頭 */
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  user-select: none;
+}
+
+.advanced-settings summary:hover {
+  background: #e9ecef;
+}
+
+.advanced-settings summary::-webkit-details-marker {
+  display: none;
+}
+
+.advanced-settings summary::before {
+  content: '▼ ';
+  display: inline-block;
+  transition: transform 0.2s;
+  margin-right: 4px;
+}
+
+.advanced-settings[open] summary::before {
+  transform: rotate(-90deg);
+  content: '▶ ';
+}
+
+.advanced-content {
+  padding-top: 12px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ========== 覆蓋層控制樣式 ========== */
