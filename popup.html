@@ -14,29 +14,27 @@
     </div>
 
     <div class="controls">
-      <label>自訂時間（秒）：</label>
-      <input type="number" id="durationInput" min="1" max="3600" value="2700" placeholder="輸入秒數">
-      <button id="startBtn">開始</button>
-      <button id="pauseBtn" disabled>暫停</button>
-      <button id="stopBtn" disabled>停止</button>
-    </div>
-
-    <div class="bpm-controls">
-      <label>
-        <input type="checkbox" id="autoStartToggle">
-        自動跟隨影片播放
-      </label>
-      <div class="auto-start-info">
-        <small>影片播放時自動啟動計時器，暫停時同步暫停</small>
+      <div class="duration-section">
+        <label>運動時長：</label>
+        <select id="durationPreset">
+          <option value="900">15 分鐘</option>
+          <option value="1800" selected>30 分鐘</option>
+          <option value="2700">45 分鐘</option>
+          <option value="custom">自訂...</option>
+        </select>
+        <input type="number" id="customDurationInput" min="1" max="180" value="30" placeholder="分鐘" style="display:none">
+      </div>
+      <div class="button-group">
+        <button id="startBtn" class="btn-start">開始</button>
+        <button id="pauseBtn" class="btn-pause" disabled>暫停</button>
+        <button id="stopBtn" class="btn-stop" disabled>停止</button>
       </div>
     </div>
 
     <div class="bpm-controls">
-      <label>BPM 速度：</label>
+      <label>BPM 速度：<span id="bpmValue">180</span></label>
       <div class="bpm-container">
-        <input type="range" id="bpmSlider" min="60" max="360" value="190" step="1">
-        <input type="number" id="bpmInput" min="60" max="360" value="190" step="1">
-        <span>BPM</span>
+        <input type="range" id="bpmSlider" min="60" max="360" value="180" step="1">
       </div>
       <label>
         <input type="checkbox" id="soundToggle" checked>
@@ -44,46 +42,46 @@
       </label>
     </div>
 
-    <div class="bpm-controls">
-      <label>音效類型：</label>
-      <div class="sound-type-container">
-        <select id="soundTypeSelect">
-          <option value="beep">嗶聲（合成音）</option>
-          <option value="castanets">響板（真實音效）</option>
-          <option value="snaredrum">小鼓（真實音效）</option>
-        </select>
-      </div>
-      <div class="sound-type-info">
-        <small>嗶聲：電子合成音｜響板：真實響板錄音｜小鼓：小鼓滾奏錄音</small>
-      </div>
-    </div>
+    <details class="advanced-settings">
+      <summary>⚙️ 進階設定</summary>
+      <div class="advanced-content">
+        <div class="bpm-controls">
+          <label>
+            <input type="checkbox" id="autoStartToggle">
+            自動跟隨影片播放
+          </label>
+        </div>
 
-    <div class="bpm-controls">
-      <label>拍號選擇：</label>
-      <div class="time-signature-container">
-        <select id="timeSignatureSelect">
-          <option value="2/4">2/4 拍（強-弱）</option>
-          <option value="3/4">3/4 拍（強-弱-弱）</option>
-          <option value="4/4" selected>4/4 拍（強-弱-次強-弱）</option>
-        </select>
-      </div>
-      <div class="time-signature-info">
-        <small>強拍：高音 | 次強拍：中音 | 弱拍：低音</small>
-      </div>
-    </div>
+        <div class="bpm-controls">
+          <label>音效類型：</label>
+          <div class="sound-type-container">
+            <select id="soundTypeSelect">
+              <option value="beep">嗶聲（合成音）</option>
+              <option value="castanets">響板（真實音效）</option>
+              <option value="snaredrum">小鼓（真實音效）</option>
+            </select>
+          </div>
+        </div>
 
-    <div class="bpm-controls">
-      <label>面板透明度：</label>
-      <div class="bpm-container">
-        <input type="range" id="opacitySlider" min="0" max="100" value="100" step="5">
-        <input type="number" id="opacityInput" min="0" max="100" value="100" step="5">
-        <span>%</span>
-      </div>
-    </div>
+        <div class="bpm-controls">
+          <label>拍號選擇：</label>
+          <div class="time-signature-container">
+            <select id="timeSignatureSelect">
+              <option value="2/4">2/4 拍（強-弱）</option>
+              <option value="3/4">3/4 拍（強-弱-弱）</option>
+              <option value="4/4" selected>4/4 拍（強-弱-次強-弱）</option>
+            </select>
+          </div>
+        </div>
 
-    <div class="overlay-controls">
-      <button id="toggleOverlayBtn">隱藏計時器面板</button>
-    </div>
+        <div class="bpm-controls">
+          <label>面板透明度：<span id="opacityValue">80</span>%</label>
+          <div class="bpm-container">
+            <input type="range" id="opacitySlider" min="0" max="100" value="80" step="5">
+          </div>
+        </div>
+      </div>
+    </details>
 
     <div class="status">
       <p id="statusText">準備就緒</p>

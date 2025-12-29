@@ -14,13 +14,13 @@ const logger = createLogger('Background');
 // ========== 狀態管理 ==========
 // 預設設定（單一權威來源）
 const DEFAULT_SETTINGS = {
-  currentBPM: 190,
+  currentBPM: 180,                // 更適合大眾的節奏
   soundEnabled: true,
-  soundType: 'castanets',        // 使用響板聲
-  overlayOpacity: 30,             // 使用 30% 透明度
-  timeSignature: '2/4',           // 使用 2/4 拍
+  soundType: 'beep',              // 使用合成嗶聲（啟動更快）
+  overlayOpacity: 80,             // 使用 80% 透明度（更易見）
+  timeSignature: '4/4',           // 使用 4/4 拍（最常見）
   autoStartEnabled: false,
-  defaultDuration: 2700,
+  defaultDuration: 1800,          // 30 分鐘（更合理的預設值）
   overlayVisible: true            // 新增：持久化覆蓋層可見性
 };
 
@@ -40,7 +40,7 @@ let timerState = {
   timerStartTime: 0,        // 計時器啟動的絕對時間戳
   expectedBeatNumber: 0,     // 當前應該播放的節拍數（0, 1, 2, ...）
   nextBeatTime: 0,          // 下一次節拍應該發生的絕對時間戳
-  lastBPM: 190,             // 追踪 BPM 變化（用於檢測調整）
+  lastBPM: 180,             // 追踪 BPM 變化（用於檢測調整）
 
   // 新增：漂移補償
   driftSamples: [],         // 最近 N 次的漂移測量值（毫秒）
