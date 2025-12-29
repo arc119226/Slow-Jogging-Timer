@@ -443,7 +443,7 @@ function runTimer() {
       // 發送預調度消息到 offscreen
       if (timerState.soundEnabled) {
         chrome.runtime.sendMessage({
-          action: 'SCHEDULE_BEEP',
+          action: ACTIONS.SCHEDULE_BEEP,
           beatType: beatType,
           delay: delay,
           soundType: timerState.soundType
