@@ -601,9 +601,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
       // 預加載對應的音效
       if (request.soundType === 'castanets' && timerState.offscreenDocumentExists) {
-        chrome.runtime.sendMessage({ action: ACTIONS.PRELOAD_CASTANETS }).catch(() => {});
+        chrome.runtime.sendMessage({ action: ACTIONS.PRELOAD_CASTANETS }).catch(err =>
+          logger.warn('Preload castanets message failed:', err));
       } else if (request.soundType === 'snaredrum' && timerState.offscreenDocumentExists) {
-        chrome.runtime.sendMessage({ action: ACTIONS.PRELOAD_SNAREDRUM }).catch(() => {});
+        chrome.runtime.sendMessage({ action: ACTIONS.PRELOAD_SNAREDRUM }).catch(err =>
+          logger.warn('Preload snaredrum message failed:', err));
       }
 
       broadcastState();
