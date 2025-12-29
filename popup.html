@@ -14,17 +14,21 @@
     </div>
 
     <div class="controls">
-      <label>運動時長：</label>
-      <select id="durationPreset">
-        <option value="900">15 分鐘</option>
-        <option value="1800" selected>30 分鐘</option>
-        <option value="2700">45 分鐘</option>
-        <option value="custom">自訂...</option>
-      </select>
-      <input type="number" id="customDurationInput" min="1" max="180" value="30" placeholder="分鐘" style="display:none">
-      <button id="startBtn" class="btn-start">開始</button>
-      <button id="pauseBtn" class="btn-pause" disabled>暫停</button>
-      <button id="stopBtn" class="btn-stop" disabled>停止</button>
+      <div class="duration-section">
+        <label>運動時長：</label>
+        <select id="durationPreset">
+          <option value="900">15 分鐘</option>
+          <option value="1800" selected>30 分鐘</option>
+          <option value="2700">45 分鐘</option>
+          <option value="custom">自訂...</option>
+        </select>
+        <input type="number" id="customDurationInput" min="1" max="180" value="30" placeholder="分鐘" style="display:none">
+      </div>
+      <div class="button-group">
+        <button id="startBtn" class="btn-start">開始</button>
+        <button id="pauseBtn" class="btn-pause" disabled>暫停</button>
+        <button id="stopBtn" class="btn-stop" disabled>停止</button>
+      </div>
     </div>
 
     <div class="bpm-controls">
