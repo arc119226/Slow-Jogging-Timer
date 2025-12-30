@@ -1,19 +1,9 @@
-// ========== 常數定義 ==========
-// Note: Content scripts不支持ES modules，這些常數與utils/保持同步
-const MAX_VIDEO_ATTACH_RETRIES = 20;
-const VIDEO_ATTACH_RETRY_INTERVAL_MS = 500;
-const BEAT_PULSE_DURATION_MS = 150;
-
-// Message actions (synced with utils/message-actions.js)
-const ACTIONS = {
-  VIDEO_PLAY: 'VIDEO_PLAY',
-  VIDEO_PAUSE: 'VIDEO_PAUSE',
-  UPDATE_TIMER: 'updateTimer',
-  TOGGLE_VISIBILITY: 'toggleVisibility',
-  UPDATE_OPACITY_DISPLAY: 'updateOpacity',
-  BEAT_PULSE: 'BEAT_PULSE',
-  STATE_UPDATE: 'STATE_UPDATE'
-};
+import {
+  BEAT_PULSE_DURATION_MS,
+  MAX_VIDEO_ATTACH_RETRIES,
+  VIDEO_ATTACH_RETRY_INTERVAL_MS
+} from './shared/constants.js';
+import { ACTIONS } from './shared/actions.js';
 
 // Logger (synced with utils/logger.js)
 const logger = {
@@ -274,7 +264,7 @@ function initializeYouTubeOverlay() {
 
         // 只發送訊息給 background，等廣播回來更新 DOM
         safeSendMessage({
-          action: 'TOGGLE_OVERLAY_VISIBILITY',
+          action: ACTIONS.TOGGLE_OVERLAY_VISIBILITY,
           visible: newVisibleState
         });
       }
