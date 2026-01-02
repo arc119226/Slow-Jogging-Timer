@@ -9,6 +9,8 @@ import {
 import { ACTIONS } from './utils/message-actions.js';
 import { createLogger } from './utils/logger.js';
 import { safeStorageSet, safeStorageGet } from './utils/storage-utils.js';
+import { resetBeatScheduling } from './utils/message-handlers.js';
+import { broadcastToYouTubeTabs, sendToActiveTab } from './utils/broadcast-utils.js';
 
 const logger = createLogger('Background');
 
@@ -323,31 +325,19 @@ function trackDrift(drift) {
 }
 
 function updateContentScript() {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0]) {
-      chrome.tabs.sendMessage(tabs[0].id, {
-        action: 'updateTimer',
-        time: formatTime(timerState.remainingSeconds),
-        bpm: timerState.currentBPM
-      }).catch(() => {
-        // YouTube 頁面可能沒有 content script，忽略錯誤
-      });
-    }
+  sendToActiveTab({
+    action: 'updateTimer',
+    time: formatTime(timerState.remainingSeconds),
+    bpm: timerState.currentBPM
   });
 }
 
 // 廣播節拍事件到所有 YouTube 頁面
 function broadcastBeatEvent(beatIndex, beatType) {
-  chrome.tabs.query({ url: 'https://www.youtube.com/*' }, (tabs) => {
-    tabs.forEach(tab => {
-      chrome.tabs.sendMessage(tab.id, {
-        action: ACTIONS.BEAT_PULSE,
-        beatIndex: beatIndex,
-        beatType: beatType
-      }).catch(() => {
-        // Content script 可能未載入，忽略錯誤
-      });
-    });
+  broadcastToYouTubeTabs({
+    action: ACTIONS.BEAT_PULSE,
+    beatIndex: beatIndex,
+    beatType: beatType
   });
 }
 
@@ -380,21 +370,12 @@ function runTimer() {
 
   timerState.isRunning = true;
 
-  // 初始化節拍調度狀態
-  timerState.timerStartTime = Date.now();
-  timerState.expectedBeatNumber = 0;
-  timerState.lastBPM = timerState.currentBPM;
-
-  const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
-  timerState.nextBeatTime = timerState.timerStartTime + beatInterval;
-
-  // 重置漂移追踪
-  timerState.driftSamples = [];
-  timerState.avgDrift = 0;
-  timerState.lastTickTime = Date.now();
+  // 使用統一的節拍調度重置函數
+  resetBeatScheduling(timerState);
 
   // ========== 動態檢查頻率（根據 BPM 調整精度）==========
   // 根據節拍間隔動態調整檢查頻率
+  const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
   const checkInterval = getCheckInterval(beatInterval);
   startTimerInterval(checkInterval);
 }
@@ -427,15 +408,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         timerState.defaultDuration = request.duration;
         timerState.isPaused = false;
 
-        // 新增：初始化節拍調度狀態
-        timerState.timerStartTime = 0;  // 將在 runTimer() 中設置
-        timerState.expectedBeatNumber = 0;
-        timerState.nextBeatTime = 0;
-        timerState.lastBPM = timerState.currentBPM;
-        timerState.currentBeatInBar = 0;
-        timerState.driftSamples = [];
-        timerState.avgDrift = 0;
-
         await safeStorageSet({ defaultDuration: request.duration }, '開始計時器');
         await createOffscreenDocument();
         runTimer();
@@ -456,17 +428,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
       case ACTIONS.RESUME_TIMER:
         timerState.isPaused = false;
-
-        // 新增：恢復時重置節拍（避免時間跳躍）
-        timerState.timerStartTime = Date.now();
-        timerState.expectedBeatNumber = 0;
-        const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
-        timerState.nextBeatTime = timerState.timerStartTime + beatInterval;
-        timerState.lastBPM = timerState.currentBPM;
-        timerState.currentBeatInBar = 0;
-        timerState.driftSamples = [];
-        timerState.avgDrift = 0;
-        timerState.lastTickTime = Date.now();
 
         runTimer();
         await safeStorageSet({ isPaused: false }, '恢復計時器');
@@ -503,17 +464,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         timerState.overlayOpacity = request.opacity;
         await safeStorageSet({ overlayOpacity: request.opacity }, '更新透明度');
 
-      // 通知所有 YouTube 標籤頁更新透明度
-      chrome.tabs.query({ url: 'https://www.youtube.com/*' }, (tabs) => {
-        tabs.forEach(tab => {
-          chrome.tabs.sendMessage(tab.id, {
-            action: 'updateOpacity',
-            opacity: request.opacity
-          }).catch(() => {
-            // Content script 可能尚未載入，忽略錯誤
-          });
+        // 通知所有 YouTube 標籤頁更新透明度
+        broadcastToYouTubeTabs({
+          action: 'updateOpacity',
+          opacity: request.opacity
         });
-      });
 
         broadcastState();
         sendResponse({ success: true });
@@ -549,19 +504,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         timerState.overlayVisible = request.visible;
         await safeStorageSet({ overlayVisible: request.visible }, '切換覆蓋層可見性');
 
-      // 通知所有 YouTube 標籤頁切換顯示狀態
-      chrome.tabs.query({ url: 'https://www.youtube.com/*' }, (tabs) => {
-        tabs.forEach(tab => {
-          chrome.tabs.sendMessage(tab.id, {
-            action: 'toggleVisibility',
-            visible: request.visible
-          }).catch(() => {
-            // Content script 可能尚未載入，忽略錯誤
-          });
+        // 通知所有 YouTube 標籤頁切換顯示狀態
+        broadcastToYouTubeTabs({
+          action: 'toggleVisibility',
+          visible: request.visible
         });
-      });
-      sendResponse({ success: true });
-      break;
+
+        sendResponse({ success: true });
+        break;
 
     case ACTIONS.GET_STATE:
       sendResponse({
@@ -586,8 +536,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (timerState.autoStartEnabled && !timerState.isRunning) {
           timerState.remainingSeconds = timerState.defaultDuration;
           timerState.isPaused = false;
-          timerState.lastBeatTime = Date.now();
-          timerState.currentBeatInBar = 0;
           await createOffscreenDocument();
           runTimer();
           broadcastState();
@@ -595,8 +543,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         // 如果計時器正在運行但被暫停，且啟用自動啟動，則恢復
         else if (timerState.autoStartEnabled && timerState.isRunning && timerState.isPaused) {
           timerState.isPaused = false;
-          timerState.lastBeatTime = Date.now();
-          timerState.currentBeatInBar = 0;
           runTimer();
           await safeStorageSet({ isPaused: false }, '視頻播放自動恢復');
           broadcastState();

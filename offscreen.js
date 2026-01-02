@@ -1,6 +1,7 @@
 // ========== 工具函數導入 ==========
 import { ACTIONS } from './utils/message-actions.js';
 import { createLogger } from './utils/logger.js';
+import { playAudioFile, preloadAudio } from './utils/audio-player.js';
 
 const logger = createLogger('Offscreen');
 
@@ -14,10 +15,15 @@ async function playBPMSound(beatType = 'weak', currentSoundType = 'beep') {
 
   if (soundType === 'beep') {
     playBeepSound(beatType);
-  } else if (soundType === 'castanets') {
-    await playCastanetsSound(beatType);
-  } else if (soundType === 'snaredrum') {
-    await playSnaredrumSound(beatType);
+  } else if (soundType === 'castanets' || soundType === 'snaredrum') {
+    await playAudioFile(
+      soundType,
+      beatType,
+      null,
+      audioContext,
+      audioBuffers,
+      playBeepSound
+    );
   }
 }
 
@@ -85,100 +91,6 @@ function playBeepSound(beatType = 'weak', scheduledTime = null) {
   }
 }
 
-// 播放響板音效（音頻文件）
-// scheduledTime: AudioContext 時間軸上的絕對時間（秒），null 表示立即播放
-async function playCastanetsSound(beatType = 'weak', scheduledTime = null) {
-  // 定義不同強度拍的音頻參數
-  const castanetsConfigs = {
-    strong: {
-      volume: 0.8,        // 80% 音量
-      playbackRate: 1.1   // 110% 速度（音調稍高）
-    },
-    medium: {
-      volume: 0.5,        // 50% 音量
-      playbackRate: 1.0   // 正常速度
-    },
-    weak: {
-      volume: 0.3,        // 30% 音量
-      playbackRate: 0.95  // 95% 速度（音調稍低）
-    }
-  };
-
-  const config = castanetsConfigs[beatType] || castanetsConfigs.weak;
-
-  try {
-    // 確保 AudioContext 已初始化
-    if (!audioContext) {
-      try {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      } catch (e) {
-        logger.error('AudioContext 初始化失敗:', e);
-        // 降級到嗶聲
-        playBeepSound(beatType, scheduledTime);
-        return;
-      }
-    }
-
-    // 加載音頻文件（如果尚未緩存）
-    if (!audioBuffers['castanets']) {
-      await loadCastanetsAudio();
-    }
-
-    if (!audioBuffers['castanets']) {
-      logger.warn('響板音效不可用，切換至嗶聲');
-      playBeepSound(beatType, scheduledTime);
-      return;
-    }
-
-    // ========== 支持預調度：使用指定時間或立即播放 ==========
-    const startTime = scheduledTime !== null
-      ? scheduledTime
-      : audioContext.currentTime;
-
-    const source = audioContext.createBufferSource();
-    const gainNode = audioContext.createGain();
-
-    source.buffer = audioBuffers['castanets'];
-    source.playbackRate.value = config.playbackRate;
-
-    source.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-
-    gainNode.gain.setValueAtTime(config.volume, startTime);
-
-    // 預調度播放
-    source.start(startTime);
-  } catch (e) {
-    logger.error('響板音效播放錯誤，使用嗶聲:', e);
-    playBeepSound(beatType, scheduledTime);
-  }
-}
-
-// 加載響板音頻文件
-async function loadCastanetsAudio() {
-  if (!audioContext) {
-    try {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    } catch (e) {
-      logger.error('AudioContext 初始化失敗:', e);
-      return;
-    }
-  }
-
-  try {
-    const response = await fetch(chrome.runtime.getURL('sounds/castanets.wav'));
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const arrayBuffer = await response.arrayBuffer();
-    audioBuffers['castanets'] = await audioContext.decodeAudioData(arrayBuffer);
-    logger.info('響板音效加載成功');
-  } catch (error) {
-    logger.error('響板音效加載失敗:', error);
-    audioBuffers['castanets'] = null;
-  }
-}
-
 // 預加載響板音效
 async function preloadCastanets() {
   if (!audioContext) {
@@ -189,104 +101,7 @@ async function preloadCastanets() {
       return;
     }
   }
-
-  if (!audioBuffers['castanets']) {
-    await loadCastanetsAudio();
-  }
-}
-
-// 播放小鼓音效（音頻文件）
-// scheduledTime: AudioContext 時間軸上的絕對時間（秒），null 表示立即播放
-async function playSnaredrumSound(beatType = 'weak', scheduledTime = null) {
-  // 定義不同強度拍的音頻參數
-  const snaredrumConfigs = {
-    strong: {
-      volume: 1.0,        // 100% 音量（小鼓強拍較響板突出）
-      playbackRate: 1.1   // 110% 速度（更緊湊）
-    },
-    medium: {
-      volume: 0.7,        // 70% 音量
-      playbackRate: 1.0   // 正常速度
-    },
-    weak: {
-      volume: 0.45,       // 45% 音量
-      playbackRate: 0.95  // 95% 速度（稍低沈）
-    }
-  };
-
-  const config = snaredrumConfigs[beatType] || snaredrumConfigs.weak;
-
-  try {
-    // 確保 AudioContext 已初始化
-    if (!audioContext) {
-      try {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      } catch (e) {
-        logger.error('AudioContext 初始化失敗:', e);
-        // 降級到嗶聲
-        playBeepSound(beatType, scheduledTime);
-        return;
-      }
-    }
-
-    // 加載音頻文件（如果尚未緩存）
-    if (!audioBuffers['snaredrum']) {
-      await loadSnaredrumAudio();
-    }
-
-    if (!audioBuffers['snaredrum']) {
-      logger.warn('小鼓音效不可用，切換至嗶聲');
-      playBeepSound(beatType, scheduledTime);
-      return;
-    }
-
-    // ========== 支持預調度：使用指定時間或立即播放 ==========
-    const startTime = scheduledTime !== null
-      ? scheduledTime
-      : audioContext.currentTime;
-
-    const source = audioContext.createBufferSource();
-    const gainNode = audioContext.createGain();
-
-    source.buffer = audioBuffers['snaredrum'];
-    source.playbackRate.value = config.playbackRate;
-
-    source.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-
-    gainNode.gain.setValueAtTime(config.volume, startTime);
-
-    // 預調度播放
-    source.start(startTime);
-  } catch (e) {
-    logger.error('小鼓音效播放錯誤，使用嗶聲:', e);
-    playBeepSound(beatType, scheduledTime);
-  }
-}
-
-// 加載小鼓音頻文件
-async function loadSnaredrumAudio() {
-  if (!audioContext) {
-    try {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    } catch (e) {
-      logger.error('AudioContext 初始化失敗:', e);
-      return;
-    }
-  }
-
-  try {
-    const response = await fetch(chrome.runtime.getURL('sounds/snaredrum.mp3'));
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const arrayBuffer = await response.arrayBuffer();
-    audioBuffers['snaredrum'] = await audioContext.decodeAudioData(arrayBuffer);
-    logger.info('小鼓音效加載成功');
-  } catch (error) {
-    logger.error('小鼓音效加載失敗:', error);
-    audioBuffers['snaredrum'] = null;
-  }
+  await preloadAudio('castanets', audioContext, audioBuffers);
 }
 
 // 預加載小鼓音效
@@ -299,10 +114,7 @@ async function preloadSnaredrum() {
       return;
     }
   }
-
-  if (!audioBuffers['snaredrum']) {
-    await loadSnaredrumAudio();
-  }
+  await preloadAudio('snaredrum', audioContext, audioBuffers);
 }
 
 // 監聽來自 background 的消息
@@ -331,25 +143,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (currentSoundType === 'beep') {
       playBeepSound(beatType, scheduledTime);
       sendResponse({ success: true });
-    } else if (currentSoundType === 'castanets') {
-      // 正確處理 async
-      playCastanetsSound(beatType, scheduledTime).then(() => {
+    } else if (currentSoundType === 'castanets' || currentSoundType === 'snaredrum') {
+      // 使用統一的音頻播放器
+      playAudioFile(
+        currentSoundType,
+        beatType,
+        scheduledTime,
+        audioContext,
+        audioBuffers,
+        playBeepSound
+      ).then(() => {
         sendResponse({ success: true });
       }).catch(err => {
-        logger.error('響板播放失敗:', err);
-        // 降級到嗶聲
-        playBeepSound(beatType, scheduledTime);
-        sendResponse({ success: true });
-      });
-      return true;  // 保持消息通道開啟以支援異步回應
-    } else if (currentSoundType === 'snaredrum') {
-      // 正確處理 async
-      playSnaredrumSound(beatType, scheduledTime).then(() => {
-        sendResponse({ success: true });
-      }).catch(err => {
-        logger.error('小鼓播放失敗:', err);
-        // 降級到嗶聲
-        playBeepSound(beatType, scheduledTime);
+        logger.error(`${currentSoundType} 播放失敗:`, err);
         sendResponse({ success: true });
       });
       return true;  // 保持消息通道開啟以支援異步回應
