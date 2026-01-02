@@ -228,4 +228,4 @@ chrome.tabs.query({url: 'https://www.youtube.com/*'}, (tabs) => {
 ---
 
 **Last Updated:** 2026-01-02
-**Extension Version:** 1.0.5
+**Extension Version:** 1.0.6
