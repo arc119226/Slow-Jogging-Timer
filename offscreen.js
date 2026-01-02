@@ -156,7 +156,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ success: true });
       }).catch(err => {
         logger.error(`${currentSoundType} 播放失敗:`, err);
-        sendResponse({ success: true });
+        sendResponse({ success: false, error: err.message });
       });
       return true;  // 保持消息通道開啟以支援異步回應
     }

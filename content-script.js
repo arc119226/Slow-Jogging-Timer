@@ -28,6 +28,7 @@ const i18n = (key, ...substitutions) => chrome.i18n.getMessage(key, substitution
 // YouTube 視頻同步狀態
 let videoElement = null;
 let isVideoAttached = false;
+let messageListenerAttached = false;
 
 // 節拍指示燈狀態
 let currentActiveSide = 'left'; // 追蹤當前應該亮的指示燈
@@ -186,61 +187,65 @@ function initializeYouTubeOverlay() {
   // 插入到頁面中
   document.body.appendChild(overlay);
 
-  // 監聽來自 popup 的消息
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === ACTIONS.UPDATE_TIMER) {
-      const display = document.getElementById('slowjogging-timer-display');
-      const bpmInfo = document.getElementById('slowjogging-bpm-info');
-      const toggleBtn = document.getElementById('slowjogging-toggle-btn');
-      const content = document.getElementById('slowjogging-timer-content');
+  // 監聽來自 popup 的消息（僅附加一次）
+  if (!messageListenerAttached) {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.action === ACTIONS.UPDATE_TIMER) {
+        const display = document.getElementById('slowjogging-timer-display');
+        const bpmInfo = document.getElementById('slowjogging-bpm-info');
+        const toggleBtn = document.getElementById('slowjogging-toggle-btn');
+        const content = document.getElementById('slowjogging-timer-content');
 
-      // 保存最新的時間
-      currentDisplayTime = request.time;
+        // 保存最新的時間
+        currentDisplayTime = request.time;
 
-      if (display) display.textContent = request.time;
-      if (bpmInfo) bpmInfo.textContent = i18n('format_bpm', request.bpm);
+        if (display) display.textContent = request.time;
+        if (bpmInfo) bpmInfo.textContent = i18n('format_bpm', request.bpm);
 
-      // 如果內容隱藏，按鈕顯示倒計時時間
-      if (content && toggleBtn && content.style.display === 'none') {
-        toggleBtn.textContent = currentDisplayTime;
-      }
-    }
-    if (request.action === ACTIONS.TOGGLE_VISIBILITY) {
-      const content = document.getElementById('slowjogging-timer-content');
-      const toggleBtn = document.getElementById('slowjogging-toggle-btn');
-
-      if (content && toggleBtn) {
-        const isHidden = content.style.display === 'none';
-        content.style.display = isHidden ? 'block' : 'none';
-
-        // 更新按鈕文字邏輯
-        if (isHidden) {
-          // 從隱藏切換到顯示
-          toggleBtn.textContent = i18n('button_hide');
-        } else {
-          // 從顯示切換到隱藏，顯示倒計時時間
+        // 如果內容隱藏，按鈕顯示倒計時時間
+        if (content && toggleBtn && content.style.display === 'none') {
           toggleBtn.textContent = currentDisplayTime;
         }
+      }
+      if (request.action === ACTIONS.TOGGLE_VISIBILITY) {
+        const content = document.getElementById('slowjogging-timer-content');
+        const toggleBtn = document.getElementById('slowjogging-toggle-btn');
 
-        // 當隱藏時，讓按鈕變小
-        const widget = document.getElementById('slowjogging-timer-widget');
-        if (widget) {
-          widget.classList.toggle('minimized', !isHidden);
+        if (content && toggleBtn) {
+          const isHidden = content.style.display === 'none';
+          content.style.display = isHidden ? 'block' : 'none';
+
+          // 更新按鈕文字邏輯
+          if (isHidden) {
+            // 從隱藏切換到顯示
+            toggleBtn.textContent = i18n('button_hide');
+          } else {
+            // 從顯示切換到隱藏，顯示倒計時時間
+            toggleBtn.textContent = currentDisplayTime;
+          }
+
+          // 當隱藏時，讓按鈕變小
+          const widget = document.getElementById('slowjogging-timer-widget');
+          if (widget) {
+            widget.classList.toggle('minimized', !isHidden);
+          }
         }
       }
-    }
-    if (request.action === ACTIONS.UPDATE_OPACITY_DISPLAY) {
-      const widget = document.getElementById('slowjogging-timer-widget');
-      if (widget) {
-        // 將 0-100 的百分比轉換為 0-1 的透明度值
-        const opacityValue = request.opacity / 100;
-        widget.style.setProperty('--overlay-opacity', opacityValue);
+      if (request.action === ACTIONS.UPDATE_OPACITY_DISPLAY) {
+        const widget = document.getElementById('slowjogging-timer-widget');
+        if (widget) {
+          // 將 0-100 的百分比轉換為 0-1 的透明度值
+          const opacityValue = request.opacity / 100;
+          widget.style.setProperty('--overlay-opacity', opacityValue);
+        }
       }
-    }
-    if (request.action === ACTIONS.BEAT_PULSE) {
-      handleBeatPulse(request.beatIndex, request.beatType);
-    }
-  });
+      if (request.action === ACTIONS.BEAT_PULSE) {
+        handleBeatPulse(request.beatIndex, request.beatType);
+      }
+    });
+    messageListenerAttached = true;
+    logger.info('Message listener 已附加');
+  }
 
   // 從 storage 載入透明度設置
   chrome.storage.local.get(['overlayOpacity'], (result) => {

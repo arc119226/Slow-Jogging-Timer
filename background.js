@@ -263,8 +263,12 @@ function processTimerTick() {
 }
 
 function startTimerInterval(checkInterval) {
-  if (timerState.timerInterval) {
-    clearInterval(timerState.timerInterval);
+  const oldInterval = timerState.timerInterval;
+  timerState.timerInterval = null; // 原子性標記
+
+  if (oldInterval) {
+    clearInterval(oldInterval);
+    logger.info('清理舊的計時器 interval');
   }
 
   timerState.lastSecondUpdate = Date.now();
@@ -364,6 +368,11 @@ function broadcastState() {
 
 // ========== 核心計時器邏輯 ==========
 function runTimer() {
+  if (timerState.isRunning && timerState.timerInterval) {
+    logger.warn('計時器已在運行中，跳過重複啟動');
+    return;
+  }
+
   if (timerState.timerInterval) {
     clearInterval(timerState.timerInterval);
   }
@@ -404,11 +413,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   (async () => {
     switch (request.action) {
       case ACTIONS.START_TIMER:
-        timerState.remainingSeconds = request.duration;
-        timerState.defaultDuration = request.duration;
+        // 輸入驗證：確保 duration 是有效的正整數
+        const duration = parseInt(request.duration);
+        if (!duration || duration <= 0 || !Number.isFinite(duration)) {
+          logger.error('無效的時長參數:', request.duration);
+          sendResponse({ success: false, error: '無效的時長參數' });
+          break;
+        }
+
+        timerState.remainingSeconds = duration;
+        timerState.defaultDuration = duration;
         timerState.isPaused = false;
 
-        await safeStorageSet({ defaultDuration: request.duration }, '開始計時器');
+        await safeStorageSet({ defaultDuration: duration }, '開始計時器');
         await createOffscreenDocument();
         runTimer();
         broadcastState();
@@ -602,9 +619,13 @@ chrome.runtime.onStartup.addListener(() => {
     // 如果計時器正在運行且未暫停，恢復執行
     if (result.isRunning && !result.isPaused && result.remainingSeconds > 0) {
       logger.info('恢復計時器運行');
-      createOffscreenDocument().then(() => {
-        runTimer();
-      });
+      createOffscreenDocument()
+        .then(() => runTimer())
+        .catch(err => {
+          logger.error('恢復計時器時 offscreen 創建失敗:', err);
+          timerState.isPaused = true;
+          safeStorageSet({ isPaused: true }, '降級處理');
+        });
     }
   });
 });
