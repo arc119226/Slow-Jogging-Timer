@@ -1,10 +1,14 @@
 // ========== 工具函數導入 ==========
 import { formatTime } from './utils/time-utils.js';
 import {
+  BPM_MIN,
+  BPM_MAX,
   BPM_FORMULA_MS,
   SCHEDULE_AHEAD_TIME_MS,
   DRIFT_SAMPLE_SIZE,
-  SLEEP_DETECTION_THRESHOLD_MS
+  SLEEP_DETECTION_THRESHOLD_MS,
+  OPACITY_MIN,
+  OPACITY_MAX
 } from './utils/constants.js';
 import { ACTIONS } from './utils/message-actions.js';
 import { createLogger } from './utils/logger.js';
