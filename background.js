@@ -43,6 +43,10 @@ let timerState = {
   isRunning: false,
   offscreenDocumentExists: false,
 
+  // 新增：多標籤頁衝突保護
+  activeTabId: null,        // 擁有播放權的標籤頁 ID（不持久化）
+  timerSource: 'none',      // 啟動來源：'manual' | 'auto' | 'none' | 'orphaned'
+
   // 新增：增量節拍調度字段
   timerStartTime: 0,        // 計時器啟動的絕對時間戳
   expectedBeatNumber: 0,     // 當前應該播放的節拍數（0, 1, 2, ...）
@@ -480,6 +484,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           break;
         }
 
+        // 多標籤頁衝突檢測
+        if (timerState.isRunning && timerState.timerInterval) {
+          // 檢查是否來自不同標籤頁
+          if (sender.tab && sender.tab.id !== timerState.activeTabId) {
+            sendResponse({
+              success: false,
+              error: 'timer_already_running_in_another_tab'
+            });
+            logger.warn('忽略來自不同標籤頁的 START_TIMER 請求:', sender.tab.id);
+            break;
+          }
+        }
+
+        // 獲取所有權
+        timerState.activeTabId = sender.tab?.id || null;
+        timerState.timerSource = 'manual';
+
         timerState.remainingSeconds = duration;
         timerState.defaultDuration = duration;
         timerState.isPaused = false;
@@ -522,7 +543,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
       case ACTIONS.STOP_TIMER:
         stopTimer();
+
+        // 清除所有權
+        timerState.activeTabId = null;
+        timerState.timerSource = 'none';
+
         timerState.remainingSeconds = 0;
+        await safeStorageSet({
+          isRunning: false,
+          remainingSeconds: 0
+        }, '停止計時器');
         updateContentScript(); // 更新 YouTube 覆蓋層顯示
         broadcastState();
         sendResponse({ success: true });
@@ -627,25 +657,45 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         break;
 
       case ACTIONS.VIDEO_PLAY:
-        // 只在啟用自動啟動 && 計時器未運行時啟動
+        // 過濾非活動標籤頁的事件
+        if (timerState.isRunning && sender.tab && sender.tab.id !== timerState.activeTabId) {
+          // 靜默忽略 - 不同標籤頁嘗試自動啟動
+          sendResponse({ success: true });
+          break;
+        }
+
+        // 自動啟動：計時器未運行時
         if (timerState.autoStartEnabled && !timerState.isRunning) {
+          // 獲取所有權
+          timerState.activeTabId = sender.tab?.id || null;
+          timerState.timerSource = 'auto';
+
           timerState.remainingSeconds = timerState.defaultDuration;
           timerState.isPaused = false;
           await createOffscreenDocument();
           runTimer();
           broadcastState();
         }
-        // 如果計時器正在運行但被暫停，且啟用自動啟動，則恢復
+        // 自動恢復：計時器暫停時
         else if (timerState.autoStartEnabled && timerState.isRunning && timerState.isPaused) {
-          timerState.isPaused = false;
-          runTimer();
-          await safeStorageSet({ isPaused: false }, '視頻播放自動恢復');
-          broadcastState();
+          // 僅響應活動標籤頁
+          if (sender.tab && sender.tab.id === timerState.activeTabId) {
+            timerState.isPaused = false;
+            runTimer();
+            await safeStorageSet({ isPaused: false }, '視頻播放自動恢復');
+            broadcastState();
+          }
         }
         sendResponse({ success: true });
         break;
 
       case ACTIONS.VIDEO_PAUSE:
+        // 僅響應活動標籤頁
+        if (sender.tab && sender.tab.id !== timerState.activeTabId) {
+          sendResponse({ success: true }); // 確認但忽略
+          break;
+        }
+
         // 只在啟用自動啟動 && 計時器正在運行且未暫停時暫停
         if (timerState.autoStartEnabled && timerState.isRunning && !timerState.isPaused) {
           timerState.isPaused = true;
@@ -681,6 +731,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   })();
 
   return true; // 保持消息通道開啟以支援異步回應
+});
+
+// ========== 標籤頁清理監聽器 ==========
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  if (timerState.activeTabId === tabId) {
+    logger.info(`活動標籤頁 ${tabId} 已關閉，清除所有權。計時器繼續運行。`);
+    timerState.activeTabId = null;
+    timerState.timerSource = 'orphaned';
+    // 不停止計時器 - 讓它作為孤立狀態繼續運行
+  }
 });
 
 // ========== 啟動監聽器 ==========

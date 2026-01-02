@@ -173,16 +173,31 @@ startBtn.addEventListener('click', () => {
   chrome.runtime.sendMessage({
     action: ACTIONS.START_TIMER,
     duration: duration
-  });
+  }, (response) => {
+    // 處理多標籤頁衝突錯誤
+    if (response && !response.success) {
+      if (response.error === 'timer_already_running_in_another_tab') {
+        // 顯示錯誤消息
+        statusText.textContent = i18n('error_timer_already_running');
+        // 恢復 UI 狀態
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        stopBtn.disabled = true;
+        durationPreset.disabled = false;
+        customDurationInput.disabled = false;
+        return;
+      }
+    }
 
-  // 立即更新 UI 狀態（不等待 background 回應）
-  startBtn.disabled = true;
-  pauseBtn.disabled = false;
-  stopBtn.disabled = false;
-  durationPreset.disabled = true;
-  customDurationInput.disabled = true;
-  // BPM 滑桿保持可用
-  statusText.textContent = i18n('status_running');
+    // 更新 UI 狀態（成功啟動）
+    startBtn.disabled = true;
+    pauseBtn.disabled = false;
+    stopBtn.disabled = false;
+    durationPreset.disabled = true;
+    customDurationInput.disabled = true;
+    // BPM 滑桿保持可用
+    statusText.textContent = i18n('status_running');
+  });
 });
 
 // 暫停/繼續計時

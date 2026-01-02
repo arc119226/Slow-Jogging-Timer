@@ -141,6 +141,11 @@
     "description": "Status when timer completes"
   },
 
+  "error_timer_already_running": {
+    "message": "타이머가 이미 다른 탭에서 실행 중입니다",
+    "description": "다른 탭에서 타이머를 시작하려고 할 때 표시되는 오류"
+  },
+
   "format_bpm": {
     "message": "$BPM$ BPM",
     "description": "BPM display format",

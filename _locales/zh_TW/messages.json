@@ -141,6 +141,11 @@
     "description": "Status when timer completes"
   },
 
+  "error_timer_already_running": {
+    "message": "計時器已在其他分頁運行中",
+    "description": "當用戶嘗試在其他分頁啟動計時器時顯示的錯誤"
+  },
+
   "format_bpm": {
     "message": "$BPM$ BPM",
     "description": "BPM display format",

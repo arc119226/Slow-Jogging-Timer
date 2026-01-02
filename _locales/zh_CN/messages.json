@@ -141,6 +141,11 @@
     "description": "Status when timer completes"
   },
 
+  "error_timer_already_running": {
+    "message": "计时器已在其他标签页运行中",
+    "description": "当用户尝试在其他标签页启动计时器时显示的错误"
+  },
+
   "format_bpm": {
     "message": "$BPM$ BPM",
     "description": "BPM display format",

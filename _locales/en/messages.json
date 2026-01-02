@@ -141,6 +141,11 @@
     "description": "Status when timer completes"
   },
 
+  "error_timer_already_running": {
+    "message": "Timer is already running in another tab",
+    "description": "Error shown when user tries to start timer while it's running in another tab"
+  },
+
   "format_bpm": {
     "message": "$BPM$ BPM",
     "description": "BPM display format",
