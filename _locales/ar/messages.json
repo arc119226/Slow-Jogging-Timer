@@ -1,0 +1,169 @@
+{
+  "extension_name": {
+    "message": "Slow Jogging Timer｜مؤقت الركض البطيء",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM timer with customizable beats for YouTube slow jogging videos｜عرض مؤقت الركض البطيء وBPM على YouTube مع إيقاع قابل للتخصيص",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "مؤقت الركض البطيء",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "مؤقت الركض البطيء",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "مدة التمرين：",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15 دقيقة",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30 دقيقة",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45 دقيقة",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "مخصص...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "دقائق",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "بدء",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "إيقاف مؤقت",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "استئناف",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "إيقاف",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "إخفاء",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "سرعة BPM：",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "تفعيل الصوت",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ الإعدادات المتقدمة",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "المتابعة التلقائية لتشغيل الفيديو",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "نوع الصوت：",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "صفير（صوت اصطناعي）",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "كاستانيت（صوت حقيقي）",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "طبلة（صوت حقيقي）",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "الإيقاع：",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "إيقاع 2/4（قوي-ضعيف）",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "إيقاع 3/4（قوي-ضعيف-ضعيف）",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "إيقاع 4/4（قوي-ضعيف-متوسط-ضعيف）",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "شفافية اللوحة：",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "جاهز",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "قيد التشغيل...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "متوقف مؤقتاً",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "متوقف",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "اكتمل！",
+    "description": "Status when timer completes"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+  "format_opacity": {
+    "message": "$OPACITY$%",
+    "description": "Opacity display format",
+    "placeholders": {
+      "opacity": {
+        "content": "$1",
+        "example": "80"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "تشغيل أصوات نبضات BPM لمؤقت الركض البطيء",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}

@@ -61,7 +61,7 @@ async function createOffscreenDocument() {
     await chrome.offscreen.createDocument({
       url: 'offscreen.html',
       reasons: ['AUDIO_PLAYBACK'],
-      justification: '播放超慢跑計時器的 BPM 節拍音效'
+      justification: chrome.i18n.getMessage('offscreen_justification')
     });
     timerState.offscreenDocumentExists = true;
     logger.info('Offscreen document 已創建');

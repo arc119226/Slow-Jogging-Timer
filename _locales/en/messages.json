@@ -1,0 +1,169 @@
+{
+  "extension_name": {
+    "message": "Slow Jogging Timer",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM timer with customizable beats for YouTube slow jogging videos",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "Slow Jogging Timer",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "Slow Jogging Timer",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "Workout Duration:",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15 minutes",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30 minutes",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45 minutes",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "Custom...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "minutes",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "Start",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "Pause",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "Resume",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "Stop",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "Hide",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "BPM Speed:",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "Enable Sound",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ Advanced Settings",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "Auto-follow video playback",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "Sound Type:",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "Beep (Synthesized)",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "Castanets (Real Sound)",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "Snare Drum (Real Sound)",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "Time Signature:",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4 Time (Strong-Weak)",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4 Time (Strong-Weak-Weak)",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4 Time (Strong-Weak-Medium-Weak)",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "Panel Opacity:",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "Ready",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "Running...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "Paused",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "Stopped",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "Completed!",
+    "description": "Status when timer completes"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+  "format_opacity": {
+    "message": "$OPACITY$%",
+    "description": "Opacity display format",
+    "placeholders": {
+      "opacity": {
+        "content": "$1",
+        "example": "80"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "Play BPM beat sounds for the slow jogging timer",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}

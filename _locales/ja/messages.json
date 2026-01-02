@@ -1,0 +1,169 @@
+{
+  "extension_name": {
+    "message": "Slow Jogging Timer｜スロージョギングタイマー",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM timer with customizable beats for YouTube slow jogging videos｜YouTubeでスロージョギングタイマーとBPMを表示、カスタマイズ可能なリズム付き",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "スロージョギングタイマー",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "スロージョギングタイマー",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "運動時間：",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15分",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30分",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45分",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "カスタム...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "分",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "開始",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "一時停止",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "再開",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "停止",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "非表示",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "BPM速度：",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "サウンドを有効にする",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ 詳細設定",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "動画再生に自動追従",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "サウンドタイプ：",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "ビープ音（合成）",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "カスタネット（実音）",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "スネアドラム（実音）",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "拍子：",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4拍子（強-弱）",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4拍子（強-弱-弱）",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4拍子（強-弱-中強-弱）",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "パネル透明度：",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "準備完了",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "計測中...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "一時停止中",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "停止しました",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "完了！",
+    "description": "Status when timer completes"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+  "format_opacity": {
+    "message": "$OPACITY$%",
+    "description": "Opacity display format",
+    "placeholders": {
+      "opacity": {
+        "content": "$1",
+        "example": "80"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "スロージョギングタイマーのBPMビート音を再生",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}

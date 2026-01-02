@@ -1,0 +1,169 @@
+{
+  "extension_name": {
+    "message": "Slow Jogging Timer｜슬로우 조깅 타이머",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM timer with customizable beats for YouTube slow jogging videos｜YouTube에서 슬로우 조깅 타이머와 BPM 표시, 사용자 지정 리듬 제공",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "슬로우 조깅 타이머",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "슬로우 조깅 타이머",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "운동 시간：",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15분",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30분",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45분",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "사용자 지정...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "분",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "시작",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "일시정지",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "재개",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "정지",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "숨기기",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "BPM 속도：",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "소리 활성화",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ 고급 설정",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "비디오 재생 자동 추적",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "소리 유형：",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "비프음（합성）",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "캐스터네츠（실제 소리）",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "스네어 드럼（실제 소리）",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "박자：",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4박자（강-약）",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4박자（강-약-약）",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4박자（강-약-중강-약）",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "패널 투명도：",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "준비 완료",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "실행 중...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "일시정지됨",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "정지됨",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "완료！",
+    "description": "Status when timer completes"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+  "format_opacity": {
+    "message": "$OPACITY$%",
+    "description": "Opacity display format",
+    "placeholders": {
+      "opacity": {
+        "content": "$1",
+        "example": "80"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "슬로우 조깅 타이머의 BPM 비트 소리 재생",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}

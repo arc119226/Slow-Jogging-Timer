@@ -6,6 +6,44 @@ import { createLogger } from './utils/logger.js';
 
 const logger = createLogger('Popup');
 
+// ========== i18n 工具函數 ==========
+const i18n = (key) => chrome.i18n.getMessage(key) || key;
+
+// ========== i18n 初始化函數 ==========
+function initializeI18n() {
+  // 初始化所有帶 data-i18n 屬性的元素
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const key = element.getAttribute('data-i18n');
+    const message = chrome.i18n.getMessage(key);
+
+    // 添加默認值處理 - 如果沒有翻譯，使用鍵名作為後備
+    if (message) {
+      element.textContent = message;
+    } else {
+      console.warn(`[i18n] Missing translation for key: ${key}`);
+      element.textContent = key; // 顯示鍵名作為後備
+    }
+  });
+
+  // 處理 placeholder 屬性
+  const customInput = document.querySelector('[data-i18n-placeholder]');
+  if (customInput) {
+    const key = customInput.getAttribute('data-i18n-placeholder');
+    const message = chrome.i18n.getMessage(key);
+    if (message) {
+      customInput.placeholder = message;
+    }
+  }
+
+  // 設置 document title
+  const titleMessage = chrome.i18n.getMessage('app_title');
+  if (titleMessage) {
+    document.title = titleMessage;
+  }
+
+  logger.info('i18n initialized, locale:', chrome.i18n.getUILanguage());
+}
+
 // ========== UI 狀態變數 ==========
 // 移除硬編碼預設值 - 將從 background 初始化
 let currentBPM;
@@ -90,16 +128,16 @@ function updateUIFromState(state) {
   // BPM 應隨時可調整，不受計時器狀態影響
 
   // 更新按鈕文字和狀態文字
-  pauseBtn.textContent = state.isPaused ? '繼續' : '暫停';
+  pauseBtn.textContent = state.isPaused ? i18n('button_resume') : i18n('button_pause');
 
   if (state.remainingSeconds === 0 && !state.isRunning) {
-    statusText.textContent = '計時完成！';
+    statusText.textContent = i18n('status_completed');
   } else if (state.isPaused) {
-    statusText.textContent = '已暫停';
+    statusText.textContent = i18n('status_paused');
   } else if (state.isRunning) {
-    statusText.textContent = '計時中...';
+    statusText.textContent = i18n('status_running');
   } else {
-    statusText.textContent = '準備就緒';
+    statusText.textContent = i18n('status_ready');
   }
 
   // 更新自動啟動開關
@@ -135,7 +173,7 @@ startBtn.addEventListener('click', () => {
   durationPreset.disabled = true;
   customDurationInput.disabled = true;
   // BPM 滑桿保持可用
-  statusText.textContent = '計時中...';
+  statusText.textContent = i18n('status_running');
 });
 
 // 暫停/繼續計時
@@ -143,13 +181,13 @@ pauseBtn.addEventListener('click', () => {
   if (isPaused) {
     chrome.runtime.sendMessage({ action: ACTIONS.RESUME_TIMER });
     isPaused = false;
-    pauseBtn.textContent = '暫停';
-    statusText.textContent = '計時中...';
+    pauseBtn.textContent = i18n('button_pause');
+    statusText.textContent = i18n('status_running');
   } else {
     chrome.runtime.sendMessage({ action: ACTIONS.PAUSE_TIMER });
     isPaused = true;
-    pauseBtn.textContent = '繼續';
-    statusText.textContent = '已暫停';
+    pauseBtn.textContent = i18n('button_resume');
+    statusText.textContent = i18n('status_paused');
   }
 });
 
@@ -159,10 +197,10 @@ stopBtn.addEventListener('click', () => {
 
   // 立即更新 UI 狀態
   timerDisplay.textContent = formatTime(0);
-  statusText.textContent = '已停止';
+  statusText.textContent = i18n('status_stopped');
   startBtn.disabled = false;
   pauseBtn.disabled = true;
-  pauseBtn.textContent = '暫停';
+  pauseBtn.textContent = i18n('button_pause');
   stopBtn.disabled = true;
   durationPreset.disabled = false;
   customDurationInput.disabled = false;
@@ -270,7 +308,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // ========== Popup 開啟時同步狀態 ==========
 document.addEventListener('DOMContentLoaded', () => {
-  // 請求當前狀態
+  // 1. 先初始化 i18n（設置所有靜態文字）
+  initializeI18n();
+
+  // 2. 然後請求當前狀態（更新動態內容）
   chrome.runtime.sendMessage({ action: ACTIONS.GET_STATE }, (response) => {
     if (response && response.state) {
       updateUIFromState(response.state);

@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>超慢跑計時器</title>
+  <title data-i18n="app_title"></title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>超慢跑計時器</h1>
+    <h1 data-i18n="app_title"></h1>
     
     <div class="timer-display">
       <div id="timer">00:00:00</div>
@@ -15,67 +15,67 @@
 
     <div class="controls">
       <div class="duration-section">
-        <label>運動時長：</label>
+        <label data-i18n="label_workout_duration"></label>
         <select id="durationPreset">
-          <option value="900">15 分鐘</option>
-          <option value="1800" selected>30 分鐘</option>
-          <option value="2700">45 分鐘</option>
-          <option value="custom">自訂...</option>
+          <option value="900" data-i18n="duration_15_minutes"></option>
+          <option value="1800" selected data-i18n="duration_30_minutes"></option>
+          <option value="2700" data-i18n="duration_45_minutes"></option>
+          <option value="custom" data-i18n="duration_custom"></option>
         </select>
-        <input type="number" id="customDurationInput" min="1" max="180" value="30" placeholder="分鐘" style="display:none">
+        <input type="number" id="customDurationInput" min="1" max="180" value="30" data-i18n-placeholder="placeholder_minutes" style="display:none">
       </div>
       <div class="button-group">
-        <button id="startBtn" class="btn-start">開始</button>
-        <button id="pauseBtn" class="btn-pause" disabled>暫停</button>
-        <button id="stopBtn" class="btn-stop" disabled>停止</button>
+        <button id="startBtn" class="btn-start" data-i18n="button_start"></button>
+        <button id="pauseBtn" class="btn-pause" disabled data-i18n="button_pause"></button>
+        <button id="stopBtn" class="btn-stop" disabled data-i18n="button_stop"></button>
       </div>
     </div>
 
     <div class="bpm-controls">
-      <label>BPM 速度：<span id="bpmValue">180</span></label>
+      <label><span data-i18n="label_bpm_speed"></span><span id="bpmValue">180</span></label>
       <div class="bpm-container">
         <input type="range" id="bpmSlider" min="60" max="360" value="180" step="1">
       </div>
       <label>
         <input type="checkbox" id="soundToggle" checked>
-        啟用聲音
+        <span data-i18n="label_enable_sound"></span>
       </label>
     </div>
 
     <details class="advanced-settings">
-      <summary>⚙️ 進階設定</summary>
+      <summary data-i18n="heading_advanced_settings"></summary>
       <div class="advanced-content">
         <div class="bpm-controls">
           <label>
             <input type="checkbox" id="autoStartToggle">
-            自動跟隨影片播放
+            <span data-i18n="label_auto_follow_video"></span>
           </label>
         </div>
 
         <div class="bpm-controls">
-          <label>音效類型：</label>
+          <label data-i18n="label_sound_type"></label>
           <div class="sound-type-container">
             <select id="soundTypeSelect">
-              <option value="beep">嗶聲（合成音）</option>
-              <option value="castanets">響板（真實音效）</option>
-              <option value="snaredrum">小鼓（真實音效）</option>
+              <option value="beep" data-i18n="sound_type_beep_synthetic"></option>
+              <option value="castanets" data-i18n="sound_type_castanets_real"></option>
+              <option value="snaredrum" data-i18n="sound_type_snaredrum_real"></option>
             </select>
           </div>
         </div>
 
         <div class="bpm-controls">
-          <label>拍號選擇：</label>
+          <label data-i18n="label_time_signature"></label>
           <div class="time-signature-container">
             <select id="timeSignatureSelect">
-              <option value="2/4">2/4 拍（強-弱）</option>
-              <option value="3/4">3/4 拍（強-弱-弱）</option>
-              <option value="4/4" selected>4/4 拍（強-弱-次強-弱）</option>
+              <option value="2/4" data-i18n="time_signature_2_4"></option>
+              <option value="3/4" data-i18n="time_signature_3_4"></option>
+              <option value="4/4" selected data-i18n="time_signature_4_4"></option>
             </select>
           </div>
         </div>
 
         <div class="bpm-controls">
-          <label>面板透明度：<span id="opacityValue">80</span>%</label>
+          <label><span data-i18n="label_panel_opacity"></span><span id="opacityValue">80</span>%</label>
           <div class="bpm-container">
             <input type="range" id="opacitySlider" min="0" max="100" value="80" step="5">
           </div>
@@ -84,7 +84,7 @@
     </details>
 
     <div class="status">
-      <p id="statusText">準備就緒</p>
+      <p id="statusText" data-i18n="status_ready"></p>
     </div>
   </div>
 

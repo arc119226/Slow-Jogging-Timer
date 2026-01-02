@@ -22,6 +22,9 @@ const logger = {
   error: (...args) => console.error('[ContentScript]', ...args)
 };
 
+// i18n helper (content script doesn't support ES modules)
+const i18n = (key, ...substitutions) => chrome.i18n.getMessage(key, substitutions);
+
 // YouTube 視頻同步狀態
 let videoElement = null;
 let isVideoAttached = false;
@@ -176,7 +179,7 @@ function initializeYouTubeOverlay() {
           <div class="slowjogging-beat-indicator" id="slowjogging-right-indicator"></div>
         </div>
       </div>
-      <button id="slowjogging-toggle-btn">隱藏</button>
+      <button id="slowjogging-toggle-btn">${i18n('button_hide')}</button>
     </div>
   `;
   
@@ -195,7 +198,7 @@ function initializeYouTubeOverlay() {
       currentDisplayTime = request.time;
 
       if (display) display.textContent = request.time;
-      if (bpmInfo) bpmInfo.textContent = request.bpm + ' BPM';
+      if (bpmInfo) bpmInfo.textContent = i18n('format_bpm', request.bpm);
 
       // 如果內容隱藏，按鈕顯示倒計時時間
       if (content && toggleBtn && content.style.display === 'none') {
@@ -213,7 +216,7 @@ function initializeYouTubeOverlay() {
         // 更新按鈕文字邏輯
         if (isHidden) {
           // 從隱藏切換到顯示
-          toggleBtn.textContent = '隱藏';
+          toggleBtn.textContent = i18n('button_hide');
         } else {
           // 從顯示切換到隱藏，顯示倒計時時間
           toggleBtn.textContent = currentDisplayTime;
