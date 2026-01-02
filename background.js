@@ -8,6 +8,7 @@ import {
 } from './utils/constants.js';
 import { ACTIONS } from './utils/message-actions.js';
 import { createLogger } from './utils/logger.js';
+import { safeStorageSet, safeStorageGet } from './utils/storage-utils.js';
 
 const logger = createLogger('Background');
 
@@ -185,13 +186,13 @@ function processTimerTick() {
       updateContentScript();
 
       // 持久化狀態
-      chrome.storage.local.set({
+      safeStorageSet({
         remainingSeconds: timerState.remainingSeconds,
         currentBPM: timerState.currentBPM,
         isRunning: timerState.isRunning,
         isPaused: timerState.isPaused,
         defaultDuration: timerState.defaultDuration
-      });
+      }, '計時器狀態更新');
 
       // 廣播狀態到 popup（如果開啟）
       broadcastState();
@@ -410,96 +411,97 @@ function stopTimer() {
   // 關閉 offscreen document 以節省資源
   closeOffscreenDocument();
 
-  chrome.storage.local.set({
+  safeStorageSet({
     isRunning: false,
     isPaused: false
-  });
+  }, '計時器停止');
 }
 
 // ========== 消息處理器 ==========
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  switch (request.action) {
-    case ACTIONS.START_TIMER:
-      timerState.remainingSeconds = request.duration;
-      timerState.defaultDuration = request.duration;
-      timerState.isPaused = false;
+  // 使用立即執行的 async 函數來支援 await
+  (async () => {
+    switch (request.action) {
+      case ACTIONS.START_TIMER:
+        timerState.remainingSeconds = request.duration;
+        timerState.defaultDuration = request.duration;
+        timerState.isPaused = false;
 
-      // 新增：初始化節拍調度狀態
-      timerState.timerStartTime = 0;  // 將在 runTimer() 中設置
-      timerState.expectedBeatNumber = 0;
-      timerState.nextBeatTime = 0;
-      timerState.lastBPM = timerState.currentBPM;
-      timerState.currentBeatInBar = 0;
-      timerState.driftSamples = [];
-      timerState.avgDrift = 0;
+        // 新增：初始化節拍調度狀態
+        timerState.timerStartTime = 0;  // 將在 runTimer() 中設置
+        timerState.expectedBeatNumber = 0;
+        timerState.nextBeatTime = 0;
+        timerState.lastBPM = timerState.currentBPM;
+        timerState.currentBeatInBar = 0;
+        timerState.driftSamples = [];
+        timerState.avgDrift = 0;
 
-      chrome.storage.local.set({ defaultDuration: request.duration });
-      createOffscreenDocument().then(() => {
+        await safeStorageSet({ defaultDuration: request.duration }, '開始計時器');
+        await createOffscreenDocument();
         runTimer();
         broadcastState();
         sendResponse({ success: true });
-      });
-      break;
+        break;
 
-    case ACTIONS.PAUSE_TIMER:
-      timerState.isPaused = true;
-      if (timerState.timerInterval) {
-        clearInterval(timerState.timerInterval);
-        timerState.timerInterval = null;
-      }
-      chrome.storage.local.set({ isPaused: true });
-      broadcastState();
-      sendResponse({ success: true });
-      break;
+      case ACTIONS.PAUSE_TIMER:
+        timerState.isPaused = true;
+        if (timerState.timerInterval) {
+          clearInterval(timerState.timerInterval);
+          timerState.timerInterval = null;
+        }
+        await safeStorageSet({ isPaused: true }, '暫停計時器');
+        broadcastState();
+        sendResponse({ success: true });
+        break;
 
-    case ACTIONS.RESUME_TIMER:
-      timerState.isPaused = false;
+      case ACTIONS.RESUME_TIMER:
+        timerState.isPaused = false;
 
-      // 新增：恢復時重置節拍（避免時間跳躍）
-      timerState.timerStartTime = Date.now();
-      timerState.expectedBeatNumber = 0;
-      const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
-      timerState.nextBeatTime = timerState.timerStartTime + beatInterval;
-      timerState.lastBPM = timerState.currentBPM;
-      timerState.currentBeatInBar = 0;
-      timerState.driftSamples = [];
-      timerState.avgDrift = 0;
-      timerState.lastTickTime = Date.now();
+        // 新增：恢復時重置節拍（避免時間跳躍）
+        timerState.timerStartTime = Date.now();
+        timerState.expectedBeatNumber = 0;
+        const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
+        timerState.nextBeatTime = timerState.timerStartTime + beatInterval;
+        timerState.lastBPM = timerState.currentBPM;
+        timerState.currentBeatInBar = 0;
+        timerState.driftSamples = [];
+        timerState.avgDrift = 0;
+        timerState.lastTickTime = Date.now();
 
-      runTimer();
-      chrome.storage.local.set({ isPaused: false });
-      broadcastState();
-      sendResponse({ success: true });
-      break;
+        runTimer();
+        await safeStorageSet({ isPaused: false }, '恢復計時器');
+        broadcastState();
+        sendResponse({ success: true });
+        break;
 
-    case ACTIONS.STOP_TIMER:
-      stopTimer();
-      timerState.remainingSeconds = 0;
-      updateContentScript(); // 更新 YouTube 覆蓋層顯示
-      broadcastState();
-      sendResponse({ success: true });
-      break;
+      case ACTIONS.STOP_TIMER:
+        stopTimer();
+        timerState.remainingSeconds = 0;
+        updateContentScript(); // 更新 YouTube 覆蓋層顯示
+        broadcastState();
+        sendResponse({ success: true });
+        break;
 
-    case ACTIONS.UPDATE_BPM:
-      timerState.currentBPM = request.bpm;
-      chrome.storage.local.set({ currentBPM: request.bpm });
+      case ACTIONS.UPDATE_BPM:
+        timerState.currentBPM = request.bpm;
+        await safeStorageSet({ currentBPM: request.bpm }, '更新 BPM');
 
-      // 立即更新 content script
-      updateContentScript();
-      broadcastState();
-      sendResponse({ success: true });
-      break;
+        // 立即更新 content script
+        updateContentScript();
+        broadcastState();
+        sendResponse({ success: true });
+        break;
 
-    case ACTIONS.TOGGLE_SOUND:
-      timerState.soundEnabled = request.enabled;
-      chrome.storage.local.set({ soundEnabled: request.enabled });
-      broadcastState();
-      sendResponse({ success: true });
-      break;
+      case ACTIONS.TOGGLE_SOUND:
+        timerState.soundEnabled = request.enabled;
+        await safeStorageSet({ soundEnabled: request.enabled }, '切換聲音開關');
+        broadcastState();
+        sendResponse({ success: true });
+        break;
 
-    case ACTIONS.UPDATE_OPACITY:
-      timerState.overlayOpacity = request.opacity;
-      chrome.storage.local.set({ overlayOpacity: request.opacity });
+      case ACTIONS.UPDATE_OPACITY:
+        timerState.overlayOpacity = request.opacity;
+        await safeStorageSet({ overlayOpacity: request.opacity }, '更新透明度');
 
       // 通知所有 YouTube 標籤頁更新透明度
       chrome.tabs.query({ url: 'https://www.youtube.com/*' }, (tabs) => {
@@ -513,21 +515,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
       });
 
-      broadcastState();
-      sendResponse({ success: true });
-      break;
+        broadcastState();
+        sendResponse({ success: true });
+        break;
 
-    case ACTIONS.UPDATE_TIME_SIGNATURE:
-      timerState.timeSignature = request.timeSignature;
-      timerState.currentBeatInBar = 0; // 切換拍號時重置計數器，從強拍開始
-      chrome.storage.local.set({ timeSignature: request.timeSignature });
-      broadcastState();
-      sendResponse({ success: true });
-      break;
+      case ACTIONS.UPDATE_TIME_SIGNATURE:
+        timerState.timeSignature = request.timeSignature;
+        timerState.currentBeatInBar = 0; // 切換拍號時重置計數器，從強拍開始
+        await safeStorageSet({ timeSignature: request.timeSignature }, '更新拍號');
+        broadcastState();
+        sendResponse({ success: true });
+        break;
 
-    case ACTIONS.UPDATE_SOUND_TYPE:
-      timerState.soundType = request.soundType;
-      chrome.storage.local.set({ soundType: request.soundType });
+      case ACTIONS.UPDATE_SOUND_TYPE:
+        timerState.soundType = request.soundType;
+        await safeStorageSet({ soundType: request.soundType }, '更新音效類型');
 
       // 預加載對應的音效
       if (request.soundType === 'castanets' && timerState.offscreenDocumentExists) {
@@ -538,14 +540,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           logger.warn('Preload snaredrum message failed:', err));
       }
 
-      broadcastState();
-      sendResponse({ success: true });
-      break;
+        broadcastState();
+        sendResponse({ success: true });
+        break;
 
-    case ACTIONS.TOGGLE_OVERLAY_VISIBILITY:
-      // 更新狀態並持久化
-      timerState.overlayVisible = request.visible;
-      chrome.storage.local.set({ overlayVisible: request.visible });  // 持久化
+      case ACTIONS.TOGGLE_OVERLAY_VISIBILITY:
+        // 更新狀態並持久化
+        timerState.overlayVisible = request.visible;
+        await safeStorageSet({ overlayVisible: request.visible }, '切換覆蓋層可見性');
 
       // 通知所有 YouTube 標籤頁切換顯示狀態
       chrome.tabs.query({ url: 'https://www.youtube.com/*' }, (tabs) => {
@@ -576,66 +578,66 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           overlayVisible: timerState.overlayVisible,
           defaultDuration: timerState.defaultDuration
         }
-      });
-      break;
+        });
+        break;
 
-    case ACTIONS.VIDEO_PLAY:
-      // 只在啟用自動啟動 && 計時器未運行時啟動
-      if (timerState.autoStartEnabled && !timerState.isRunning) {
-        timerState.remainingSeconds = timerState.defaultDuration;
-        timerState.isPaused = false;
-        timerState.lastBeatTime = Date.now();
-        timerState.currentBeatInBar = 0;
-        createOffscreenDocument().then(() => {
+      case ACTIONS.VIDEO_PLAY:
+        // 只在啟用自動啟動 && 計時器未運行時啟動
+        if (timerState.autoStartEnabled && !timerState.isRunning) {
+          timerState.remainingSeconds = timerState.defaultDuration;
+          timerState.isPaused = false;
+          timerState.lastBeatTime = Date.now();
+          timerState.currentBeatInBar = 0;
+          await createOffscreenDocument();
           runTimer();
           broadcastState();
-        });
-      }
-      // 如果計時器正在運行但被暫停，且啟用自動啟動，則恢復
-      else if (timerState.autoStartEnabled && timerState.isRunning && timerState.isPaused) {
-        timerState.isPaused = false;
-        timerState.lastBeatTime = Date.now();
-        timerState.currentBeatInBar = 0;
-        runTimer();
-        chrome.storage.local.set({ isPaused: false });
-        broadcastState();
-      }
-      sendResponse({ success: true });
-      break;
-
-    case ACTIONS.VIDEO_PAUSE:
-      // 只在啟用自動啟動 && 計時器正在運行且未暫停時暫停
-      if (timerState.autoStartEnabled && timerState.isRunning && !timerState.isPaused) {
-        timerState.isPaused = true;
-        if (timerState.timerInterval) {
-          clearInterval(timerState.timerInterval);
-          timerState.timerInterval = null;
         }
-        chrome.storage.local.set({ isPaused: true });
+        // 如果計時器正在運行但被暫停，且啟用自動啟動，則恢復
+        else if (timerState.autoStartEnabled && timerState.isRunning && timerState.isPaused) {
+          timerState.isPaused = false;
+          timerState.lastBeatTime = Date.now();
+          timerState.currentBeatInBar = 0;
+          runTimer();
+          await safeStorageSet({ isPaused: false }, '視頻播放自動恢復');
+          broadcastState();
+        }
+        sendResponse({ success: true });
+        break;
+
+      case ACTIONS.VIDEO_PAUSE:
+        // 只在啟用自動啟動 && 計時器正在運行且未暫停時暫停
+        if (timerState.autoStartEnabled && timerState.isRunning && !timerState.isPaused) {
+          timerState.isPaused = true;
+          if (timerState.timerInterval) {
+            clearInterval(timerState.timerInterval);
+            timerState.timerInterval = null;
+          }
+          await safeStorageSet({ isPaused: true }, '視頻暫停自動暫停');
+          broadcastState();
+        }
+        sendResponse({ success: true });
+        break;
+
+      case ACTIONS.TOGGLE_AUTO_START:
+        timerState.autoStartEnabled = request.enabled;
+        await safeStorageSet({ autoStartEnabled: request.enabled }, '切換自動啟動');
         broadcastState();
-      }
-      sendResponse({ success: true });
-      break;
+        sendResponse({ success: true });
+        break;
 
-    case ACTIONS.TOGGLE_AUTO_START:
-      timerState.autoStartEnabled = request.enabled;
-      chrome.storage.local.set({ autoStartEnabled: request.enabled });
-      broadcastState();
-      sendResponse({ success: true });
-      break;
+      case ACTIONS.UPDATE_DEFAULT_DURATION:
+        timerState.defaultDuration = request.duration;
+        await safeStorageSet({ defaultDuration: request.duration }, '更新預設時長');
+        broadcastState();
+        sendResponse({ success: true });
+        break;
 
-    case ACTIONS.UPDATE_DEFAULT_DURATION:
-      timerState.defaultDuration = request.duration;
-      chrome.storage.local.set({ defaultDuration: request.duration });
-      broadcastState();
-      sendResponse({ success: true });
-      break;
-
-    case ACTIONS.OFFSCREEN_READY:
-      logger.info('Offscreen document 已就緒');
-      sendResponse({ success: true });
-      break;
-  }
+      case ACTIONS.OFFSCREEN_READY:
+        logger.info('Offscreen document 已就緒');
+        sendResponse({ success: true });
+        break;
+    }
+  })();
 
   return true; // 保持消息通道開啟以支援異步回應
 });
