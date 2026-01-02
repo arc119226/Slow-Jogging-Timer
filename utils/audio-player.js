@@ -7,6 +7,9 @@ import { createLogger } from './logger.js';
 
 const logger = createLogger('AudioPlayer');
 
+// AudioBuffer 緩存限制
+const MAX_AUDIO_BUFFERS = 10;
+
 // 音效配置映射
 const AUDIO_CONFIGS = {
   castanets: {
@@ -89,6 +92,13 @@ export async function playAudioFile(
  */
 async function loadAudioFile(soundType, filePath, audioContext, audioBuffers) {
   try {
+    // 檢查緩存大小，防止內存增長
+    if (Object.keys(audioBuffers).length >= MAX_AUDIO_BUFFERS) {
+      const firstKey = Object.keys(audioBuffers)[0];
+      delete audioBuffers[firstKey];
+      logger.warn(`音頻緩存已滿（${MAX_AUDIO_BUFFERS} 項），清理最舊的緩存: ${firstKey}`);
+    }
+
     const response = await fetch(chrome.runtime.getURL(filePath));
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

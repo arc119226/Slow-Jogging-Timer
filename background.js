@@ -59,6 +59,10 @@ let timerState = {
   scheduleAheadTime: SCHEDULE_AHEAD_TIME_MS    // 提前調度音效（消除通訊延遲）
 };
 
+// ========== Storage 寫入節流 ==========
+let storageSaveTimer = null;
+let pendingStorageUpdate = null;
+
 // ========== Offscreen 生命週期管理 ==========
 async function createOffscreenDocument() {
   if (timerState.offscreenDocumentExists) {
@@ -215,14 +219,27 @@ function processTimerTick() {
       // 更新 YouTube 覆蓋層
       updateContentScript();
 
-      // 持久化狀態
-      safeStorageSet({
+      // 批量保存：累積更新並每 5 秒寫入一次
+      if (!pendingStorageUpdate) {
+        pendingStorageUpdate = {};
+      }
+
+      Object.assign(pendingStorageUpdate, {
         remainingSeconds: timerState.remainingSeconds,
         currentBPM: timerState.currentBPM,
         isRunning: timerState.isRunning,
         isPaused: timerState.isPaused,
         defaultDuration: timerState.defaultDuration
-      }, '計時器狀態更新');
+      });
+
+      if (storageSaveTimer) clearTimeout(storageSaveTimer);
+
+      storageSaveTimer = setTimeout(() => {
+        if (pendingStorageUpdate) {
+          safeStorageSet(pendingStorageUpdate, '計時器狀態批量更新');
+          pendingStorageUpdate = null;
+        }
+      }, 5000);
 
       // 廣播狀態到 popup（如果開啟）
       broadcastState();
@@ -417,7 +434,21 @@ function runTimer() {
   startTimerInterval(checkInterval);
 }
 
+function flushPendingStorage() {
+  if (storageSaveTimer) {
+    clearTimeout(storageSaveTimer);
+    storageSaveTimer = null;
+  }
+
+  if (pendingStorageUpdate) {
+    safeStorageSet(pendingStorageUpdate, '強制刷新存儲');
+    pendingStorageUpdate = null;
+  }
+}
+
 function stopTimer() {
+  flushPendingStorage(); // 立即保存任何待處理的狀態
+
   if (timerState.timerInterval) {
     clearInterval(timerState.timerInterval);
     timerState.timerInterval = null;
@@ -466,6 +497,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           clearInterval(timerState.timerInterval);
           timerState.timerInterval = null;
         }
+
+        // 暫停 30 秒後自動關閉 offscreen document 以節省資源
+        setTimeout(() => {
+          if (timerState.isPaused && timerState.offscreenDocumentExists) {
+            closeOffscreenDocument();
+            logger.info('暫停超過 30 秒，自動關閉 offscreen document');
+          }
+        }, 30000);
+
         await safeStorageSet({ isPaused: true }, '暫停計時器');
         broadcastState();
         sendResponse({ success: true });

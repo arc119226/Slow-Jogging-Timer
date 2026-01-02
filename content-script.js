@@ -29,6 +29,7 @@ const i18n = (key, ...substitutions) => chrome.i18n.getMessage(key, substitution
 let videoElement = null;
 let isVideoAttached = false;
 let messageListenerAttached = false;
+let navigationObserver = null;
 
 // 節拍指示燈狀態
 let currentActiveSide = 'left'; // 追蹤當前應該亮的指示燈
@@ -117,9 +118,14 @@ function handleVideoEnded() {
 
 // 監聽 YouTube SPA 導航
 function observeNavigation() {
+  if (navigationObserver) {
+    logger.info('[Slow Jogging] Navigation observer 已存在');
+    return navigationObserver;
+  }
+
   let lastUrl = location.href;
 
-  const observer = new MutationObserver(() => {
+  navigationObserver = new MutationObserver(() => {
     const currentUrl = location.href;
     if (currentUrl !== lastUrl) {
       lastUrl = currentUrl;
@@ -132,12 +138,12 @@ function observeNavigation() {
     }
   });
 
-  observer.observe(document.body, {
+  navigationObserver.observe(document.body, {
     childList: true,
     subtree: true
   });
 
-  return observer;
+  return navigationObserver;
 }
 
 // 初始化視頻同步功能
@@ -329,6 +335,19 @@ if (document.readyState === 'loading') {
   initializeYouTubeOverlay();
   initializeVideoSync();
 }
+
+// 清理函數：斷開所有監聽器
+function cleanup() {
+  if (navigationObserver) {
+    navigationObserver.disconnect();
+    navigationObserver = null;
+    logger.info('[Slow Jogging] Navigation observer 已清理');
+  }
+  detachFromVideo();
+}
+
+// 頁面卸載時清理資源
+window.addEventListener('beforeunload', cleanup);
 
 // 检测 extension context 失效并清理事件监听器
 if (typeof chrome !== 'undefined' && chrome.runtime) {
