@@ -12,7 +12,7 @@ import {
 } from './utils/constants.js';
 import { ACTIONS } from './utils/message-actions.js';
 import { createLogger } from './utils/logger.js';
-import { safeStorageSet, safeStorageGet } from './utils/storage-utils.js';
+import { safeStorageSet } from './utils/storage-utils.js';
 import { resetBeatScheduling } from './utils/message-handlers.js';
 import { broadcastToYouTubeTabs, sendToActiveTab } from './utils/broadcast-utils.js';
 

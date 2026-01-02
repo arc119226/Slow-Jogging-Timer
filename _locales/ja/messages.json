@@ -151,19 +151,9 @@
       }
     }
   },
-  "format_opacity": {
-    "message": "$OPACITY$%",
-    "description": "Opacity display format",
-    "placeholders": {
-      "opacity": {
-        "content": "$1",
-        "example": "80"
-      }
-    }
-  },
 
   "offscreen_justification": {
-    "message": "スロージョギングタイマーのBPMビート音を再生",
+    "message": "スロージョギングタイマーの BPM ビート音を再生",
     "description": "Justification for offscreen document (shown to user in Chrome)"
   }
 }

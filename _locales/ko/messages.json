@@ -150,20 +150,10 @@
         "example": "180"
       }
     }
-  },
-  "format_opacity": {
-    "message": "$OPACITY$%",
-    "description": "Opacity display format",
-    "placeholders": {
-      "opacity": {
-        "content": "$1",
-        "example": "80"
-      }
-    }
-  },
+    },
 
   "offscreen_justification": {
-    "message": "슬로우 조깅 타이머의 BPM 비트 소리 재생",
+    "message": "슬로우 조깅 타이머의 BPM 비트 사운드 재생",
     "description": "Justification for offscreen document (shown to user in Chrome)"
   }
 }

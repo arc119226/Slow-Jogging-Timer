@@ -151,16 +151,6 @@
       }
     }
   },
-  "format_opacity": {
-    "message": "$OPACITY$%",
-    "description": "Opacity display format",
-    "placeholders": {
-      "opacity": {
-        "content": "$1",
-        "example": "80"
-      }
-    }
-  },
 
   "offscreen_justification": {
     "message": "تشغيل أصوات نبضات BPM لمؤقت الركض البطيء",
