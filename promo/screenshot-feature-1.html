@@ -275,5 +275,88 @@
   <div style="position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px;">
     📐 尺寸：1280 x 800 px
   </div>
+
+  <!-- 一鍵截圖按鈕 -->
+  <button id="screenshot-btn" style="
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 20px 60px;
+    border-radius: 16px;
+    font-size: 24px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(76, 175, 80, 0.4);
+    z-index: 10000;
+    transition: all 0.3s ease;
+  " onmouseover="this.style.transform='translateX(-50%) scale(1.05)'" onmouseout="this.style.transform='translateX(-50%) scale(1)'">
+    📸 點擊截圖並下載 (1280x800)
+  </button>
+
+  <!-- 載入 html2canvas -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <script>
+    document.getElementById('screenshot-btn').addEventListener('click', async function() {
+      const btn = this;
+      const originalText = btn.textContent;
+
+      // 隱藏按鈕和尺寸指示器
+      btn.style.display = 'none';
+      const sizeIndicator = document.querySelector('[style*="bottom: 20px"]');
+      const originalSizeDisplay = sizeIndicator.style.display;
+      sizeIndicator.style.display = 'none';
+
+      // 更新按鈕文字
+      btn.textContent = '⏳ 截圖中...';
+
+      try {
+        // 等待一小段時間確保元素完全隱藏
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // 截圖
+        const screenshot = document.querySelector('.screenshot');
+        const canvas = await html2canvas(screenshot, {
+          width: 1280,
+          height: 800,
+          scale: 1,
+          backgroundColor: null,
+          logging: false,
+          useCORS: true
+        });
+
+        // 轉換為圖片並下載
+        canvas.toBlob(function(blob) {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+          link.download = `slow-jogging-timer-feature-1280x800-${timestamp}.png`;
+          link.href = url;
+          link.click();
+          URL.revokeObjectURL(url);
+
+          // 恢復按鈕
+          btn.textContent = '✅ 截圖完成！點擊再次截圖';
+          btn.style.display = 'block';
+          sizeIndicator.style.display = originalSizeDisplay;
+
+          setTimeout(() => {
+            btn.textContent = originalText;
+          }, 2000);
+        }, 'image/png');
+
+      } catch (error) {
+        console.error('截圖失敗:', error);
+        alert('截圖失敗，請重試或使用瀏覽器的截圖功能');
+        btn.textContent = originalText;
+        btn.style.display = 'block';
+        sizeIndicator.style.display = originalSizeDisplay;
+      }
+    });
+  </script>
 </body>
 </html>
