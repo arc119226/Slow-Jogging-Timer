@@ -155,8 +155,17 @@ startBtn.addEventListener('click', () => {
 
   // 從預設值或自訂輸入獲取時長
   if (durationPreset.value === 'custom') {
-    const minutes = parseInt(customDurationInput.value) || 30;
-    duration = minutes * 60; // 轉換為秒
+    const minutes = parseInt(customDurationInput.value);
+
+    // 驗證自訂時長範圍：1-1440 分鐘（24 小時）
+    if (!minutes || minutes < 1 || minutes > 1440) {
+      logger.warn('無效的自訂時長:', customDurationInput.value);
+      customDurationInput.value = 30;
+      statusText.textContent = '時長無效，已重置為 30 分鐘';
+      duration = 1800; // 30 分鐘 = 1800 秒
+    } else {
+      duration = minutes * 60; // 轉換為秒
+    }
   } else {
     duration = parseInt(durationPreset.value);
   }
@@ -313,8 +322,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 2. 然後請求當前狀態（更新動態內容）
   chrome.runtime.sendMessage({ action: ACTIONS.GET_STATE }, (response) => {
+    if (chrome.runtime.lastError) {
+      logger.error('獲取狀態失敗:', chrome.runtime.lastError);
+      statusText.textContent = '無法連接到後台服務';
+      return;
+    }
+
     if (response && response.state) {
       updateUIFromState(response.state);
+    } else {
+      statusText.textContent = '狀態同步失敗';
     }
   });
 });

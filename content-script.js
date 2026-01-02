@@ -63,14 +63,16 @@ function attachToYouTubeVideo() {
     return false;
   }
 
-  // 避免重複附加
+  // 避免重複附加（檢查是否為同一視頻元素且已附加）
   if (video === videoElement && isVideoAttached) {
+    logger.info('[Slow Jogging] 視頻已附加，跳過重複操作');
     return true;
   }
 
-  // 移除舊的監聽器
+  // 如果檢測到新視頻，先移除舊的監聽器
   if (videoElement && isVideoAttached) {
     detachFromVideo();
+    logger.info('[Slow Jogging] 已移除舊視頻的監聽器');
   }
 
   videoElement = video;

@@ -57,7 +57,10 @@ let timerState = {
 
 // ========== Offscreen 生命週期管理 ==========
 async function createOffscreenDocument() {
-  if (timerState.offscreenDocumentExists) return;
+  if (timerState.offscreenDocumentExists) {
+    logger.info('Offscreen document 已存在，跳過創建');
+    return;
+  }
 
   try {
     await chrome.offscreen.createDocument({
@@ -73,7 +76,10 @@ async function createOffscreenDocument() {
       timerState.offscreenDocumentExists = true;
       logger.info('Offscreen document 已存在');
     } else {
+      // 其他錯誤：不標記為已存在，並向上拋出
+      timerState.offscreenDocumentExists = false;
       logger.error('創建 offscreen document 失敗:', error);
+      throw error;
     }
   }
 }
@@ -94,7 +100,25 @@ async function closeOffscreenDocument() {
 
 // ========== 輔助函數 ==========
 function getBeatsPerBar(timeSignature) {
-  return parseInt(timeSignature.split('/')[0]);
+  // 驗證拍號格式
+  if (!timeSignature || typeof timeSignature !== 'string') {
+    logger.error('無效的拍號格式:', timeSignature);
+    return 4; // 預設 4/4 拍
+  }
+
+  const parts = timeSignature.split('/');
+  if (parts.length !== 2) {
+    logger.error('拍號格式錯誤:', timeSignature);
+    return 4;
+  }
+
+  const beats = parseInt(parts[0]);
+  if (!beats || beats < 2 || beats > 12) {
+    logger.error('拍號數值無效:', timeSignature);
+    return 4;
+  }
+
+  return beats;
 }
 
 function getBeatType(beatIndex, timeSignature) {
@@ -461,8 +485,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         break;
 
       case ACTIONS.UPDATE_BPM:
-        timerState.currentBPM = request.bpm;
-        await safeStorageSet({ currentBPM: request.bpm }, '更新 BPM');
+        // 驗證 BPM 範圍
+        const newBPM = parseInt(request.bpm);
+        if (!newBPM || newBPM < BPM_MIN || newBPM > BPM_MAX) {
+          logger.error('BPM 超出範圍:', request.bpm);
+          sendResponse({ success: false, error: `BPM 必須在 ${BPM_MIN}-${BPM_MAX} 之間` });
+          break;
+        }
+
+        timerState.currentBPM = newBPM;
+        await safeStorageSet({ currentBPM: newBPM }, '更新 BPM');
 
         // 立即更新 content script
         updateContentScript();
@@ -478,13 +510,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         break;
 
       case ACTIONS.UPDATE_OPACITY:
-        timerState.overlayOpacity = request.opacity;
-        await safeStorageSet({ overlayOpacity: request.opacity }, '更新透明度');
+        // 驗證並限制透明度範圍：0-100
+        const opacity = Math.max(OPACITY_MIN, Math.min(OPACITY_MAX, request.opacity));
+        timerState.overlayOpacity = opacity;
+        await safeStorageSet({ overlayOpacity: opacity }, '更新透明度');
 
         // 通知所有 YouTube 標籤頁更新透明度
         broadcastToYouTubeTabs({
           action: 'updateOpacity',
-          opacity: request.opacity
+          opacity: opacity
         });
 
         broadcastState();
