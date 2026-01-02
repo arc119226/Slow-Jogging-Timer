@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Chrome Web Store
+    url: https://chrome.google.com/webstore/detail/slow-jogging-timer/[EXTENSION_ID]
+    about: Install the extension from Chrome Web Store
+  - name: Documentation
+    url: https://github.com/arc119226/Slow-Jogging-Timer/blob/main/README.md
+    about: Read the documentation and usage guide
+  - name: Privacy Policy
+    url: https://github.com/arc119226/Slow-Jogging-Timer/blob/main/PRIVACY_POLICY.md
+    about: Read our privacy policy and data practices
