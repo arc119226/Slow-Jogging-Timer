@@ -9,10 +9,12 @@
     "48": "icon.png",
     "128": "icon.png"
   },
+
   "permissions": [
     "storage",
     "offscreen"
   ],
+
   "host_permissions": [
     "https://www.youtube.com/*"
   ],

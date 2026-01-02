@@ -49,6 +49,29 @@
 - **Web Audio API**：合成節拍音效
 - **Chrome Storage API**：本地設置持久化
 
+## 限制與注意事項 / Limitations & Notes
+
+### 系統需求 / System Requirements
+- Chrome/Edge 瀏覽器版本 109+ (需支援 Offscreen Document API)
+- 僅在 YouTube 網站 (https://www.youtube.com/*) 上運作
+- 需要 Web Audio API 支援
+
+### 功能限制 / Feature Limitations
+- 覆蓋層位置固定在右上角（無法拖曳）
+- 計時器面板透明度範圍：0-100
+- BPM 範圍限制：60-360
+- 自動追隨視頻播放功能需手動啟用（預設關閉）
+
+### 資源管理 / Resource Management
+- 設定保存採用 5 秒批次寫入，優化存儲性能
+- 暫停超過 30 秒後自動關閉音頻文檔以節省資源
+- 音頻緩存限制為 10 項，採用先進先出策略
+
+### 已知問題 / Known Issues
+- 電腦休眠/睡眠後可能短暫音頻不同步（會自動恢復）
+- YouTube SPA 導航在極少數情況下可能需要刷新頁面
+- 自訂時長輸入無最大值限制（為靈活性考量）
+
 ## 開發 / Development
 
 ### 項目結構
