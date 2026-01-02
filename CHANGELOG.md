@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-01-02
+
+### Added
+- **Multi-tab conflict resolution system** to prevent audio overlap
+  - Tab ownership model: only one tab can own the timer at a time
+  - `activeTabId` state field to track which tab owns the current timer session
+  - `timerSource` state field to record timer start source ('manual' | 'auto' | 'none' | 'orphaned')
+  - `chrome.tabs.onRemoved` listener for automatic cleanup when tabs close
+- Event filtering for multi-tab scenarios:
+  - `START_TIMER`: Rejects requests from non-owning tabs with error response
+  - `VIDEO_PLAY`: Silently ignores auto-start events from non-owning tabs
+  - `VIDEO_PAUSE`: Only responds to pause events from owning tab
+- Multilingual error messages for timer conflicts:
+  - English: "Timer is already running in another tab"
+  - Traditional Chinese: "計時器已在其他分頁運行中"
+  - Simplified Chinese: "计时器已在其他标签页运行中"
+  - Japanese: "タイマーは既に別のタブで実行中です"
+  - Korean: "타이머가 이미 다른 탭에서 실행 중입니다"
+  - Arabic: "المؤقت يعمل بالفعل في علامة تبويب أخرى"
+- Error response handling in popup.js with UI state restoration
+- Orphaned timer support: timer continues running when owning tab closes
+
+### Changed
+- Enhanced START_TIMER handler with ownership acquisition and conflict detection
+- Updated VIDEO_PLAY handler to filter events from non-owning tabs
+- Updated VIDEO_PAUSE handler to only respond to owning tab
+- Modified STOP_TIMER handler to clear ownership on timer stop
+- Improved popup.js to handle error responses from background service worker
+
+### Fixed
+- Multiple YouTube tabs playing overlapping BPM audio simultaneously
+- Auto-follow feature triggering multiple timers from different tabs
+- Confusion when video playback in one tab affects timer in another tab
+- Timer state inconsistency across multiple tabs
+
+### Technical Details
+- Uses `sender.tab.id` from Chrome message API to identify message source
+- `activeTabId` is volatile (not persisted) since tab IDs become invalid after browser restart
+- No new permissions required (sender.tab.id automatically provided, onRemoved doesn't need permission)
+- Implements predictable "first-tab-wins" ownership model
+- Global audio protection ensures only one BPM audio instance plays across all browser tabs
+
 ## [1.0.6] - 2026-01-02
 
 ### Added
