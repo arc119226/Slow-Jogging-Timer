@@ -1,0 +1,10 @@
+# 忽略截圖文件（保留 HTML 模板）
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+
+# 但保留 README.md 和 HTML 模板
+!*.html
+!*.md
