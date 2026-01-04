@@ -15,7 +15,9 @@
 ## 安裝 / Installation
 
 ### 從 Chrome Web Store 安裝（推薦）
-即將上架，敬請期待！
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-安裝擴充功能-blue?style=for-the-badge&logo=googlechrome)](https://chromewebstore.google.com/detail/slow-jogging-timer/clbpbomlccokhipbamiaagpfiflldbni)
+
+點擊上方按鈕前往 Chrome Web Store 安裝
 
 ### 從源碼安裝（開發者模式）
 1. 下載或 Clone 此儲存庫
