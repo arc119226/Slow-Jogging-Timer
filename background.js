@@ -67,6 +67,32 @@ let timerState = {
 let storageSaveTimer = null;
 let pendingStorageUpdate = null;
 
+// ========== Service Worker 狀態恢復機制 ==========
+let isStateRestored = false;  // 追踪狀態是否已從 storage 恢復
+
+async function ensureStateRestored() {
+  if (isStateRestored) return true;
+
+  const settingsKeys = [...Object.keys(DEFAULT_SETTINGS), 'remainingSeconds', 'isRunning', 'isPaused'];
+
+  return new Promise((resolve) => {
+    chrome.storage.local.get(settingsKeys, (result) => {
+      if (chrome.runtime.lastError) {
+        logger.error('狀態恢復失敗:', chrome.runtime.lastError);
+        resolve(false);
+        return;
+      }
+
+      const settings = { ...DEFAULT_SETTINGS, ...result };
+      Object.assign(timerState, settings);
+      isStateRestored = true;
+
+      logger.info('狀態已從 storage 恢復:', Object.keys(result).length, '個鍵');
+      resolve(true);
+    });
+  });
+}
+
 // ========== Offscreen 生命週期管理 ==========
 async function createOffscreenDocument() {
   if (timerState.offscreenDocumentExists) {
@@ -243,7 +269,7 @@ function processTimerTick() {
           safeStorageSet(pendingStorageUpdate, '計時器狀態批量更新');
           pendingStorageUpdate = null;
         }
-      }, 5000);
+      }, 1000);  // 從 5000ms 降到 1000ms，減少數據丟失窗口
 
       // 廣播狀態到 popup（如果開啟）
       broadcastState();
@@ -474,6 +500,9 @@ function stopTimer() {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // 使用立即執行的 async 函數來支援 await
   (async () => {
+    // 確保狀態已從 storage 恢復（防止 service worker 休眠後狀態丟失）
+    await ensureStateRestored();
+
     switch (request.action) {
       case ACTIONS.START_TIMER:
         // 輸入驗證：確保 duration 是有效的正整數
@@ -535,6 +564,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       case ACTIONS.RESUME_TIMER:
         timerState.isPaused = false;
 
+        await createOffscreenDocument();  // 確保 offscreen document 存在（可能已在暫停 30 秒後被關閉）
         runTimer();
         await safeStorageSet({ isPaused: false }, '恢復計時器');
         broadcastState();
@@ -639,6 +669,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         break;
 
     case ACTIONS.GET_STATE:
+      await ensureStateRestored();  // 雙重保險（消息處理器頂部已有，這裡是額外的防禦性檢查）
       sendResponse({
         state: {
           remainingSeconds: timerState.remainingSeconds,
@@ -681,6 +712,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           // 僅響應活動標籤頁
           if (sender.tab && sender.tab.id === timerState.activeTabId) {
             timerState.isPaused = false;
+            await createOffscreenDocument();  // 確保 offscreen document 存在（可能已在暫停 30 秒後被關閉）
             runTimer();
             await safeStorageSet({ isPaused: false }, '視頻播放自動恢復');
             broadcastState();
@@ -743,6 +775,13 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
   }
 });
 
+// ========== Service Worker 生命週期處理 ==========
+// 休眠前強制刷新 storage（盡力而為，不保證觸發）
+self.addEventListener('suspend', () => {
+  logger.info('Service worker 即將休眠，刷新 storage');
+  flushPendingStorage();
+});
+
 // ========== 啟動監聽器 ==========
 chrome.runtime.onStartup.addListener(() => {
   logger.info('Service worker 啟動');
@@ -765,6 +804,9 @@ chrome.runtime.onStartup.addListener(() => {
           safeStorageSet({ isPaused: true }, '降級處理');
         });
     }
+
+    // 標記狀態已恢復
+    isStateRestored = true;
   });
 });
 
@@ -776,6 +818,7 @@ chrome.runtime.onInstalled.addListener((details) => {
     chrome.storage.local.set(DEFAULT_SETTINGS, () => {
       logger.info('預設設定已初始化');
       Object.assign(timerState, DEFAULT_SETTINGS);
+      isStateRestored = true;  // 標記狀態已初始化
     });
   } else if (details.reason === 'update') {
     // ========== 修復：恢復所有狀態（包括運行時狀態）==========
@@ -806,6 +849,9 @@ chrome.runtime.onInstalled.addListener((details) => {
       } else {
         logger.info('[update] 計時器未運行');
       }
+
+      // 標記狀態已恢復
+      isStateRestored = true;
     });
   }
 
