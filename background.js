@@ -44,8 +44,12 @@ let timerState = {
   offscreenDocumentExists: false,
 
   // 新增：多標籤頁衝突保護
-  activeTabId: null,        // 擁有播放權的標籤頁 ID（不持久化）
+  activeTabId: null,        // 擁有播放權的標籤頁 ID（僅用於手動啟動衝突檢查，不持久化）
   timerSource: 'none',      // 啟動來源：'manual' | 'auto' | 'none' | 'orphaned'
+
+  // 新增：影片追蹤（不持久化）
+  currentVideoId: null,          // 當前播放的影片 ID（用於日誌/調試）
+  lastAutoStartVideoId: null,    // 上次自動啟動的影片 ID（用於新影片檢測）
 
   // 新增：增量節拍調度字段
   timerStartTime: 0,        // 計時器啟動的絕對時間戳
@@ -578,6 +582,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         timerState.activeTabId = null;
         timerState.timerSource = 'none';
 
+        // 清除影片追蹤
+        timerState.currentVideoId = null;
+        timerState.lastAutoStartVideoId = null;
+
         timerState.remainingSeconds = 0;
         await safeStorageSet({
           isRunning: false,
@@ -688,56 +696,95 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         break;
 
       case ACTIONS.VIDEO_PLAY:
-        // 過濾非活動標籤頁的事件
-        if (timerState.isRunning && sender.tab && sender.tab.id !== timerState.activeTabId) {
-          // 靜默忽略 - 不同標籤頁嘗試自動啟動
+        // 只在啟用自動跟隨時處理
+        if (!timerState.autoStartEnabled) {
           sendResponse({ success: true });
           break;
         }
 
-        // 自動啟動：計時器未運行時
-        if (timerState.autoStartEnabled && !timerState.isRunning) {
-          // 獲取所有權
-          timerState.activeTabId = sender.tab?.id || null;
-          timerState.timerSource = 'auto';
+        const playVideoId = request.videoId;
+        const isNewVideo = playVideoId && playVideoId !== timerState.lastAutoStartVideoId;
 
+        // 場景 1：新影片播放
+        if (isNewVideo) {
+          logger.info(`[Auto-Follow] 新影片播放: ${playVideoId}`);
+
+          // 更新影片 ID
+          timerState.currentVideoId = playVideoId;
+          timerState.lastAutoStartVideoId = playVideoId;
+
+          // 如果計時器運行中 → 從當前剩餘時間重新開始
+          if (timerState.isRunning) {
+            logger.info('[Auto-Follow] 計時器運行中，從剩餘時間重新開始');
+            timerState.isPaused = false;
+
+            // 重置節拍調度（開始新一輪節奏）
+            resetBeatScheduling(timerState);
+
+            // 重啟計時器 interval
+            if (timerState.timerInterval) {
+              clearInterval(timerState.timerInterval);
+            }
+            const beatInterval = BPM_FORMULA_MS / timerState.currentBPM;
+            const checkInterval = getCheckInterval(beatInterval);
+            startTimerInterval(checkInterval);
+
+            await safeStorageSet({ isPaused: false }, '新影片播放重新開始');
+            broadcastState();
+          }
+          // 如果計時器暫停或未運行 → 啟動新計時器
+          else {
+            timerState.remainingSeconds = timerState.defaultDuration;
+            timerState.isPaused = false;
+            await createOffscreenDocument();
+            runTimer();
+            broadcastState();
+          }
+        }
+        // 場景 2：同一影片恢復播放
+        else if (timerState.isRunning && timerState.isPaused) {
+          logger.info('[Auto-Follow] 同一影片恢復播放');
+          timerState.isPaused = false;
+          await createOffscreenDocument();
+          runTimer();
+          await safeStorageSet({ isPaused: false }, '視頻播放自動恢復');
+          broadcastState();
+        }
+        // 場景 3：計時器未運行 → 自動啟動
+        else if (!timerState.isRunning) {
+          logger.info('[Auto-Follow] 自動啟動計時器');
+          timerState.currentVideoId = playVideoId;
+          timerState.lastAutoStartVideoId = playVideoId;
           timerState.remainingSeconds = timerState.defaultDuration;
           timerState.isPaused = false;
           await createOffscreenDocument();
           runTimer();
           broadcastState();
         }
-        // 自動恢復：計時器暫停時
-        else if (timerState.autoStartEnabled && timerState.isRunning && timerState.isPaused) {
-          // 僅響應活動標籤頁
-          if (sender.tab && sender.tab.id === timerState.activeTabId) {
-            timerState.isPaused = false;
-            await createOffscreenDocument();  // 確保 offscreen document 存在（可能已在暫停 30 秒後被關閉）
-            runTimer();
-            await safeStorageSet({ isPaused: false }, '視頻播放自動恢復');
-            broadcastState();
-          }
-        }
+
         sendResponse({ success: true });
         break;
 
       case ACTIONS.VIDEO_PAUSE:
-        // 僅響應活動標籤頁
-        if (sender.tab && sender.tab.id !== timerState.activeTabId) {
-          sendResponse({ success: true }); // 確認但忽略
+        // 只在啟用自動跟隨 && 計時器運行且未暫停時處理
+        if (!timerState.autoStartEnabled) {
+          sendResponse({ success: true });
           break;
         }
 
-        // 只在啟用自動啟動 && 計時器正在運行且未暫停時暫停
-        if (timerState.autoStartEnabled && timerState.isRunning && !timerState.isPaused) {
+        if (timerState.isRunning && !timerState.isPaused) {
+          logger.info('[Auto-Follow] 視頻暫停，暫停計時器');
           timerState.isPaused = true;
+
           if (timerState.timerInterval) {
             clearInterval(timerState.timerInterval);
             timerState.timerInterval = null;
           }
+
           await safeStorageSet({ isPaused: true }, '視頻暫停自動暫停');
           broadcastState();
         }
+
         sendResponse({ success: true });
         break;
 

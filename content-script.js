@@ -25,6 +25,13 @@ const logger = {
 // i18n helper (content script doesn't support ES modules)
 const i18n = (key, ...substitutions) => chrome.i18n.getMessage(key, substitutions);
 
+// 獲取 YouTube 影片 ID
+function getYouTubeVideoId() {
+  const url = window.location.href;
+  const match = url.match(/[?&]v=([^&]+)/);
+  return match ? match[1] : null;
+}
+
 // YouTube 視頻同步狀態
 let videoElement = null;
 let isVideoAttached = false;
@@ -99,21 +106,33 @@ function detachFromVideo() {
 }
 
 function handleVideoPlay() {
-  logger.info('[Slow Jogging] 視頻播放中，發送 VIDEO_PLAY 消息');
-  safeSendMessage({ action: ACTIONS.VIDEO_PLAY });
+  const videoId = getYouTubeVideoId();
+  logger.info('[Slow Jogging] 視頻播放中，影片ID:', videoId);
+  safeSendMessage({
+    action: ACTIONS.VIDEO_PLAY,
+    videoId: videoId
+  });
 }
 
 function handleVideoPause() {
   // 如果視頻已結束，不發送暫停消息（由 ended 事件處理）
   if (videoElement && videoElement.ended) return;
 
-  logger.info('[Slow Jogging] 視頻暫停，發送 VIDEO_PAUSE 消息');
-  safeSendMessage({ action: ACTIONS.VIDEO_PAUSE });
+  const videoId = getYouTubeVideoId();
+  logger.info('[Slow Jogging] 視頻暫停，影片ID:', videoId);
+  safeSendMessage({
+    action: ACTIONS.VIDEO_PAUSE,
+    videoId: videoId
+  });
 }
 
 function handleVideoEnded() {
-  logger.info('[Slow Jogging] 視頻結束，發送 VIDEO_PAUSE 消息');
-  safeSendMessage({ action: ACTIONS.VIDEO_PAUSE });
+  const videoId = getYouTubeVideoId();
+  logger.info('[Slow Jogging] 視頻結束，影片ID:', videoId);
+  safeSendMessage({
+    action: ACTIONS.VIDEO_PAUSE,
+    videoId: videoId
+  });
 }
 
 // 監聽 YouTube SPA 導航
