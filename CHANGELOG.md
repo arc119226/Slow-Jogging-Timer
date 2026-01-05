@@ -7,6 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-01-05
+
+### Fixed
+- **Auto-follow video playback completely broken** after v1.1.0 tab ownership implementation
+  - Video pause not updating popup status to "paused"
+  - Video resume not restarting timer from remaining time
+  - New video playback not triggering timer restart
+  - Root cause: Tab Ownership model was over-restrictive, blocking all auto-follow scenarios
+
+### Changed
+- Refactored auto-follow event handling logic with intelligent video tracking:
+  - **Video ID tracking**: Added `getYouTubeVideoId()` function to parse YouTube video ID from URL
+  - **Three-scenario model**: Rewrote VIDEO_PLAY handler to distinguish between:
+    - Same video resume: continues from paused state
+    - New video playback: restarts timer from remaining time (preserves progress)
+    - Auto-start: starts timer from default duration
+  - **Simplified VIDEO_PAUSE**: Removed tab ownership checks for auto-follow mode
+  - **Tab Ownership adjustment**: Preserved for manual start conflicts, removed for auto-follow events
+- Added video tracking state fields (not persisted to storage):
+  - `currentVideoId`: Current playing video ID (for logging/debugging)
+  - `lastAutoStartVideoId`: Last auto-started video ID (for new video detection)
+- Enhanced STOP_TIMER to clear video tracking state
+
+### Technical Details
+- Video identification via regex: `/[?&]v=([^&]+)/` extracts YouTube video ID
+- New video detection: `playVideoId !== lastAutoStartVideoId`
+- Timer restart strategy for new videos:
+  - Preserves `remainingSeconds` (doesn't reset to default duration)
+  - Calls `resetBeatScheduling()` to recalculate beat timing
+  - Restarts `timerInterval` for fresh rhythm scheduling
+- Auto-follow now bypasses tab ownership checks (users only play one video at a time)
+- Manual start (START_TIMER) still protected by tab ownership (multi-tab conflict prevention)
+
+### User Experience Improvements
+- ✅ Video pause → popup correctly shows "paused" status
+- ✅ Video resume → timer continues from remaining time
+- ✅ New video playback → timer restarts from remaining time (not default duration)
+- ✅ Manual controls unaffected (START_TIMER still has multi-tab protection)
+- ✅ Backward compatible (message format extended, doesn't break existing functionality)
+
+### Documentation
+- Added comprehensive auto-follow playback logic documentation to README.md
+- Includes three scenario explanations, video ID identification mechanism, tab ownership model, and decision flow diagrams
+
 ## [1.1.0] - 2026-01-02
 
 ### Added
