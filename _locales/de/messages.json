@@ -1,0 +1,164 @@
+{
+  "extension_name": {
+    "message": "Slow Jogging Timer",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM-Timer mit anpassbaren Beats für Slow Jogging Videos auf YouTube",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "Slow Jogging Timer",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "Slow Jogging Timer",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "Trainingsdauer:",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15 Minuten",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30 Minuten",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45 Minuten",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "Benutzerdefiniert...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "Minuten",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "Starten",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "Pause",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "Fortsetzen",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "Stoppen",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "Ausblenden",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "BPM-Geschwindigkeit:",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "Ton aktivieren",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ Erweiterte Einstellungen",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "Video-Wiedergabe folgen",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "Klangtyp:",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "Piepton (Synthetisch)",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "Kastagnetten (Echter Klang)",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "Snare-Drum (Echter Klang)",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "Taktart:",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4 (Stark-Schwach)",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4 (Stark-Schwach-Schwach)",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4 (Stark-Schwach-Mittel-Schwach)",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "Panel-Transparenz:",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "Bereit",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "Läuft...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "Pausiert",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "Gestoppt",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "Abgeschlossen!",
+    "description": "Status when timer completes"
+  },
+
+  "error_timer_already_running": {
+    "message": "Der Timer läuft bereits in einem anderen Tab",
+    "description": "Error shown when user tries to start timer while it's running in another tab"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "BPM-Rhythmustöne für den Slow Jogging Timer abspielen",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}

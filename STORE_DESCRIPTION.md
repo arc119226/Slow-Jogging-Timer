@@ -711,6 +711,85 @@ Commencez votre voyage scientifique de jogging lent aujourd'hui - que chaque pas
 
 ---
 
+## Deutsche Version
+
+### Kurzbeschreibung (maximal 132 Zeichen)
+Präziser BPM-Timer für Slow Jogging Training auf YouTube. Trainieren Sie im Rhythmus, genießen Sie ein wissenschaftliches Erlebnis.
+
+### Ausführliche Beschreibung
+
+**Machen Sie Ihr Slow Jogging Training präziser und rhythmischer**
+
+„Slow Jogging Timer" ist eine Chrome-Erweiterung, die speziell für Slow Jogging Enthusiasten auf YouTube entwickelt wurde. Ob Sie dem LSD (Long Slow Distance) Training, dem MAF 180 Herzfrequenztraining oder jeder anderen Form des Slow Jogging folgen, dieses Tool bietet eine stabile Rhythmusführung, um jeden Schritt im richtigen Tempo zu halten.
+
+**Hauptfunktionen**
+
+🎵 **Präzises BPM-Metronom**
+- Einstellbarer BPM-Bereich von 60 bis 360
+- Drei Klangoptionen: Synthetischer Piepton, Kastagnetten, Snare-Drum
+- Unterstützung für 2/4, 3/4, 4/4 Taktarten für verschiedene Trainingsanforderungen
+- Automatische Lautstärkedifferenzierung für starke, mittlere und schwache Schläge für einen klareren Rhythmus
+
+⏱️ **Flexible Timer-Einstellungen**
+- Benutzerdefinierte Dauer von 1 bis 3600 Sekunden (bis zu 60 Minuten)
+- Schnelle Auswahl häufig verwendeter Voreinstellungen
+- Klare Countdown-Anzeige zur einfachen Fortschrittsverfolgung
+
+🎬 **Tiefe YouTube-Integration**
+- Automatisches Folgen der Video-Wiedergabe/Pause (optional)
+- Seiten-Overlay zeigt Timer und BPM in Echtzeit an
+- Einstellbare Transparenz, um die Videobetrachtung nicht zu stören
+- Ein-/Ausblenden-Funktion
+
+💾 **Intelligente Einstellungsspeicherung**
+- Alle Einstellungen werden automatisch gespeichert
+- Sofortige Wiederherstellung Ihrer Präferenzen beim nächsten Start
+- Globaler Timer-Status über Tabs hinweg
+
+**Warum Slow Jogging Timer wählen?**
+
+Traditionelle Metronom-Apps erfordern das Wechseln zwischen Telefon und Computer, was umständlich ist. Der Slow Jogging Timer integriert sich direkt in YouTube-Seiten und ermöglicht es Ihnen, sich auf das Training zu konzentrieren:
+
+✓ Keine zusätzlichen Geräte erforderlich - Ihr Browser ist Ihr Trainingspartner
+✓ Rhythmustöne synchronisieren sich mit Trainingsvideos, Sie verpassen keine Anleitung
+✓ Leichtes Design, keine Auswirkung auf die Computerleistung
+✓ Vollständiger Offline-Betrieb, keine Sammlung persönlicher Daten
+
+**Anwendungsfälle**
+
+• Slow Jogging Tutorial-Videos auf YouTube folgen
+• Stationäres Slow Jogging zu Hause
+• LSD (Long Slow Distance) Trainingsmethode praktizieren
+• MAF 180 Herzfrequenztraining Tempokontrolle
+• Jede aerobe Übung, die einen festen Rhythmus erfordert
+
+**Verwendung**
+
+1. Installieren Sie die Erweiterung
+2. Öffnen Sie ein beliebiges YouTube-Video
+3. Klicken Sie auf das Erweiterungssymbol in der Symbolleiste
+4. Stellen Sie Ihre Trainingsdauer und BPM ein
+5. Klicken Sie auf „Starten" und beginnen Sie Ihr Slow Jogging Training!
+
+**Datenschutzgarantie**
+
+Wir schätzen Ihre Privatsphäre:
+- Keine Sammlung persönlicher Daten
+- Kein Tracking des Surfverhaltens
+- Alle Einstellungen werden nur lokal auf Ihrem Gerät gespeichert
+- Open-Source-Projekt mit transparentem Code
+
+**Technische Highlights**
+
+- Erstellt mit dem neuesten Chrome Manifest V3 Standard
+- Web Audio API für professionelle Klangqualität
+- Präziser Drift-Kompensationsalgorithmus gewährleistet stabile Beats
+- Multi-Tab-Konfliktschutz verhindert Audio-Überlappung
+
+Beginnen Sie noch heute Ihre wissenschaftliche Slow Jogging Reise - lassen Sie jeden Schritt voller Rhythmus sein!
+
+---
+
 ## 使用建議
 
 ### Chrome Web Store 提交時
@@ -722,7 +801,7 @@ Commencez votre voyage scientifique de jogging lent aujourd'hui - que chaque pas
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 9 種語言版本：
+- 已提供 10 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -732,6 +811,7 @@ Commencez votre voyage scientifique de jogging lent aujourd'hui - que chaque pas
   - 俄文（ru）
   - 西班牙文（es）
   - 法文（fr）
+  - 德文（de）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **German language support** (`de` locale)
+  - All 34 message keys translated to German
+  - Supported languages now: zh_TW, zh_CN, en, ja, ko, ar, ru, es, fr, de (10 total)
+
 ## [1.1.5] - 2026-01-07
 
 ### Added
