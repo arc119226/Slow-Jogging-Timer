@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.22] - 2026-01-07
+
 ### Added
 - **Slovak language support** (`sk` locale)
   - All 34 message keys translated to Slovak
