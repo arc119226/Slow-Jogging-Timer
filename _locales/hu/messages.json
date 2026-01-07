@@ -1,0 +1,164 @@
+{
+  "extension_name": {
+    "message": "Lassú Futás Időzítő",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM időzítő testreszabható ütemekkel YouTube lassú futás videókhoz",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "Lassú Futás Időzítő",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "Lassú Futás Időzítő",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "Edzés időtartama:",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15 perc",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30 perc",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45 perc",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "Egyéni...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "perc",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "Indítás",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "Szünet",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "Folytatás",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "Leállítás",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "Elrejtés",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "BPM sebesség:",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "Hang engedélyezése",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ Speciális beállítások",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "Videó lejátszás követése",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "Hang típusa:",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "Sípolás (Szintetizált)",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "Kasztanyetta (Valódi hang)",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "Pergődob (Valódi hang)",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "Ütemmutató:",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4 (Erős-Gyenge)",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4 (Erős-Gyenge-Gyenge)",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4 (Erős-Gyenge-Közepes-Gyenge)",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "Panel átlátszóság:",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "Kész",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "Fut...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "Szüneteltetve",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "Leállítva",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "Befejezve!",
+    "description": "Status when timer completes"
+  },
+
+  "error_timer_already_running": {
+    "message": "Az időzítő már fut egy másik lapon",
+    "description": "Error shown when user tries to start timer while it's running in another tab"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "BPM ritmus hangok lejátszása a lassú futás időzítőhöz",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}

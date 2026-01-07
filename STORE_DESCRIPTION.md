@@ -1106,6 +1106,85 @@ Začněte svou vědeckou cestu pomalého běhu ještě dnes - nechte každý kro
 
 ---
 
+## Magyar Verzió
+
+### Rövid leírás (max 132 karakter)
+Precíz BPM metronóm időzítő lassú futás edzéshez YouTube-on. Edz ritmusban, élvezd a tudományos futásélményt.
+
+### Részletes leírás
+
+**Tedd a lassú futás edzésedet pontosabbá és ritmikusabbá**
+
+A „Lassú Futás Időzítő" egy Chrome bővítmény, amelyet kifejezetten a YouTube lassú futás rajongóinak terveztek. Akár LSD (Long Slow Distance) edzést, MAF 180 pulzusedzést vagy bármilyen más lassú futás formát követsz, ez az eszköz stabil ritmikus vezetést biztosít, hogy minden lépésed a megfelelő tempóban legyen.
+
+**Főbb funkciók**
+
+🎵 **Precíz BPM metronóm**
+- Állítható BPM tartomány 60-tól 360-ig
+- Három hangopció: szintetizált sípolás, kasztanyetta, pergődob
+- 2/4, 3/4, 4/4 ütemmutatók támogatása különböző edzési igényekhez
+- Automatikus hangerő megkülönböztetés az erős, közepes és gyenge ütemekhez tisztább ritmusért
+
+⏱️ **Rugalmas időzítő beállítások**
+- Egyéni időtartam 1-től 3600 másodpercig (akár 60 perc)
+- Gyors kiválasztás népszerű előbeállításokhoz
+- Világos visszaszámlálás kijelző az előrehaladás könnyű követéséhez
+
+🎬 **Mély YouTube integráció**
+- Automatikus videó lejátszás/szünet követés (opcionális)
+- Oldalon megjelenő fedvény mutatja az időzítőt és a BPM-et valós időben
+- Állítható átlátszóság, hogy ne zavarja a videónézést
+- Megjelenítés/elrejtés funkció
+
+💾 **Intelligens beállítás memória**
+- Minden beállítás automatikusan mentésre kerül
+- Azonnali preferencia visszaállítás következő indításkor
+- Globális időzítő állapot a lapok között
+
+**Miért válaszd a Lassú Futás Időzítőt?**
+
+A hagyományos metronóm alkalmazások telefonod és számítógéped közötti váltást igényelnek, ami kényelmetlen. A Lassú Futás Időzítő közvetlenül a YouTube oldalakba integrálódik, így az edzésre koncentrálhatsz:
+
+✓ Nincs szükség extra eszközre - böngésződ a edzőpartnered
+✓ A ritmushangok szinkronizálódnak az edzésvideókkal, nem maradsz le egyetlen instrukcióról sem
+✓ Könnyű kialakítás, nincs hatással a számítógép teljesítményére
+✓ Teljesen offline működés, személyes adatok gyűjtése nélkül
+
+**Használati esetek**
+
+• Lassú futás oktatóvideók követése YouTube-on
+• Otthoni stacionárius lassú futás edzés
+• LSD (Long Slow Distance) edzési módszer
+• MAF 180 pulzusedzés tempókontroll
+• Bármilyen stabil ritmust igénylő aerob gyakorlat
+
+**Használat**
+
+1. Telepítsd a bővítményt
+2. Nyiss meg bármely YouTube videót
+3. Kattints a bővítmény ikonjára az eszköztáron
+4. Állítsd be az edzés időtartamát és a BPM-et
+5. Kattints az „Indítás" gombra és kezdd el a lassú futás edzést!
+
+**Adatvédelmi garancia**
+
+Értékeljük a magánéletedet:
+- Nincs személyes adat gyűjtés
+- Nincs böngészési viselkedés követés
+- Minden beállítás csak helyben, az eszközödön tárolódik
+- Nyílt forráskódú projekt átlátható kóddal
+
+**Technikai előnyök**
+
+- A legújabb Chrome Manifest V3 szabvány alapján készült
+- Web Audio API professzionális hangminőséghez
+- Precíz drift-kompenzációs algoritmus stabil ütemekért
+- Több lap közötti konfliktus védelem hangátfedés megelőzésére
+
+Kezdd el tudományos lassú futás utazásodat még ma - tedd minden lépésedet ritmussal teljessé!
+
+---
+
 ## Ελληνική Έκδοση
 
 ### Σύντομη περιγραφή (132 χαρακτήρες max)
@@ -1670,7 +1749,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 21 種語言版本：
+- 已提供 22 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -1692,6 +1771,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
   - 芬蘭文（fi）
   - 希臘文（el）
   - 捷克文（cs）
+  - 匈牙利文（hu）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
