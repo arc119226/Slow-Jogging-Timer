@@ -1659,6 +1659,85 @@ Započnite svoje znanstveno putovanje sporog trčanja danas - ispunite svaki kor
 
 ---
 
+## Slovenska Različica
+
+### Kratek opis (največ 132 znakov)
+Natančen BPM metronomski časovnik za trening počasnega tekanja na YouTubu. Vadite v ritmu, uživajte v znanstvenem teku.
+
+### Podroben opis
+
+**Naredite svoj trening počasnega tekanja natančnejši in bolj ritmičen**
+
+„Časovnik za počasno tekanje" je razširitev za Chrome, zasnovana posebej za navdušence nad počasnim tekanjem na YouTubu. Ne glede na to, ali sledite LSD (Long Slow Distance) treningu, MAF 180 treningu srčnega utripa ali kateri koli drugi obliki počasnega tekanja, to orodje zagotavlja stabilno ritmično vodenje, da je vsak korak v pravem tempu.
+
+**Glavne funkcije**
+
+🎵 **Natančen BPM metronom**
+- Nastavljiv razpon BPM od 60 do 360
+- Tri možnosti zvoka: sintetični pisk, kastanjete, mali boben
+- Podpora za takte 2/4, 3/4, 4/4 za različne potrebe treninga
+- Samodejna diferenciacija glasnosti za močne, srednje in šibke udarce za jasnejši ritem
+
+⏱️ **Prilagodljive nastavitve časovnika**
+- Trajanje po meri od 1 do 3600 sekund (do 60 minut)
+- Hiter izbor priljubljenih prednastavitev
+- Jasen prikaz odštevanja za enostavno sledenje napredku
+
+🎬 **Globoka YouTube integracija**
+- Samodejno sledenje predvajanju/premoru videa (neobvezno)
+- Prekrivanje na strani prikazuje časovnik in BPM v realnem času
+- Nastavljiva prosojnost, da ne moti gledanja
+- Funkcija prikaži/skrij
+
+💾 **Pameten pomnilnik nastavitev**
+- Vse nastavitve se samodejno shranijo
+- Takojšnja obnovitev vaših nastavitev ob naslednjem zagonu
+- Globalno stanje časovnika med zavihki
+
+**Zakaj izbrati Časovnik za počasno tekanje?**
+
+Tradicionalne aplikacije metronoma zahtevajo preklapljanje med telefonom in računalnikom, kar je nepraktično. Časovnik za počasno tekanje se neposredno integrira v YouTube strani, tako da se lahko osredotočite na trening:
+
+✓ Dodatne naprave niso potrebne - vaš brskalnik je vaš vadbeni partner
+✓ Ritmični zvoki se sinhronizirajo z vadbenimi videoposnetki, ne boste zamudili navodil
+✓ Lahka zasnova, brez vpliva na zmogljivost računalnika
+✓ Popolnoma brez povezave, brez zbiranja osebnih podatkov
+
+**Primeri uporabe**
+
+• Sledenje vajam počasnega tekanja na YouTubu
+• Stacionarni trening počasnega tekanja doma
+• LSD (Long Slow Distance) metoda treninga
+• MAF 180 nadzor tempa srčnega utripa
+• Katera koli aerobna vaja, ki zahteva stabilen ritem
+
+**Kako uporabljati**
+
+1. Namestite razširitev
+2. Odprite kateri koli videoposnetek na YouTubu
+3. Kliknite ikono razširitve v orodni vrstici
+4. Nastavite trajanje treninga in BPM
+5. Kliknite „Začni" in začnite trening počasnega tekanja!
+
+**Zagotovilo zasebnosti**
+
+Cenimo vašo zasebnost:
+- Brez zbiranja osebnih podatkov
+- Brez sledenja vedenju brskanja
+- Vse nastavitve so shranjene samo lokalno na vaši napravi
+- Odprtokodni projekt s prozorno kodo
+
+**Tehnične prednosti**
+
+- Zgrajeno na najnovejšem standardu Chrome Manifest V3
+- Web Audio API za profesionalno kakovost zvoka
+- Natančen algoritem kompenzacije drifta zagotavlja stabilne udarce
+- Zaščita pred konflikti med zavihki preprečuje prekrivanje zvoka
+
+Začnite svoje znanstveno potovanje počasnega tekanja danes - napolnite vsak korak z ritmom!
+
+---
+
 ## Ελληνική Έκδοση
 
 ### Σύντομη περιγραφή (132 χαρακτήρες max)
@@ -2223,7 +2302,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 28 種語言版本：
+- 已提供 29 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -2252,6 +2331,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
   - 斯洛伐克文（sk）
   - 克羅埃西亞文（hr）
   - 塞爾維亞文（sr）
+  - 斯洛維尼亞文（sl）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
