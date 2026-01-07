@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.20] - 2026-01-07
+
 ### Added
 - **Bulgarian language support** (`bg` locale)
   - All 34 message keys translated to Bulgarian
