@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-01-07
+
+### Fixed
+- **CSS style pollution affecting YouTube pages** after extension installation
+  - YouTube Premium logo was hidden, showing only "TW"
+  - Video titles changed from white to blue color
+  - Player control buttons rendered abnormally
+  - Root cause: Global CSS selectors (`html`, `body`, `*`, `h1`, `button`) in `styles.css` were injected into YouTube pages, overriding native styles
+
+### Changed
+- Separated YouTube overlay styles into dedicated `content-script.css` file
+  - Contains only namespaced selectors (`#slowjogging-*`, `.slowjogging-*`)
+  - No global selectors that could affect YouTube's native styling
+- Updated `manifest.json` to inject `content-script.css` instead of `styles.css` for content scripts
+- Cleaned up `styles.css` by removing redundant overlay styles (moved to `content-script.css`)
+
+### Technical Details
+- `styles.css` now serves popup UI only (requires global resets for standalone window)
+- `content-script.css` serves YouTube overlay only (fully namespaced, no pollution)
+- CSS injection scope properly isolated between popup and content script contexts
+
 ## [1.1.1] - 2026-01-05
 
 ### Fixed
