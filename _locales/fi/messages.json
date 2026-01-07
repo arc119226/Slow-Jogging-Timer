@@ -1,0 +1,164 @@
+{
+  "extension_name": {
+    "message": "Slow Jogging -ajastin",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM-ajastin mukautettavilla iskuilla slow jogging -videoille YouTubessa",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "Slow Jogging -ajastin",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "Slow Jogging -ajastin",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "Harjoituksen kesto:",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15 minuuttia",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30 minuuttia",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45 minuuttia",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "Mukautettu...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "minuuttia",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "Aloita",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "Tauko",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "Jatka",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "Lopeta",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "Piilota",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "BPM-nopeus:",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "Ota ääni käyttöön",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ Lisäasetukset",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "Seuraa videon toistoa",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "Äänityyppi:",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "Piippaus (Synteettinen)",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "Kastanjetit (Aito ääni)",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "Virvelirumpu (Aito ääni)",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "Tahtilaji:",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4 (Vahva-Heikko)",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4 (Vahva-Heikko-Heikko)",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4 (Vahva-Heikko-Keski-Heikko)",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "Paneelin läpinäkyvyys:",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "Valmis",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "Käynnissä...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "Tauolla",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "Pysäytetty",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "Valmis!",
+    "description": "Status when timer completes"
+  },
+
+  "error_timer_already_running": {
+    "message": "Ajastin on jo käynnissä toisessa välilehdessä",
+    "description": "Error shown when user tries to start timer while it's running in another tab"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "Toista BPM-rytmiääniä slow jogging -ajastimelle",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}
