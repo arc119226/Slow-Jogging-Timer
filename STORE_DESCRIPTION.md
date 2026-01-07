@@ -1185,6 +1185,85 @@ Kezdd el tudományos lassú futás utazásodat még ma - tedd minden lépésedet
 
 ---
 
+## Versiunea Română
+
+### Descriere scurtă (max 132 caractere)
+Cronometru metronom BPM precis pentru antrenament de alergare lentă pe YouTube. Antrenează-te în ritm, bucură-te de o experiență științifică.
+
+### Descriere detaliată
+
+**Fă antrenamentul de alergare lentă mai precis și mai ritmic**
+
+„Cronometrul Alergare Lentă" este o extensie Chrome concepută special pentru entuziaștii alergării lente pe YouTube. Fie că urmezi antrenament LSD (Long Slow Distance), antrenament cardiac MAF 180 sau orice altă formă de alergare lentă, acest instrument oferă ghidare ritmică stabilă pentru a menține fiecare pas în tempoul potrivit.
+
+**Caracteristici principale**
+
+🎵 **Metronom BPM precis**
+- Interval BPM ajustabil de la 60 la 360
+- Trei opțiuni de sunet: bip sintetizat, castaniete, tobă mică
+- Suport pentru măsuri 2/4, 3/4, 4/4 pentru diferite nevoi de antrenament
+- Diferențiere automată a volumului pentru bătăi puternice, medii și slabe pentru un ritm mai clar
+
+⏱️ **Setări flexibile ale cronometrului**
+- Durată personalizată de la 1 la 3600 secunde (până la 60 minute)
+- Selectare rapidă pentru presetări populare
+- Afișaj clar de numărătoare inversă pentru urmărirea ușoară a progresului
+
+🎬 **Integrare profundă YouTube**
+- Urmărire automată a redării/pauzei video (opțional)
+- Suprapunere pe pagină care arată cronometrul și BPM-ul în timp real
+- Opacitate ajustabilă pentru a nu deranja vizionarea
+- Funcție de afișare/ascundere
+
+💾 **Memorie inteligentă a setărilor**
+- Toate setările sunt salvate automat
+- Restaurare instantanee a preferințelor la următoarea pornire
+- Stare globală a cronometrului între file
+
+**De ce să alegi Cronometrul Alergare Lentă?**
+
+Aplicațiile tradiționale de metronom necesită comutare între telefon și computer, ceea ce este incomod. Cronometrul Alergare Lentă se integrează direct în paginile YouTube, astfel încât să te poți concentra pe antrenament:
+
+✓ Nu ai nevoie de dispozitive suplimentare - browserul tău este partenerul tău de antrenament
+✓ Sunetele de ritm se sincronizează cu videoclipurile de antrenament, nu vei rata nicio instrucțiune
+✓ Design ușor, fără impact asupra performanței computerului
+✓ Funcționare complet offline, fără colectare de date personale
+
+**Cazuri de utilizare**
+
+• Urmărirea tutorialelor de alergare lentă pe YouTube
+• Antrenament staționar de alergare lentă acasă
+• Metodă de antrenament LSD (Long Slow Distance)
+• Control tempo antrenament cardiac MAF 180
+• Orice exercițiu aerobic care necesită un ritm stabil
+
+**Cum se utilizează**
+
+1. Instalează extensia
+2. Deschide orice videoclip YouTube
+3. Apasă pe pictograma extensiei din bara de instrumente
+4. Setează durata antrenamentului și BPM-ul
+5. Apasă „Start" și începe antrenamentul de alergare lentă!
+
+**Garanție de confidențialitate**
+
+Prețuim confidențialitatea ta:
+- Fără colectare de date personale
+- Fără urmărirea comportamentului de navigare
+- Toate setările sunt stocate doar local pe dispozitivul tău
+- Proiect open source cu cod transparent
+
+**Avantaje tehnice**
+
+- Construit pe cel mai recent standard Chrome Manifest V3
+- Web Audio API pentru calitate profesională a sunetului
+- Algoritm precis de compensare a derivei pentru bătăi stabile
+- Protecție împotriva conflictelor între file pentru prevenirea suprapunerii audio
+
+Începe-ți călătoria științifică de alergare lentă astăzi - fă fiecare pas plin de ritm!
+
+---
+
 ## Ελληνική Έκδοση
 
 ### Σύντομη περιγραφή (132 χαρακτήρες max)
@@ -1749,7 +1828,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 22 種語言版本：
+- 已提供 23 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -1772,6 +1851,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
   - 希臘文（el）
   - 捷克文（cs）
   - 匈牙利文（hu）
+  - 羅馬尼亞文（ro）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
