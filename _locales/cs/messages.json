@@ -1,0 +1,164 @@
+{
+  "extension_name": {
+    "message": "Časovač pomalého běhu",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM časovač s přizpůsobitelnými údery pro videa pomalého běhu na YouTube",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "Časovač pomalého běhu",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "Časovač pomalého běhu",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "Délka cvičení:",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15 minut",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30 minut",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45 minut",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "Vlastní...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "minut",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "Spustit",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "Pozastavit",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "Pokračovat",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "Zastavit",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "Skrýt",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "Rychlost BPM:",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "Povolit zvuk",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ Pokročilá nastavení",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "Sledovat přehrávání videa",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "Typ zvuku:",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "Pípnutí (Syntetické)",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "Kastaněty (Skutečný zvuk)",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "Malý buben (Skutečný zvuk)",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "Taktové označení:",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4 (Silná-Slabá)",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4 (Silná-Slabá-Slabá)",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4 (Silná-Slabá-Střední-Slabá)",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "Průhlednost panelu:",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "Připraveno",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "Běží...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "Pozastaveno",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "Zastaveno",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "Dokončeno!",
+    "description": "Status when timer completes"
+  },
+
+  "error_timer_already_running": {
+    "message": "Časovač již běží v jiné kartě",
+    "description": "Error shown when user tries to start timer while it's running in another tab"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "Přehrávání BPM rytmických zvuků pro časovač pomalého běhu",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}
