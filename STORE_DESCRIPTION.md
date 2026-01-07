@@ -1027,6 +1027,85 @@ Begin vandaag nog je wetenschappelijke slow jogging reis - laat elke stap vol ri
 
 ---
 
+## Wersja Polska
+
+### Krótki opis (limit 132 znaków)
+Precyzyjny timer BPM do treningów wolnego biegania na YouTube. Trenuj w rytmie, ciesz się naukowym doświadczeniem biegowym.
+
+### Szczegółowy opis
+
+**Spraw, aby trening wolnego biegania był bardziej precyzyjny i rytmiczny**
+
+„Timer do Wolnego Biegania" to rozszerzenie Chrome zaprojektowane specjalnie dla entuzjastów wolnego biegania na YouTube. Niezależnie od tego, czy stosujesz trening LSD (Long Slow Distance), trening tętna MAF 180, czy jakąkolwiek inną formę wolnego biegania, to narzędzie zapewnia stabilne prowadzenie rytmiczne, aby każdy krok był w odpowiednim tempie.
+
+**Główne funkcje**
+
+🎵 **Precyzyjny metronom BPM**
+- Regulowany zakres BPM od 60 do 360
+- Trzy opcje dźwięku: syntetyczny sygnał, kastaniety, werbel
+- Obsługa metrum 2/4, 3/4, 4/4 dla różnych potrzeb treningowych
+- Automatyczne różnicowanie głośności dla mocnych, średnich i słabych uderzeń dla wyraźniejszego rytmu
+
+⏱️ **Elastyczne ustawienia timera**
+- Własny czas od 1 do 3600 sekund (do 60 minut)
+- Szybki wybór popularnych ustawień wstępnych
+- Przejrzysty wyświetlacz odliczania do łatwego śledzenia postępów
+
+🎬 **Głęboka integracja z YouTube**
+- Automatyczne śledzenie odtwarzania/pauzy wideo (opcjonalnie)
+- Nakładka na stronie pokazuje timer i BPM w czasie rzeczywistym
+- Regulowana przezroczystość, aby nie przeszkadzać w oglądaniu
+- Funkcja pokaż/ukryj
+
+💾 **Inteligentna pamięć ustawień**
+- Wszystkie ustawienia są automatycznie zapisywane
+- Natychmiastowe przywracanie preferencji przy następnym uruchomieniu
+- Globalny stan timera między kartami
+
+**Dlaczego wybrać Timer do Wolnego Biegania?**
+
+Tradycyjne aplikacje metronomu wymagają przełączania między telefonem a komputerem, co jest niewygodne. Timer do Wolnego Biegania integruje się bezpośrednio ze stronami YouTube, pozwalając skupić się na treningu:
+
+✓ Nie potrzebujesz dodatkowych urządzeń - Twoja przeglądarka to Twój partner treningowy
+✓ Dźwięki rytmu synchronizują się z filmami treningowymi, nie przegapisz żadnej instrukcji
+✓ Lekki design, bez wpływu na wydajność komputera
+✓ W pełni offline, bez zbierania danych osobowych
+
+**Przypadki użycia**
+
+• Śledzenie tutoriali wolnego biegania na YouTube
+• Ćwiczenia wolnego biegania w miejscu w domu
+• Praktykowanie metody treningowej LSD (Long Slow Distance)
+• Kontrola tempa przy treningu tętna MAF 180
+• Każde ćwiczenie aerobowe wymagające stałego rytmu
+
+**Jak używać**
+
+1. Zainstaluj rozszerzenie
+2. Otwórz dowolny film na YouTube
+3. Kliknij ikonę rozszerzenia na pasku narzędzi
+4. Ustaw czas treningu i BPM
+5. Kliknij „Start" i rozpocznij trening wolnego biegania!
+
+**Gwarancja prywatności**
+
+Cenimy Twoją prywatność:
+- Brak zbierania danych osobowych
+- Brak śledzenia zachowań przeglądania
+- Wszystkie ustawienia przechowywane tylko lokalnie na Twoim urządzeniu
+- Projekt open source z przejrzystym kodem
+
+**Techniczne atuty**
+
+- Zbudowany z najnowszym standardem Chrome Manifest V3
+- Web Audio API dla profesjonalnej jakości dźwięku
+- Precyzyjny algorytm kompensacji dryfu gwarantuje stabilne uderzenia
+- Ochrona przed konfliktami między kartami zapobiega nakładaniu się dźwięku
+
+Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy krok będzie pełen rytmu!
+
+---
+
 ## 使用建議
 
 ### Chrome Web Store 提交時
@@ -1038,7 +1117,7 @@ Begin vandaag nog je wetenschappelijke slow jogging reis - laat elke stap vol ri
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 13 種語言版本：
+- 已提供 14 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -1052,6 +1131,7 @@ Begin vandaag nog je wetenschappelijke slow jogging reis - laat elke stap vol ri
   - 葡萄牙文（pt）
   - 意大利文（it）
   - 荷蘭文（nl）
+  - 波蘭文（pl）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
