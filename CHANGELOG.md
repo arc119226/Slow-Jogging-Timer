@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Indonesian language support** (`id` locale)
+  - All 34 message keys translated to Indonesian
+  - Supported languages now: zh_TW, zh_CN, en, ja, ko, ar, ru, es, fr, de, pt, it, nl, pl, tr, sv, da, no, fi, el, cs, hu, ro, bg, uk, sk, hr, sr, sl, id (30 total)
 - **Slovenian language support** (`sl` locale)
   - All 34 message keys translated to Slovenian
-  - Supported languages now: zh_TW, zh_CN, en, ja, ko, ar, ru, es, fr, de, pt, it, nl, pl, tr, sv, da, no, fi, el, cs, hu, ro, bg, uk, sk, hr, sr, sl (29 total)
 
 ## [1.1.24] - 2026-01-07
 

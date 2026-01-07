@@ -2291,6 +2291,85 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
 
 ---
 
+## Versi Indonesia
+
+### Deskripsi Singkat (maks 132 karakter)
+Timer BPM presisi untuk latihan jogging lambat di YouTube. Berlatih dengan ritme, nikmati pengalaman jogging ilmiah.
+
+### Deskripsi Lengkap
+
+**Jadikan Latihan Jogging Lambat Anda Lebih Presisi dan Berirama**
+
+"Timer Jogging Lambat" adalah ekstensi Chrome yang dirancang khusus untuk penggemar jogging lambat di YouTube. Baik Anda mengikuti latihan LSD (Long Slow Distance), latihan detak jantung MAF 180, atau bentuk jogging lambat lainnya, alat ini memberikan panduan ketukan yang stabil agar setiap langkah tepat pada ritme yang benar.
+
+**Fitur Utama**
+
+🎵 **Metronom BPM Presisi**
+- Rentang BPM yang dapat disesuaikan dari 60 hingga 360
+- Tiga pilihan suara: bunyi bip sintetis, kastanyet, snare drum
+- Dukungan untuk tanda birama 2/4, 3/4, 4/4 untuk berbagai kebutuhan latihan
+- Diferensiasi volume otomatis untuk ketukan kuat, sedang, dan lemah untuk ritme yang lebih jelas
+
+⏱️ **Pengaturan Timer Fleksibel**
+- Durasi kustom dari 1 hingga 3600 detik (hingga 60 menit)
+- Pilihan cepat untuk durasi preset umum
+- Tampilan hitung mundur yang jelas untuk pelacakan kemajuan yang mudah
+
+🎬 **Integrasi YouTube Mendalam**
+- Ikuti otomatis putar/jeda video (opsional)
+- Overlay halaman menampilkan timer dan BPM secara real-time
+- Opasitas yang dapat disesuaikan agar tidak mengganggu tampilan video
+- Fungsi tampilkan/sembunyikan
+
+💾 **Memori Pengaturan Cerdas**
+- Semua pengaturan disimpan secara otomatis
+- Pulihkan preferensi Anda secara instan saat peluncuran berikutnya
+- Status timer global di seluruh tab
+
+**Mengapa Memilih Timer Jogging Lambat?**
+
+Aplikasi metronom tradisional memerlukan perpindahan antara ponsel dan komputer, yang merepotkan. Timer Jogging Lambat terintegrasi langsung ke halaman YouTube, memungkinkan Anda fokus pada latihan:
+
+✓ Tidak perlu perangkat tambahan - browser Anda adalah mitra latihan Anda
+✓ Suara ketukan sinkron dengan video latihan, tidak akan melewatkan panduan apapun
+✓ Desain ringan, tidak mempengaruhi performa komputer
+✓ Beroperasi sepenuhnya offline, tidak mengumpulkan data pribadi
+
+**Kasus Penggunaan**
+
+• Mengikuti video tutorial jogging lambat YouTube
+• Latihan jogging lambat di tempat di rumah
+• Praktik metode latihan LSD (Long Slow Distance)
+• Kontrol kecepatan latihan detak jantung MAF 180
+• Olahraga aerobik apa pun yang memerlukan ritme tetap
+
+**Cara Penggunaan**
+
+1. Instal ekstensi
+2. Buka video YouTube mana pun
+3. Klik ikon ekstensi di toolbar
+4. Atur durasi latihan dan BPM Anda
+5. Klik "Mulai" dan mulai latihan jogging lambat Anda!
+
+**Jaminan Privasi**
+
+Kami menghargai privasi Anda:
+- Tidak ada pengumpulan data pribadi
+- Tidak ada pelacakan perilaku browsing
+- Semua pengaturan disimpan secara lokal di perangkat Anda saja
+- Proyek open-source dengan kode transparan
+
+**Sorotan Teknis**
+
+- Dibangun dengan standar Chrome Manifest V3 terbaru
+- Web Audio API untuk kualitas suara profesional
+- Algoritma kompensasi drift presisi menjamin ketukan stabil
+- Perlindungan konflik multi-tab mencegah tumpang tindih audio
+
+Mulai perjalanan jogging lambat ilmiah Anda hari ini - biarkan setiap langkah dipenuhi ritme!
+
+---
+
 ## 使用建議
 
 ### Chrome Web Store 提交時
@@ -2302,7 +2381,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 29 種語言版本：
+- 已提供 30 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -2332,6 +2411,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
   - 克羅埃西亞文（hr）
   - 塞爾維亞文（sr）
   - 斯洛維尼亞文（sl）
+  - 印尼文（id）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM

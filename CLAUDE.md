@@ -89,7 +89,7 @@ The extension implements a **tab ownership model** to prevent multiple YouTube t
 **Manual Start Conflict:**
 - Tab A starts timer → acquires ownership
 - Tab B attempts to start timer → **rejected with error message**
-- Error displays in popup: "Timer is already running in another tab" (localized in 29 languages: en, zh_TW, zh_CN, ja, ko, ar, ru, es, fr, de, pt, it, nl, pl, tr, sv, da, no, fi, el, cs, hu, ro, bg, uk, sk, hr, sr, sl)
+- Error displays in popup: "Timer is already running in another tab" (localized in 30 languages: en, zh_TW, zh_CN, ja, ko, ar, ru, es, fr, de, pt, it, nl, pl, tr, sv, da, no, fi, el, cs, hu, ro, bg, uk, sk, hr, sr, sl, id)
 - UI state restored to allow retry
 
 **Auto-Follow Conflict:**
