@@ -632,6 +632,85 @@ Valoramos tu privacidad:
 
 ---
 
+## Version Française
+
+### Description courte (limite de 132 caractères)
+Minuteur BPM précis pour l'entraînement de jogging lent sur YouTube. Entraînez-vous en rythme, profitez d'une expérience scientifique.
+
+### Description détaillée
+
+**Rendez votre entraînement de jogging lent plus précis et rythmé**
+
+« Minuteur de Jogging Lent » est une extension Chrome conçue spécifiquement pour les passionnés de jogging lent sur YouTube. Que vous suiviez l'entraînement LSD (Long Slow Distance), l'entraînement de fréquence cardiaque MAF 180, ou toute autre forme de pratique de jogging lent, cet outil fournit un guidage rythmique stable pour maintenir chaque pas au bon tempo.
+
+**Fonctionnalités principales**
+
+🎵 **Métronome BPM précis**
+- Plage BPM réglable de 60 à 360
+- Trois options sonores : bip synthétisé, castagnettes, caisse claire
+- Support des mesures 2/4, 3/4, 4/4 pour s'adapter aux différents besoins d'entraînement
+- Différenciation automatique du volume pour les temps forts, moyens et faibles pour un rythme plus clair
+
+⏱️ **Configuration flexible du minuteur**
+- Durée personnalisée de 1 à 3600 secondes (jusqu'à 60 minutes)
+- Sélection rapide des durées prédéfinies courantes
+- Affichage clair du compte à rebours pour un suivi facile de la progression
+
+🎬 **Intégration profonde avec YouTube**
+- Suivi automatique de la lecture/pause vidéo (optionnel)
+- Superposition sur la page affichant le minuteur et le BPM en temps réel
+- Opacité réglable pour ne pas gêner le visionnage de la vidéo
+- Fonction afficher/masquer
+
+💾 **Mémoire intelligente des paramètres**
+- Tous les paramètres sont sauvegardés automatiquement
+- Restauration instantanée de vos préférences au prochain lancement
+- État global du minuteur entre les onglets
+
+**Pourquoi choisir Minuteur de Jogging Lent ?**
+
+Les applications métronome traditionnelles nécessitent de basculer entre le téléphone et l'ordinateur, ce qui est peu pratique. Le Minuteur de Jogging Lent s'intègre directement dans les pages YouTube, vous permettant de vous concentrer sur l'entraînement :
+
+✓ Aucun appareil supplémentaire nécessaire - votre navigateur est votre partenaire d'entraînement
+✓ Les sons rythmiques se synchronisent avec les vidéos d'entraînement, vous ne manquerez aucune instruction
+✓ Conception légère, sans impact sur les performances de l'ordinateur
+✓ Fonctionnement entièrement hors ligne, aucune collecte de données personnelles
+
+**Cas d'utilisation**
+
+• Suivre les tutoriels vidéo de jogging lent sur YouTube
+• Exercices de jogging lent stationnaire à domicile
+• Pratique de la méthode d'entraînement LSD (Long Slow Distance)
+• Contrôle du rythme lors de l'entraînement de fréquence cardiaque MAF 180
+• Tout exercice aérobique nécessitant un rythme fixe
+
+**Comment utiliser**
+
+1. Installez l'extension
+2. Ouvrez n'importe quelle vidéo YouTube
+3. Cliquez sur l'icône de l'extension dans la barre d'outils
+4. Configurez la durée de votre entraînement et le BPM
+5. Cliquez sur « Démarrer » et commencez votre entraînement de jogging lent !
+
+**Garantie de confidentialité**
+
+Nous accordons de l'importance à votre vie privée :
+- Aucune collecte de données personnelles
+- Aucun suivi du comportement de navigation
+- Tous les paramètres sont stockés uniquement localement sur votre appareil
+- Projet open source avec code transparent
+
+**Points forts techniques**
+
+- Construit avec le dernier standard Chrome Manifest V3
+- Web Audio API pour une qualité sonore professionnelle
+- Algorithme de compensation de dérive précis garantissant des rythmes stables
+- Protection contre les conflits entre onglets empêchant la superposition audio
+
+Commencez votre voyage scientifique de jogging lent aujourd'hui - que chaque pas soit rempli de rythme !
+
+---
+
 ## 使用建議
 
 ### Chrome Web Store 提交時
@@ -643,7 +722,7 @@ Valoramos tu privacidad:
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 8 種語言版本：
+- 已提供 9 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -652,6 +731,7 @@ Valoramos tu privacidad:
   - 阿拉伯文（ar）
   - 俄文（ru）
   - 西班牙文（es）
+  - 法文（fr）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
