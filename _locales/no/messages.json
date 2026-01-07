@@ -1,0 +1,164 @@
+{
+  "extension_name": {
+    "message": "Slow Jogging Timer",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM-timer med tilpassbare slag for slow jogging-videoer på YouTube",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "Slow Jogging Timer",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "Slow Jogging Timer",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "Treningsvarighet:",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15 minutter",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30 minutter",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45 minutter",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "Tilpasset...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "minutter",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "Start",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "Pause",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "Gjenoppta",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "Stopp",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "Skjul",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "BPM-hastighet:",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "Aktiver lyd",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ Avanserte innstillinger",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "Følg videoavspilling",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "Lydtype:",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "Pip (Syntetisk)",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "Kastanjetter (Ekte lyd)",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "Skarptromme (Ekte lyd)",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "Taktart:",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4 (Sterk-Svak)",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4 (Sterk-Svak-Svak)",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4 (Sterk-Svak-Middels-Svak)",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "Panelgjennomsiktighet:",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "Klar",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "Kjører...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "Satt på pause",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "Stoppet",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "Fullført!",
+    "description": "Status when timer completes"
+  },
+
+  "error_timer_already_running": {
+    "message": "Timeren kjører allerede i en annen fane",
+    "description": "Error shown when user tries to start timer while it's running in another tab"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "Spill av BPM-rytmelyder for slow jogging-timeren",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}
