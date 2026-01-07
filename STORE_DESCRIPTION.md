@@ -1027,6 +1027,85 @@ Begin vandaag nog je wetenschappelijke slow jogging reis - laat elke stap vol ri
 
 ---
 
+## Türkçe Sürüm
+
+### Kısa açıklama (132 karakter sınırı)
+YouTube'da yavaş koşu antrenmanları için hassas BPM metronom zamanlayıcısı. Ritimle antrenman yapın, bilimsel koşu deneyiminin keyfini çıkarın.
+
+### Ayrıntılı açıklama
+
+**Yavaş koşu antrenmanınızı daha hassas ve ritmik hale getirin**
+
+"Yavaş Koşu Zamanlayıcısı", YouTube'da yavaş koşu tutkunları için özel olarak tasarlanmış bir Chrome uzantısıdır. LSD (Long Slow Distance) antrenmanı, MAF 180 kalp atış hızı antrenmanı veya herhangi bir yavaş koşu pratiği takip ediyor olun, bu araç her adımı doğru tempoda tutmak için sabit ritim rehberliği sağlar.
+
+**Temel Özellikler**
+
+🎵 **Hassas BPM Metronom**
+- 60 ile 360 arasında ayarlanabilir BPM aralığı
+- Üç ses seçeneği: sentetik bip, kastanyet, trampet
+- Farklı antrenman ihtiyaçlarına uyum sağlamak için 2/4, 3/4, 4/4 ölçü desteği
+- Daha net ritim için güçlü, orta ve zayıf vuruşlar için otomatik ses seviyesi ayrımı
+
+⏱️ **Esnek Zamanlayıcı Ayarları**
+- 1 ile 3600 saniye arasında özel süre (60 dakikaya kadar)
+- Yaygın kullanılan ön ayarların hızlı seçimi
+- Kolay ilerleme takibi için net geri sayım göstergesi
+
+🎬 **Derin YouTube Entegrasyonu**
+- Video oynatma/duraklatmayı otomatik takip (isteğe bağlı)
+- Sayfa katmanı zamanlayıcı ve BPM'i gerçek zamanlı gösterir
+- Video izlemeyi engellemeyecek ayarlanabilir şeffaflık
+- Göster/gizle fonksiyonu
+
+💾 **Akıllı Ayar Hafızası**
+- Tüm ayarlar otomatik olarak kaydedilir
+- Bir sonraki başlatmada tercihleriniz anında geri yüklenir
+- Sekmeler arasında global zamanlayıcı durumu
+
+**Neden Yavaş Koşu Zamanlayıcısı'nı Seçmelisiniz?**
+
+Geleneksel metronom uygulamaları telefon ve bilgisayar arasında geçiş yapmayı gerektirir, bu da zahmetlidir. Yavaş Koşu Zamanlayıcısı doğrudan YouTube sayfalarına entegre olur ve antrenmana odaklanmanızı sağlar:
+
+✓ Ek cihaz gerekmez - tarayıcınız antrenman ortağınızdır
+✓ Ritim sesleri antrenman videolarıyla senkronize olur, hiçbir talimatı kaçırmazsınız
+✓ Hafif tasarım, bilgisayar performansını etkilemez
+✓ Tamamen çevrimdışı çalışma, kişisel veri toplama yok
+
+**Kullanım Senaryoları**
+
+• YouTube'da yavaş koşu eğitim videolarını takip etme
+• Evde yerinde yavaş koşu egzersizleri
+• LSD (Long Slow Distance) antrenman yöntemini uygulama
+• MAF 180 kalp atış hızı antrenmanı tempo kontrolü
+• Sabit ritim gerektiren her türlü aerobik egzersiz
+
+**Nasıl Kullanılır**
+
+1. Uzantıyı yükleyin
+2. Herhangi bir YouTube videosunu açın
+3. Araç çubuğundaki uzantı simgesine tıklayın
+4. Antrenman sürenizi ve BPM'i ayarlayın
+5. "Başlat"a tıklayın ve yavaş koşu antrenmanınıza başlayın!
+
+**Gizlilik Garantisi**
+
+Gizliliğinize değer veriyoruz:
+- Kişisel veri toplama yok
+- Tarama davranışı izleme yok
+- Tüm ayarlar yalnızca cihazınızda yerel olarak depolanır
+- Şeffaf kodlu açık kaynak proje
+
+**Teknik Öne Çıkanlar**
+
+- En son Chrome Manifest V3 standardıyla oluşturuldu
+- Profesyonel ses kalitesi için Web Audio API
+- Kararlı vuruşları garanti eden hassas sapma telafi algoritması
+- Ses çakışmasını önleyen çoklu sekme çakışma koruması
+
+Bugün bilimsel yavaş koşu yolculuğunuza başlayın - her adım ritimle dolsun!
+
+---
+
 ## Wersja Polska
 
 ### Krótki opis (limit 132 znaków)
@@ -1117,7 +1196,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 14 種語言版本：
+- 已提供 15 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -1132,6 +1211,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
   - 意大利文（it）
   - 荷蘭文（nl）
   - 波蘭文（pl）
+  - 土耳其文（tr）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
