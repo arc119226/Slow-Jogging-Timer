@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.24] - 2026-01-07
+
 ### Added
 - **Serbian language support** (`sr` locale)
   - All 34 message keys translated to Serbian
