@@ -1,0 +1,164 @@
+{
+  "extension_name": {
+    "message": "Pemasa Joging Perlahan",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "Pemasa BPM dengan rentak boleh laras untuk video joging perlahan di YouTube",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "Pemasa Joging Perlahan",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "Pemasa Joging Perlahan",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "Tempoh Senaman:",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15 minit",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30 minit",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45 minit",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "Tersuai...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "minit",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "Mula",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "Jeda",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "Sambung",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "Berhenti",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "Sembunyi",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "Kelajuan BPM:",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "Dayakan Bunyi",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ Tetapan Lanjutan",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "Ikut main balik video",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "Jenis Bunyi:",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "Bip (Sintetik)",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "Kastanet (Bunyi Sebenar)",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "Dram Snare (Bunyi Sebenar)",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "Tanda Masa:",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4 (Kuat-Lemah)",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4 (Kuat-Lemah-Lemah)",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4 (Kuat-Lemah-Sederhana-Lemah)",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "Kelegapan Panel:",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "Sedia",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "Berjalan...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "Dijeda",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "Dihentikan",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "Selesai!",
+    "description": "Status when timer completes"
+  },
+
+  "error_timer_already_running": {
+    "message": "Pemasa sudah berjalan di tab lain",
+    "description": "Error shown when user tries to start timer while it's running in another tab"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "Memainkan bunyi rentak BPM untuk pemasa joging perlahan",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}

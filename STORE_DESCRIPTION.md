@@ -2370,6 +2370,85 @@ Mulai perjalanan jogging lambat ilmiah Anda hari ini - biarkan setiap langkah di
 
 ---
 
+## Versi Bahasa Melayu
+
+### Penerangan Ringkas (maks 132 aksara)
+Pemasa BPM tepat untuk senaman joging perlahan di YouTube. Berlatih dengan rentak, nikmati pengalaman joging saintifik.
+
+### Penerangan Terperinci
+
+**Jadikan Latihan Joging Perlahan Anda Lebih Tepat dan Berirama**
+
+"Pemasa Joging Perlahan" ialah sambungan Chrome yang direka khas untuk peminat joging perlahan di YouTube. Sama ada anda mengikuti latihan LSD (Long Slow Distance), latihan kadar jantung MAF 180, atau apa-apa bentuk joging perlahan, alat ini menyediakan panduan rentak yang stabil supaya setiap langkah tepat pada rentak yang betul.
+
+**Ciri-ciri Utama**
+
+🎵 **Metronom BPM Tepat**
+- Julat BPM boleh laras dari 60 hingga 360
+- Tiga pilihan bunyi: bip sintetik, kastanet, dram snare
+- Sokongan untuk tanda masa 2/4, 3/4, 4/4 untuk pelbagai keperluan latihan
+- Pembezaan kelantangan automatik untuk rentak kuat, sederhana, dan lemah untuk rentak yang lebih jelas
+
+⏱️ **Tetapan Pemasa Fleksibel**
+- Tempoh tersuai dari 1 hingga 3600 saat (sehingga 60 minit)
+- Pilihan cepat untuk tempoh praset biasa
+- Paparan undur yang jelas untuk penjejakan kemajuan mudah
+
+🎬 **Integrasi YouTube Mendalam**
+- Ikut automatik main/jeda video (pilihan)
+- Tindan halaman memaparkan pemasa dan BPM secara masa nyata
+- Kelegapan boleh laras supaya tidak mengganggu tontonan video
+- Fungsi tunjuk/sembunyi
+
+💾 **Memori Tetapan Pintar**
+- Semua tetapan disimpan secara automatik
+- Pulihkan pilihan anda serta-merta pada pelancaran seterusnya
+- Status pemasa global merentasi tab
+
+**Mengapa Pilih Pemasa Joging Perlahan?**
+
+Aplikasi metronom tradisional memerlukan pertukaran antara telefon dan komputer, yang menyusahkan. Pemasa Joging Perlahan berintegrasi terus ke halaman YouTube, membolehkan anda fokus pada latihan:
+
+✓ Tiada peranti tambahan diperlukan - pelayar anda adalah rakan latihan anda
+✓ Bunyi rentak segerak dengan video latihan, tidak akan terlepas apa-apa panduan
+✓ Reka bentuk ringan, tiada kesan pada prestasi komputer
+✓ Beroperasi sepenuhnya luar talian, tiada pengumpulan data peribadi
+
+**Kes Penggunaan**
+
+• Mengikuti video tutorial joging perlahan YouTube
+• Latihan joging perlahan di tempat di rumah
+• Amalan kaedah latihan LSD (Long Slow Distance)
+• Kawalan kelajuan latihan kadar jantung MAF 180
+• Sebarang senaman aerobik yang memerlukan rentak tetap
+
+**Cara Penggunaan**
+
+1. Pasang sambungan
+2. Buka mana-mana video YouTube
+3. Klik ikon sambungan di bar alat
+4. Tetapkan tempoh latihan dan BPM anda
+5. Klik "Mula" dan mulakan latihan joging perlahan anda!
+
+**Jaminan Privasi**
+
+Kami menghargai privasi anda:
+- Tiada pengumpulan data peribadi
+- Tiada penjejakan tingkah laku pelayaran
+- Semua tetapan disimpan secara setempat pada peranti anda sahaja
+- Projek sumber terbuka dengan kod telus
+
+**Sorotan Teknikal**
+
+- Dibina dengan piawaian Chrome Manifest V3 terkini
+- Web Audio API untuk kualiti bunyi profesional
+- Algoritma pampasan hanyut tepat menjamin rentak stabil
+- Perlindungan konflik berbilang tab menghalang pertindihan audio
+
+Mulakan perjalanan joging perlahan saintifik anda hari ini - biarkan setiap langkah dipenuhi rentak!
+
+---
+
 ## 使用建議
 
 ### Chrome Web Store 提交時
@@ -2381,7 +2460,7 @@ Mulai perjalanan jogging lambat ilmiah Anda hari ini - biarkan setiap langkah di
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 30 種語言版本：
+- 已提供 31 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -2412,6 +2491,7 @@ Mulai perjalanan jogging lambat ilmiah Anda hari ini - biarkan setiap langkah di
   - 塞爾維亞文（sr）
   - 斯洛維尼亞文（sl）
   - 印尼文（id）
+  - 馬來文（ms）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
