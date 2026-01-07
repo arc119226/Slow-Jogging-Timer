@@ -790,6 +790,85 @@ Beginnen Sie noch heute Ihre wissenschaftliche Slow Jogging Reise - lassen Sie j
 
 ---
 
+## Versão Portuguesa
+
+### Descrição curta (limite de 132 caracteres)
+Temporizador BPM preciso para treinos de corrida lenta no YouTube. Treine no ritmo, desfrute de uma experiência científica de corrida.
+
+### Descrição detalhada
+
+**Torne seu treino de corrida lenta mais preciso e rítmico**
+
+"Temporizador de Corrida Lenta" é uma extensão do Chrome projetada especificamente para entusiastas de corrida lenta no YouTube. Seja seguindo o treinamento LSD (Long Slow Distance), treinamento de frequência cardíaca MAF 180, ou qualquer outra forma de prática de corrida lenta, esta ferramenta fornece orientação rítmica estável para manter cada passo no tempo certo.
+
+**Recursos principais**
+
+🎵 **Metrônomo BPM preciso**
+- Faixa de BPM ajustável de 60 a 360
+- Três opções de som: bipe sintetizado, castanholas, caixa clara
+- Suporte para compassos 2/4, 3/4, 4/4 para atender diferentes necessidades de treino
+- Diferenciação automática de volume para tempos fortes, médios e fracos para um ritmo mais claro
+
+⏱️ **Configurações flexíveis do temporizador**
+- Duração personalizada de 1 a 3600 segundos (até 60 minutos)
+- Seleção rápida de durações predefinidas comuns
+- Exibição clara de contagem regressiva para fácil acompanhamento do progresso
+
+🎬 **Integração profunda com o YouTube**
+- Seguimento automático de reprodução/pausa do vídeo (opcional)
+- Sobreposição na página exibindo temporizador e BPM em tempo real
+- Opacidade ajustável para não interferir na visualização do vídeo
+- Função mostrar/ocultar
+
+💾 **Memória inteligente de configurações**
+- Todas as configurações são salvas automaticamente
+- Restauração instantânea de suas preferências no próximo início
+- Estado global do temporizador entre abas
+
+**Por que escolher o Temporizador de Corrida Lenta?**
+
+Aplicativos de metrônomo tradicionais exigem alternar entre telefone e computador, o que é inconveniente. O Temporizador de Corrida Lenta integra-se diretamente nas páginas do YouTube, permitindo que você se concentre no treino:
+
+✓ Nenhum dispositivo adicional necessário - seu navegador é seu parceiro de treino
+✓ Sons de ritmo sincronizam com vídeos de treino, você não perderá nenhuma instrução
+✓ Design leve, sem impacto no desempenho do computador
+✓ Funcionamento completamente offline, sem coleta de dados pessoais
+
+**Casos de uso**
+
+• Seguir vídeos tutoriais de corrida lenta no YouTube
+• Exercícios de corrida lenta estacionária em casa
+• Prática do método de treinamento LSD (Long Slow Distance)
+• Controle de ritmo no treinamento de frequência cardíaca MAF 180
+• Qualquer exercício aeróbico que requeira um ritmo fixo
+
+**Como usar**
+
+1. Instale a extensão
+2. Abra qualquer vídeo do YouTube
+3. Clique no ícone da extensão na barra de ferramentas
+4. Configure a duração do seu treino e BPM
+5. Clique em "Iniciar" e comece seu treino de corrida lenta!
+
+**Garantia de privacidade**
+
+Valorizamos sua privacidade:
+- Sem coleta de dados pessoais
+- Sem rastreamento de comportamento de navegação
+- Todas as configurações são armazenadas apenas localmente no seu dispositivo
+- Projeto de código aberto com código transparente
+
+**Destaques técnicos**
+
+- Construído com o padrão mais recente Chrome Manifest V3
+- Web Audio API para qualidade de som profissional
+- Algoritmo de compensação de deriva preciso garante batidas estáveis
+- Proteção contra conflitos entre abas evita sobreposição de áudio
+
+Comece sua jornada científica de corrida lenta hoje - que cada passo seja cheio de ritmo!
+
+---
+
 ## 使用建議
 
 ### Chrome Web Store 提交時
@@ -801,7 +880,7 @@ Beginnen Sie noch heute Ihre wissenschaftliche Slow Jogging Reise - lassen Sie j
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 10 種語言版本：
+- 已提供 11 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -812,6 +891,7 @@ Beginnen Sie noch heute Ihre wissenschaftliche Slow Jogging Reise - lassen Sie j
   - 西班牙文（es）
   - 法文（fr）
   - 德文（de）
+  - 葡萄牙文（pt）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM

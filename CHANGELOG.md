@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Portuguese language support** (`pt` locale)
+  - All 34 message keys translated to Portuguese
+  - Supported languages now: zh_TW, zh_CN, en, ja, ko, ar, ru, es, fr, de, pt (11 total)
+
 ## [1.1.6] - 2026-01-07
 
 ### Added
