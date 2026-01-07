@@ -1422,6 +1422,85 @@ Prețuim confidențialitatea ta:
 
 ---
 
+## Slovenská Verzia
+
+### Krátky popis (max 132 znakov)
+Presný BPM metronomový časovač pre tréning pomalého behu na YouTube. Trénujte v rytme, užite si vedecký zážitok z behu.
+
+### Podrobný popis
+
+**Urobte svoj tréning pomalého behu presnejší a rytmickejší**
+
+„Časovač pomalého behu" je rozšírenie Chrome navrhnuté špeciálne pre nadšencov pomalého behu na YouTube. Či už sledujete LSD (Long Slow Distance) tréning, tréning srdcovej frekvencie MAF 180 alebo akúkoľvek inú formu pomalého behu, tento nástroj poskytuje stabilné rytmické vedenie, aby každý krok bol v správnom tempe.
+
+**Hlavné funkcie**
+
+🎵 **Presný BPM metronóm**
+- Nastaviteľný rozsah BPM od 60 do 360
+- Tri možnosti zvuku: syntetické pípnutie, kastanety, malý bubon
+- Podpora taktov 2/4, 3/4, 4/4 pre rôzne tréningové potreby
+- Automatické rozlíšenie hlasitosti pre silné, stredné a slabé údery pre jasnejší rytmus
+
+⏱️ **Flexibilné nastavenia časovača**
+- Vlastná dĺžka od 1 do 3600 sekúnd (až 60 minút)
+- Rýchly výber bežných predvolieb
+- Jasné zobrazenie odpočítavania pre ľahké sledovanie pokroku
+
+🎬 **Hlboká integrácia YouTube**
+- Automatické sledovanie prehrávania/pozastavenia videa (voliteľné)
+- Prekrývacia vrstva zobrazuje časovač a BPM v reálnom čase
+- Nastaviteľná priehľadnosť, aby nerušila sledovanie videa
+- Funkcia zobraziť/skryť
+
+💾 **Inteligentná pamäť nastavení**
+- Všetky nastavenia sa automaticky ukladajú
+- Okamžité obnovenie vašich preferencií pri ďalšom spustení
+- Globálny stav časovača naprieč kartami
+
+**Prečo zvoliť Časovač pomalého behu?**
+
+Tradičné metronomové aplikácie vyžadujú prepínanie medzi telefónom a počítačom, čo je nepraktické. Časovač pomalého behu sa integruje priamo do stránok YouTube, takže sa môžete sústrediť na tréning:
+
+✓ Nie je potrebné ďalšie zariadenie - váš prehliadač je váš tréningový partner
+✓ Rytmické zvuky sa synchronizujú s tréningovými videami, nepremeškáte žiadne pokyny
+✓ Ľahký dizajn, žiadny vplyv na výkon počítača
+✓ Plne offline prevádzka, žiadny zber osobných údajov
+
+**Prípady použitia**
+
+• Sledovanie výukových videí pomalého behu na YouTube
+• Stacionárny tréning pomalého behu doma
+• LSD (Long Slow Distance) tréningová metóda
+• MAF 180 kontrola tempa srdcovej frekvencie
+• Akékoľvek aeróbne cvičenie vyžadujúce stabilný rytmus
+
+**Ako používať**
+
+1. Nainštalujte rozšírenie
+2. Otvorte ľubovoľné video na YouTube
+3. Kliknite na ikonu rozšírenia na paneli nástrojov
+4. Nastavte dĺžku tréningu a BPM
+5. Kliknite na „Štart" a začnite tréning pomalého behu!
+
+**Záruka súkromia**
+
+Ceníme si vaše súkromie:
+- Žiadny zber osobných údajov
+- Žiadne sledovanie správania pri prehliadaní
+- Všetky nastavenia sú uložené iba lokálne na vašom zariadení
+- Open source projekt s transparentným kódom
+
+**Technické výhody**
+
+- Postavené na najnovšom štandarde Chrome Manifest V3
+- Web Audio API pre profesionálnu kvalitu zvuku
+- Presný algoritmus kompenzácie driftu zaisťuje stabilné údery
+- Ochrana proti konfliktom medzi kartami zabraňuje prekrývaniu zvuku
+
+Začnite svoju vedeckú cestu pomalého behu ešte dnes - naplňte každý krok rytmom!
+
+---
+
 ## Ελληνική Έκδοση
 
 ### Σύντομη περιγραφή (132 χαρακτήρες max)
@@ -1986,7 +2065,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 25 種語言版本：
+- 已提供 26 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -2012,6 +2091,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
   - 羅馬尼亞文（ro）
   - 保加利亞文（bg）
   - 烏克蘭文（uk）
+  - 斯洛伐克文（sk）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
