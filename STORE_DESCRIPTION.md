@@ -1027,6 +1027,85 @@ Begin vandaag nog je wetenschappelijke slow jogging reis - laat elke stap vol ri
 
 ---
 
+## Dansk Version
+
+### Kort beskrivelse (132 tegn maks)
+Præcis BPM-metronom-timer til slow jogging-træning på YouTube. Træn i rytme, nyd en videnskabelig løbeoplevelse.
+
+### Detaljeret beskrivelse
+
+**Gør din slow jogging-træning mere præcis og rytmisk**
+
+"Slow Jogging Timer" er en Chrome-udvidelse specielt designet til slow jogging-entusiaster på YouTube. Uanset om du følger LSD (Long Slow Distance) træning, MAF 180 pulstræning, eller enhver anden form for slow jogging, giver dette værktøj stabil rytmevejledning for at holde hvert skridt i det rigtige tempo.
+
+**Hovedfunktioner**
+
+🎵 **Præcis BPM-metronom**
+- Justerbart BPM-interval fra 60 til 360
+- Tre lydmuligheder: syntetisk bip, kastagnetter, lilletromme
+- Understøttelse af 2/4, 3/4, 4/4 taktarter til forskellige træningsbehov
+- Automatisk lydstyrkeforskel for stærke, mellem og svage slag for tydeligere rytme
+
+⏱️ **Fleksible timerindstillinger**
+- Tilpasset varighed fra 1 til 3600 sekunder (op til 60 minutter)
+- Hurtig valg af almindelige forudindstillinger
+- Tydelig nedtællingsvisning for nem fremskridtsovervågning
+
+🎬 **Dyb YouTube-integration**
+- Automatisk følg videoafspilning/pause (valgfrit)
+- Sideoverlay viser timer og BPM i realtid
+- Justerbar gennemsigtighed for ikke at forstyrre videovisning
+- Vis/skjul-funktion
+
+💾 **Smart indstillingshukommelse**
+- Alle indstillinger gemmes automatisk
+- Øjeblikkelig gendannelse af dine præferencer ved næste start
+- Global timerstatus på tværs af faner
+
+**Hvorfor vælge Slow Jogging Timer?**
+
+Traditionelle metronom-apps kræver skift mellem telefon og computer, hvilket er upraktisk. Slow Jogging Timer integreres direkte i YouTube-sider, så du kan fokusere på træningen:
+
+✓ Ingen ekstra enheder nødvendige - din browser er din træningspartner
+✓ Rytmelyde synkroniseres med træningsvideoer, du går ikke glip af nogen instruktioner
+✓ Let design, ingen indvirkning på computerydelsen
+✓ Fuldt offline-funktion, ingen indsamling af personlige data
+
+**Brugsscenarier**
+
+• Følg slow jogging-tutorials på YouTube
+• Stationær slow jogging-træning derhjemme
+• LSD (Long Slow Distance) træningsmetode
+• MAF 180 pulstræningstempokontrol
+• Al aerob træning der kræver fast rytme
+
+**Sådan bruger du**
+
+1. Installer udvidelsen
+2. Åbn en vilkårlig YouTube-video
+3. Klik på udvidelsesikonet i værktøjslinjen
+4. Indstil din træningsvarighed og BPM
+5. Klik på "Start" og begynd din slow jogging-træning!
+
+**Privatlivsgaranti**
+
+Vi værdsætter dit privatliv:
+- Ingen indsamling af personlige data
+- Ingen sporing af browsingadfærd
+- Alle indstillinger gemmes kun lokalt på din enhed
+- Open source-projekt med transparent kode
+
+**Tekniske højdepunkter**
+
+- Bygget med nyeste Chrome Manifest V3-standard
+- Web Audio API for professionel lydkvalitet
+- Præcis driftkompensationsalgoritme sikrer stabile slag
+- Beskyttelse mod konflikter mellem faner forhindrer lydoverlapning
+
+Begynd din videnskabelige slow jogging-rejse i dag - lad hvert skridt være fyldt med rytme!
+
+---
+
 ## Svensk Version
 
 ### Kort beskrivning (132 tecken max)
@@ -1275,7 +1354,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 16 種語言版本：
+- 已提供 17 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -1292,6 +1371,7 @@ Rozpocznij swoją naukową podróż z wolnym bieganiem już dziś - niech każdy
   - 波蘭文（pl）
   - 土耳其文（tr）
   - 瑞典文（sv）
+  - 丹麥文（da）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
