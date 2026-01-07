@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Spanish language support** (`es` locale)
+  - All 34 message keys translated to Spanish
+  - Supported languages now: zh_TW, zh_CN, en, ja, ko, ar, ru, es (8 total)
+
 ## [1.1.3] - 2026-01-07
 
 ### Added

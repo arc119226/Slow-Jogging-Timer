@@ -553,6 +553,85 @@ YouTube 슬로우 조깅 훈련을 위한 정밀 BPM 메트로놈 타이머. 리
 
 ---
 
+## Versión en Español
+
+### Descripción corta (límite de 132 caracteres)
+Temporizador BPM preciso para entrenamientos de trote lento en YouTube. Entrena con ritmo, disfruta de una experiencia científica.
+
+### Descripción detallada
+
+**Haz tu entrenamiento de trote lento más preciso y rítmico**
+
+"Temporizador de Trote Lento" es una extensión de Chrome diseñada específicamente para los entusiastas del trote lento en YouTube. Ya sea que sigas el entrenamiento LSD (Long Slow Distance), el entrenamiento de frecuencia cardíaca MAF 180, o cualquier otra forma de práctica de trote lento, esta herramienta proporciona una guía de ritmo estable para mantener cada paso en el tempo correcto.
+
+**Funciones principales**
+
+🎵 **Metrónomo BPM preciso**
+- Rango de BPM ajustable de 60 a 360
+- Tres opciones de sonido: pitido sintetizado, castañuelas, caja
+- Soporte para compases 2/4, 3/4, 4/4 para adaptarse a diferentes necesidades de entrenamiento
+- Diferenciación automática de volumen para tiempos fuertes, medios y débiles para un ritmo más claro
+
+⏱️ **Configuración flexible del temporizador**
+- Duración personalizada de 1 a 3600 segundos (hasta 60 minutos)
+- Selección rápida de duraciones preestablecidas comunes
+- Visualización clara de cuenta regresiva para un fácil seguimiento del progreso
+
+🎬 **Integración profunda con YouTube**
+- Seguimiento automático de reproducción/pausa del video (opcional)
+- Superposición en la página que muestra el temporizador y BPM en tiempo real
+- Opacidad ajustable para no interferir con la visualización del video
+- Función de mostrar/ocultar
+
+💾 **Memoria inteligente de configuración**
+- Todas las configuraciones se guardan automáticamente
+- Restauración instantánea de tus preferencias en el próximo inicio
+- Estado global del temporizador entre pestañas
+
+**¿Por qué elegir Temporizador de Trote Lento?**
+
+Las aplicaciones de metrónomo tradicionales requieren cambiar entre el teléfono y la computadora, lo cual es incómodo. El Temporizador de Trote Lento se integra directamente en las páginas de YouTube, permitiéndote concentrarte en el entrenamiento:
+
+✓ No se necesitan dispositivos adicionales - tu navegador es tu compañero de entrenamiento
+✓ Los sonidos del ritmo se sincronizan con los videos de entrenamiento, nunca te perderás ninguna instrucción
+✓ Diseño ligero, sin impacto en el rendimiento de la computadora
+✓ Funcionamiento completamente offline, sin recopilación de datos personales
+
+**Casos de uso**
+
+• Seguir videos tutoriales de trote lento en YouTube
+• Ejercicios de trote lento estacionario en casa
+• Práctica del método de entrenamiento LSD (Long Slow Distance)
+• Control del ritmo en entrenamiento de frecuencia cardíaca MAF 180
+• Cualquier ejercicio aeróbico que requiera un ritmo fijo
+
+**Cómo usar**
+
+1. Instala la extensión
+2. Abre cualquier video de YouTube
+3. Haz clic en el icono de la extensión en la barra de herramientas
+4. Configura la duración de tu entrenamiento y BPM
+5. ¡Haz clic en "Iniciar" y comienza tu entrenamiento de trote lento!
+
+**Garantía de privacidad**
+
+Valoramos tu privacidad:
+- Sin recopilación de datos personales
+- Sin seguimiento del comportamiento de navegación
+- Todas las configuraciones se almacenan solo localmente en tu dispositivo
+- Proyecto de código abierto con código transparente
+
+**Aspectos técnicos destacados**
+
+- Construido con el último estándar Chrome Manifest V3
+- Web Audio API para calidad de sonido profesional
+- Algoritmo de compensación de deriva preciso que garantiza ritmos estables
+- Protección contra conflictos entre pestañas que previene la superposición de audio
+
+¡Comienza tu viaje científico de trote lento hoy - que cada paso esté lleno de ritmo!
+
+---
+
 ## 使用建議
 
 ### Chrome Web Store 提交時
@@ -564,7 +643,7 @@ YouTube 슬로우 조깅 훈련을 위한 정밀 BPM 메트로놈 타이머. 리
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 7 種語言版本：
+- 已提供 8 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -572,6 +651,7 @@ YouTube 슬로우 조깅 훈련을 위한 정밀 BPM 메트로놈 타이머. 리
   - 韓文（ko）
   - 阿拉伯文（ar）
   - 俄文（ru）
+  - 西班牙文（es）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
