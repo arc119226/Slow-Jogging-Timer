@@ -1,0 +1,164 @@
+{
+  "extension_name": {
+    "message": "Таймер повільного бігу",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM таймер з налаштовуваними ритмами для відео повільного бігу на YouTube",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "Таймер повільного бігу",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "Таймер повільного бігу",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "Тривалість тренування:",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15 хвилин",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30 хвилин",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45 хвилин",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "Власне...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "хвилин",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "Старт",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "Пауза",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "Продовжити",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "Стоп",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "Сховати",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "Швидкість BPM:",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "Увімкнути звук",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ Розширені налаштування",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "Слідувати за відтворенням відео",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "Тип звуку:",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "Сигнал (Синтезований)",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "Кастаньєти (Реальний звук)",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "Малий барабан (Реальний звук)",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "Музичний розмір:",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4 (Сильна-Слабка)",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4 (Сильна-Слабка-Слабка)",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4 (Сильна-Слабка-Середня-Слабка)",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "Прозорість панелі:",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "Готово",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "Працює...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "На паузі",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "Зупинено",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "Завершено!",
+    "description": "Status when timer completes"
+  },
+
+  "error_timer_already_running": {
+    "message": "Таймер вже працює в іншій вкладці",
+    "description": "Error shown when user tries to start timer while it's running in another tab"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "Відтворення BPM ритмічних звуків для таймера повільного бігу",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}
