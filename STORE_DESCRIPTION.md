@@ -869,6 +869,85 @@ Comece sua jornada científica de corrida lenta hoje - que cada passo seja cheio
 
 ---
 
+## Versione Italiana
+
+### Descrizione breve (limite di 132 caratteri)
+Timer BPM preciso per allenamenti di corsa lenta su YouTube. Allenati a ritmo, goditi un'esperienza scientifica di corsa.
+
+### Descrizione dettagliata
+
+**Rendi il tuo allenamento di corsa lenta più preciso e ritmico**
+
+"Timer per Corsa Lenta" è un'estensione Chrome progettata specificamente per gli appassionati di corsa lenta su YouTube. Che tu stia seguendo l'allenamento LSD (Long Slow Distance), l'allenamento della frequenza cardiaca MAF 180, o qualsiasi altra forma di pratica di corsa lenta, questo strumento fornisce una guida ritmica stabile per mantenere ogni passo al tempo giusto.
+
+**Funzionalità principali**
+
+🎵 **Metronomo BPM preciso**
+- Intervallo BPM regolabile da 60 a 360
+- Tre opzioni sonore: bip sintetizzato, nacchere, rullante
+- Supporto per tempi 2/4, 3/4, 4/4 per adattarsi a diverse esigenze di allenamento
+- Differenziazione automatica del volume per battiti forti, medi e deboli per un ritmo più chiaro
+
+⏱️ **Impostazioni flessibili del timer**
+- Durata personalizzata da 1 a 3600 secondi (fino a 60 minuti)
+- Selezione rapida delle durate preimpostate comuni
+- Visualizzazione chiara del conto alla rovescia per un facile monitoraggio del progresso
+
+🎬 **Integrazione profonda con YouTube**
+- Seguimento automatico della riproduzione/pausa del video (opzionale)
+- Sovrapposizione sulla pagina che mostra timer e BPM in tempo reale
+- Opacità regolabile per non interferire con la visualizzazione del video
+- Funzione mostra/nascondi
+
+💾 **Memoria intelligente delle impostazioni**
+- Tutte le impostazioni vengono salvate automaticamente
+- Ripristino istantaneo delle tue preferenze al prossimo avvio
+- Stato globale del timer tra le schede
+
+**Perché scegliere Timer per Corsa Lenta?**
+
+Le app metronomo tradizionali richiedono di passare tra telefono e computer, il che è scomodo. Il Timer per Corsa Lenta si integra direttamente nelle pagine YouTube, permettendoti di concentrarti sull'allenamento:
+
+✓ Nessun dispositivo aggiuntivo necessario - il tuo browser è il tuo partner di allenamento
+✓ I suoni del ritmo si sincronizzano con i video di allenamento, non perderai nessuna istruzione
+✓ Design leggero, nessun impatto sulle prestazioni del computer
+✓ Funzionamento completamente offline, nessuna raccolta di dati personali
+
+**Casi d'uso**
+
+• Seguire video tutorial di corsa lenta su YouTube
+• Esercizi di corsa lenta stazionaria a casa
+• Pratica del metodo di allenamento LSD (Long Slow Distance)
+• Controllo del ritmo nell'allenamento della frequenza cardiaca MAF 180
+• Qualsiasi esercizio aerobico che richieda un ritmo fisso
+
+**Come usare**
+
+1. Installa l'estensione
+2. Apri qualsiasi video YouTube
+3. Clicca sull'icona dell'estensione nella barra degli strumenti
+4. Imposta la durata del tuo allenamento e il BPM
+5. Clicca su "Avvia" e inizia il tuo allenamento di corsa lenta!
+
+**Garanzia di privacy**
+
+Apprezziamo la tua privacy:
+- Nessuna raccolta di dati personali
+- Nessun tracciamento del comportamento di navigazione
+- Tutte le impostazioni sono memorizzate solo localmente sul tuo dispositivo
+- Progetto open source con codice trasparente
+
+**Punti di forza tecnici**
+
+- Costruito con l'ultimo standard Chrome Manifest V3
+- Web Audio API per qualità audio professionale
+- Algoritmo di compensazione della deriva preciso garantisce battiti stabili
+- Protezione contro i conflitti tra schede previene la sovrapposizione audio
+
+Inizia oggi il tuo viaggio scientifico nella corsa lenta - che ogni passo sia pieno di ritmo!
+
+---
+
 ## 使用建議
 
 ### Chrome Web Store 提交時
@@ -880,7 +959,7 @@ Comece sua jornada científica de corrida lenta hoje - que cada passo seja cheio
 ### 多語言策略
 - 主要語言選擇：繁體中文（zh_TW）或英文（en）
 - 在 Chrome Web Store 後台可為不同地區提供不同語言版本
-- 已提供 11 種語言版本：
+- 已提供 12 種語言版本：
   - 繁體中文（zh_TW）
   - 簡體中文（zh_CN）
   - 英文（en）
@@ -892,6 +971,7 @@ Comece sua jornada científica de corrida lenta hoje - que cada passo seja cheio
   - 法文（fr）
   - 德文（de）
   - 葡萄牙文（pt）
+  - 意大利文（it）
 
 ### SEO 關鍵字建議
 - 超慢跑、slow jogging、節拍器、metronome、BPM
