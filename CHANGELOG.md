@@ -7,6 +7,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-01-07
+
+### Added - Internationalization Milestone
+
+**Complete internationalization: 31 languages now supported**
+
+This release consolidates language additions from v1.1.3 to v1.1.25, expanding language support from 7 to 31 languages (25 new languages added).
+
+#### Language Support by Region
+
+| Region | Languages |
+|--------|-----------|
+| **Original (v1.1.2)** | English (en), Traditional Chinese (zh_TW), Simplified Chinese (zh_CN), Japanese (ja), Korean (ko), Arabic (ar) |
+| **European - Western** | Russian (ru), Spanish (es), French (fr), German (de), Portuguese (pt), Italian (it), Dutch (nl) |
+| **European - Nordic** | Swedish (sv), Danish (da), Norwegian (no), Finnish (fi) |
+| **European - Central/Eastern** | Polish (pl), Czech (cs), Hungarian (hu), Slovak (sk), Greek (el) |
+| **European - Southeastern** | Romanian (ro), Bulgarian (bg), Ukrainian (uk), Croatian (hr), Serbian (sr), Slovenian (sl) |
+| **Asian** | Turkish (tr), Indonesian (id), Malay (ms) |
+
+#### Complete Language List (31 total)
+
+```
+en, zh_TW, zh_CN, ja, ko, ar, ru, es, fr, de, pt, it, nl,
+pl, tr, sv, da, no, fi, el, cs, hu, ro, bg, uk, sk, hr, sr, sl, id, ms
+```
+
+#### Individual Language Additions (chronological)
+
+- v1.1.3: Russian (ru)
+- v1.1.4: Spanish (es)
+- v1.1.5: French (fr)
+- v1.1.6: German (de)
+- v1.1.7: Portuguese (pt)
+- v1.1.8: Italian (it)
+- v1.1.9: Dutch (nl)
+- v1.1.10: Polish (pl)
+- v1.1.11: Turkish (tr)
+- v1.1.12: Swedish (sv)
+- v1.1.13: Danish (da)
+- v1.1.14: Norwegian (no)
+- v1.1.15: Finnish (fi)
+- v1.1.16: Greek (el)
+- v1.1.17: Czech (cs)
+- v1.1.18: Hungarian (hu)
+- v1.1.19: Romanian (ro)
+- v1.1.20: Bulgarian (bg)
+- v1.1.21: Ukrainian (uk)
+- v1.1.22: Slovak (sk)
+- v1.1.23: Croatian (hr)
+- v1.1.24: Serbian (sr)
+- v1.1.25: Slovenian (sl), Indonesian (id), Malay (ms)
+
+### Technical Details
+
+- Each language includes all 34 message keys for complete UI localization
+- Error messages for multi-tab conflicts localized in all 31 languages
+- Chrome i18n API automatically selects user's preferred language
+- Fallback to English for unsupported languages
+
 ## [1.1.25] - 2026-01-07
 
 ### Added

@@ -11,6 +11,21 @@
 - 可調整面板透明度
 - YouTube 頁面覆蓋層顯示
 - 設置自動保存
+- **31 種語言支援** - 自動根據瀏覽器設定顯示
+
+## 支援語言 / Supported Languages
+
+本擴充功能支援 31 種語言，自動根據您的瀏覽器設定顯示對應語言：
+
+| 區域 Region | 語言 Languages |
+|-------------|----------------|
+| **東亞 East Asia** | 繁體中文 (zh_TW), 简体中文 (zh_CN), 日本語 (ja), 한국어 (ko) |
+| **中東 Middle East** | العربية (ar) |
+| **西歐 Western Europe** | English (en), Español (es), Français (fr), Deutsch (de), Português (pt), Italiano (it), Nederlands (nl) |
+| **北歐 Nordic** | Svenska (sv), Dansk (da), Norsk (no), Suomi (fi) |
+| **中東歐 Central/Eastern Europe** | Polski (pl), Čeština (cs), Magyar (hu), Slovenčina (sk), Ελληνικά (el), Русский (ru) |
+| **東南歐 Southeastern Europe** | Română (ro), Български (bg), Українська (uk), Hrvatski (hr), Srpski (sr), Slovenščina (sl) |
+| **亞洲 Asia** | Türkçe (tr), Bahasa Indonesia (id), Bahasa Melayu (ms) |
 
 ## 安裝 / Installation
 
