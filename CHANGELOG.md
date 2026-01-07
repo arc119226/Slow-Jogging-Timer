@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Russian language support** (`ru` locale)
+  - All 34 message keys translated to Russian
+  - Supported languages now: zh_TW, zh_CN, en, ja, ko, ar, ru (7 total)
+
 ## [1.1.2] - 2026-01-07
 
 ### Fixed
