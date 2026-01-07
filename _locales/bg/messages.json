@@ -1,0 +1,164 @@
+{
+  "extension_name": {
+    "message": "Таймер за бавно бягане",
+    "description": "Extension name in browser toolbar"
+  },
+  "extension_description": {
+    "message": "BPM таймер с персонализируеми ритми за видеоклипове за бавно бягане в YouTube",
+    "description": "Extension description in Chrome Web Store"
+  },
+  "extension_title": {
+    "message": "Таймер за бавно бягане",
+    "description": "Tooltip when hovering over extension icon"
+  },
+
+  "app_title": {
+    "message": "Таймер за бавно бягане",
+    "description": "Main title in popup"
+  },
+
+  "label_workout_duration": {
+    "message": "Продължителност на тренировката:",
+    "description": "Label for workout duration selector"
+  },
+  "duration_15_minutes": {
+    "message": "15 минути",
+    "description": "15 minutes option"
+  },
+  "duration_30_minutes": {
+    "message": "30 минути",
+    "description": "30 minutes option"
+  },
+  "duration_45_minutes": {
+    "message": "45 минути",
+    "description": "45 minutes option"
+  },
+  "duration_custom": {
+    "message": "Персонализирано...",
+    "description": "Custom duration option"
+  },
+  "placeholder_minutes": {
+    "message": "минути",
+    "description": "Placeholder for custom duration input"
+  },
+
+  "button_start": {
+    "message": "Старт",
+    "description": "Start button"
+  },
+  "button_pause": {
+    "message": "Пауза",
+    "description": "Pause button"
+  },
+  "button_resume": {
+    "message": "Продължи",
+    "description": "Resume button (shown when paused)"
+  },
+  "button_stop": {
+    "message": "Стоп",
+    "description": "Stop button"
+  },
+  "button_hide": {
+    "message": "Скрий",
+    "description": "Hide overlay button"
+  },
+
+  "label_bpm_speed": {
+    "message": "Скорост BPM:",
+    "description": "Label for BPM slider"
+  },
+  "label_enable_sound": {
+    "message": "Включи звука",
+    "description": "Checkbox label for enabling sound"
+  },
+
+  "heading_advanced_settings": {
+    "message": "⚙️ Разширени настройки",
+    "description": "Advanced settings collapsible header"
+  },
+  "label_auto_follow_video": {
+    "message": "Следвай възпроизвеждането на видеото",
+    "description": "Checkbox label for auto-follow video playback"
+  },
+
+  "label_sound_type": {
+    "message": "Тип звук:",
+    "description": "Label for sound type selector"
+  },
+  "sound_type_beep_synthetic": {
+    "message": "Бипкане (Синтетично)",
+    "description": "Beep sound option"
+  },
+  "sound_type_castanets_real": {
+    "message": "Кастанети (Реален звук)",
+    "description": "Castanets sound option"
+  },
+  "sound_type_snaredrum_real": {
+    "message": "Малък барабан (Реален звук)",
+    "description": "Snare drum sound option"
+  },
+
+  "label_time_signature": {
+    "message": "Музикален размер:",
+    "description": "Label for time signature selector"
+  },
+  "time_signature_2_4": {
+    "message": "2/4 (Силно-Слабо)",
+    "description": "2/4 time signature option"
+  },
+  "time_signature_3_4": {
+    "message": "3/4 (Силно-Слабо-Слабо)",
+    "description": "3/4 time signature option"
+  },
+  "time_signature_4_4": {
+    "message": "4/4 (Силно-Слабо-Средно-Слабо)",
+    "description": "4/4 time signature option"
+  },
+
+  "label_panel_opacity": {
+    "message": "Прозрачност на панела:",
+    "description": "Label for overlay opacity slider"
+  },
+
+  "status_ready": {
+    "message": "Готов",
+    "description": "Status when timer is ready"
+  },
+  "status_running": {
+    "message": "Работи...",
+    "description": "Status when timer is running"
+  },
+  "status_paused": {
+    "message": "На пауза",
+    "description": "Status when timer is paused"
+  },
+  "status_stopped": {
+    "message": "Спрян",
+    "description": "Status when timer is stopped"
+  },
+  "status_completed": {
+    "message": "Завършено!",
+    "description": "Status when timer completes"
+  },
+
+  "error_timer_already_running": {
+    "message": "Таймерът вече работи в друг раздел",
+    "description": "Error shown when user tries to start timer while it's running in another tab"
+  },
+
+  "format_bpm": {
+    "message": "$BPM$ BPM",
+    "description": "BPM display format",
+    "placeholders": {
+      "bpm": {
+        "content": "$1",
+        "example": "180"
+      }
+    }
+  },
+
+  "offscreen_justification": {
+    "message": "Възпроизвеждане на BPM ритъм звуци за таймера за бавно бягане",
+    "description": "Justification for offscreen document (shown to user in Chrome)"
+  }
+}
