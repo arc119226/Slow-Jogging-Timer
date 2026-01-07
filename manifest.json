@@ -35,7 +35,7 @@
     {
       "matches": ["https://www.youtube.com/*"],
       "js": ["content-script.js"],
-      "css": ["styles.css"],
+      "css": ["content-script.css"],
       "run_at": "document_idle"
     }
   ],

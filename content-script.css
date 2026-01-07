@@ -1,0 +1,154 @@
+/* ========== YouTube Overlay Styles ========== */
+/* This file is injected ONLY into YouTube pages via content_scripts */
+/* Contains ONLY namespaced selectors (#slowjogging-*) to avoid polluting YouTube styles */
+
+/* YouTube overlay container */
+#slowjogging-timer-overlay {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Timer panel */
+#slowjogging-timer-widget {
+  position: relative;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  color: white;
+  min-width: 200px;
+  backdrop-filter: blur(10px);
+  --overlay-opacity: 1; /* Default opaque */
+}
+
+/* Background layer - using pseudo-element for independent opacity control */
+#slowjogging-timer-widget::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  opacity: var(--overlay-opacity);
+  z-index: -1;
+}
+
+/* Timer display */
+#slowjogging-timer-display {
+  position: relative;
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 2px;
+  z-index: 1;
+}
+
+/* BPM info */
+#slowjogging-bpm-info {
+  position: relative;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 12px;
+  opacity: 0.9;
+  font-weight: 500;
+  z-index: 1;
+}
+
+/* Hide button */
+#slowjogging-toggle-btn {
+  position: relative;
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1;
+
+  /* Ensure text displays correctly */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;  /* Ensure monospace numbers */
+}
+
+#slowjogging-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+#slowjogging-toggle-btn:active {
+  transform: scale(0.98);
+}
+
+/* Minimized state */
+#slowjogging-timer-widget.minimized {
+  min-width: auto;
+  padding: 8px 12px;
+}
+
+#slowjogging-timer-widget.minimized #slowjogging-toggle-btn {
+  font-size: 11px;
+  padding: 6px 8px;
+  min-height: auto;
+}
+
+/* ========== BPM Beat Indicators ========== */
+
+/* BPM indicator container */
+#slowjogging-bpm-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Beat indicator base style */
+.slowjogging-beat-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: all 0.15s ease-out;
+  opacity: 0.3;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Left indicator (light blue) */
+#slowjogging-left-indicator {
+  background: rgb(135, 206, 250);
+}
+
+#slowjogging-left-indicator.active {
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(135, 206, 250, 0.8),
+              0 0 20px rgba(135, 206, 250, 0.4);
+  transform: scale(1.15);
+}
+
+/* Right indicator (light green) */
+#slowjogging-right-indicator {
+  background: rgb(144, 238, 144);
+}
+
+#slowjogging-right-indicator.active {
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(144, 238, 144, 0.8),
+              0 0 20px rgba(144, 238, 144, 0.4);
+  transform: scale(1.15);
+}
