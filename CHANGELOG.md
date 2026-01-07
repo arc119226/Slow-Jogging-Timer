@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.25] - 2026-01-07
+
 ### Added
 - **Malay language support** (`ms` locale)
   - All 34 message keys translated to Malay
