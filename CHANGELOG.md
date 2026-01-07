@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Croatian language support** (`hr` locale)
+  - All 34 message keys translated to Croatian
+  - Supported languages now: zh_TW, zh_CN, en, ja, ko, ar, ru, es, fr, de, pt, it, nl, pl, tr, sv, da, no, fi, el, cs, hu, ro, bg, uk, sk, hr (27 total)
+
 ## [1.1.22] - 2026-01-07
 
 ### Added
