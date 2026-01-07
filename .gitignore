@@ -21,5 +21,3 @@ build/
 node_modules/
 package-lock.json
 
-# Development files
-CLAUDE.md
